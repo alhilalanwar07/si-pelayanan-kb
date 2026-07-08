@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi Mandiri Peserta KB - Sistem Informasi Pelayanan KB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --danger: #ef4444;
+            --bg: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            color: var(--text-primary);
+        }
+
+        /* ===== TOP NAVBAR ===== */
+        .navbar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 0.85rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-logo {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 0.95rem;
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);
+        }
+
+        .navbar-brand-text h1 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .navbar-brand-text span {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-nav {
+            padding: 0.55rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            font-family: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-nav-outline {
+            border: 1.5px solid var(--border);
+            background: white;
+            color: var(--text-secondary);
+        }
+
+        .btn-nav-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .btn-nav-primary {
+            border: none;
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-nav-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ===== MAIN ===== */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            padding: 2.5rem 1.5rem 3rem;
+        }
+
+        .registration-wrapper {
+            width: 100%;
+            max-width: 720px;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header-icon {
+            width: 64px; height: 64px;
+            background: linear-gradient(135deg, var(--primary-light), #bfdbfe);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+        }
+
+        .page-header-icon svg {
+            width: 30px; height: 30px;
+            color: var(--primary);
+        }
+
+        .page-header h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04);
+        }
+
+        .form-card-header {
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fafbfc;
+        }
+
+        .form-card-header svg {
+            width: 20px; height: 20px;
+            color: var(--primary);
+        }
+
+        .form-card-header h3 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .form-card-header span {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        .form-card-body {
+            padding: 2rem;
+        }
+
+        /* Form Sections */
+        .form-section {
+            margin-bottom: 1.75rem;
+            padding-bottom: 1.75rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .section-label-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+        .section-label-dot.green { background: var(--success); }
+        .section-label-dot.amber { background: var(--warning); }
+
+        .section-label h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Form Grid & Elements */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+        }
+
+        .form-label .required {
+            color: var(--danger);
+        }
+
+        .form-label .hint {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+        }
+
+        .form-input-wrapper {
+            position: relative;
+        }
+
+        .form-input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px; height: 16px;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.7rem 0.85rem;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            background: #f8fafc;
+            font-size: 0.85rem;
+            font-family: inherit;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input.with-icon {
+            padding-left: 2.25rem;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+        }
+
+        .form-input::placeholder { color: var(--text-muted); }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            padding-right: 2.25rem;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Radio Group */
+        .radio-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.6rem 1rem;
+            background: #f8fafc;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        .radio-item:hover {
+            border-color: var(--primary);
+        }
+
+        .radio-item input[type="radio"] {
+            width: 16px; height: 16px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .radio-item span {
+            font-size: 0.82rem;
+            font-weight: 500;
+        }
+
+        /* Info Alert */
+        .info-alert {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 1rem 1.25rem;
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border: 1px solid #93c5fd;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-alert svg {
+            width: 18px; height: 18px;
+            color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .info-alert p {
+            font-size: 0.82rem;
+            color: #1e40af;
+            line-height: 1.5;
+        }
+
+        /* Form Footer */
+        .form-card-footer {
+            padding: 1.25rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fafbfc;
+        }
+
+        .footer-info {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .btn-submit {
+            padding: 0.75rem 2rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-submit:hover::after {
+            left: 100%;
+        }
+
+        .btn-submit svg {
+            width: 18px; height: 18px;
+        }
+
+        /* Footer Page */
+        .page-footer {
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .page-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .page-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .radio-group { flex-direction: column; }
+            .navbar { padding: 0.75rem 1rem; }
+            .main-container { padding: 1.5rem 1rem; }
+            .form-card-body { padding: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="navbar-logo">KB</div>
+            <div class="navbar-brand-text">
+                <h1>SI Pelayanan KB</h1>
+                <span>Kec. Wundulako</span>
+            </div>
+        </div>
+        <div class="navbar-actions">
+            <a href="login.html" class="btn-nav btn-nav-outline">← Kembali</a>
+            <a href="login.html" class="btn-nav btn-nav-primary">Masuk</a>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-container">
+        <div class="registration-wrapper">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                </div>
+                <h2>Registrasi Mandiri Peserta KB</h2>
+                <p>Silakan lengkapi formulir pendaftaran di bawah ini. Setelah data terkirim, petugas akan memverifikasi data Anda.</p>
+            </div>
+
+            <!-- Info Alert -->
+            <div class="info-alert">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <p>Data yang Anda masukkan akan disimpan ke sistem dan memerlukan verifikasi oleh Admin/Operator Kecamatan sebelum Anda dapat menerima pelayanan KB. Pastikan data yang diisi sesuai dengan KTP/dokumen resmi.</p>
+            </div>
+
+            <!-- Registration Form -->
+            <div class="form-card">
+                <div class="form-card-header">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <h3>Formulir Pendaftaran</h3>
+                    <span>Semua field bertanda <span style="color:var(--danger);font-weight:700;">*</span> wajib diisi</span>
+                </div>
+
+                <div class="form-card-body">
+                    <form>
+
+                        <!-- Identitas Diri -->
+                        <div class="form-section">
+                            <div class="section-label">
+                                <div class="section-label-dot"></div>
+                                <h4>Data Identitas Diri</h4>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label class="form-label" for="nik">
+                                        Nomor Induk Kependudukan (NIK) <span class="required">*</span>
+                                    </label>
+                                    <div class="form-input-wrapper">
+                                        <svg class="form-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
+                                        <input class="form-input with-icon" id="nik" type="text" placeholder="Masukkan 16 digit NIK" maxlength="16">
+                                    </div>
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label class="form-label" for="nama_lengkap">
+                                        Nama Lengkap <span class="required">*</span> <span class="hint">(sesuai KTP)</span>
+                                    </label>
+                                    <input class="form-input" id="nama_lengkap" type="text" placeholder="Masukkan nama lengkap">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="nama_suami_istri">
+                                        Nama Suami/Istri <span class="required">*</span>
+                                    </label>
+                                    <input class="form-input" id="nama_suami_istri" type="text" placeholder="Nama pasangan">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="tanggal_lahir">
+                                        Tanggal Lahir Istri <span class="required">*</span>
+                                    </label>
+                                    <input class="form-input" id="tanggal_lahir" type="date">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Domisili -->
+                        <div class="form-section">
+                            <div class="section-label">
+                                <div class="section-label-dot green"></div>
+                                <h4>Data Domisili</h4>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label class="form-label" for="alamat_lengkap">
+                                        Alamat Lengkap <span class="required">*</span>
+                                    </label>
+                                    <textarea class="form-textarea" id="alamat_lengkap" placeholder="RT/RW, Dusun/Lingkungan, Detail alamat..."></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="wilayah">
+                                        Desa / Kelurahan <span class="required">*</span>
+                                    </label>
+                                    <select class="form-select" id="wilayah">
+                                        <option value="">-- Pilih Desa/Kelurahan --</option>
+                                        <option value="1">Kelurahan Wundulako</option>
+                                        <option value="2">Desa Kowioha</option>
+                                        <option value="3">Desa Bende</option>
+                                        <option value="4">Desa Lamokuni</option>
+                                        <option value="5">Desa Watalara</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="asuransi">
+                                        Penggunaan Asuransi
+                                    </label>
+                                    <select class="form-select" id="asuransi">
+                                        <option value="">-- Pilih --</option>
+                                        <option value="bpjs">BPJS Kesehatan</option>
+                                        <option value="kis">KIS (Kartu Indonesia Sehat)</option>
+                                        <option value="umum">Umum (Tanpa Asuransi)</option>
+                                        <option value="lainnya">Lainnya</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Keluarga -->
+                        <div class="form-section">
+                            <div class="section-label">
+                                <div class="section-label-dot amber"></div>
+                                <h4>Data Keluarga</h4>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="jumlah_anak">
+                                        Jumlah Anak Hidup <span class="required">*</span>
+                                    </label>
+                                    <input class="form-input" id="jumlah_anak" type="number" placeholder="Contoh: 2" min="0">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="umur_anak_terakhir">
+                                        Umur Anak Terakhir <span class="hint">(bulan)</span>
+                                    </label>
+                                    <input class="form-input" id="umur_anak_terakhir" type="number" placeholder="Contoh: 18" min="0">
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- Footer -->
+                <div class="form-card-footer">
+                    <span class="footer-info">Data akan diverifikasi oleh operator kecamatan</span>
+                    <button class="btn-submit" type="button">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                        Daftar Sekarang
+                    </button>
+                </div>
+            </div>
+
+            <!-- Page Footer -->
+            <div class="page-footer">
+                Sudah pernah terdaftar? <a href="login.html">Masuk ke sistem →</a><br>
+                <span style="margin-top:4px;display:inline-block;">© 2026 Sistem Informasi Pelayanan KB — DPPKB Kec. Wundulako</span>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
