@@ -476,10 +476,73 @@
 
                 {{-- ==================== STEP 3: TIKET ANTRIAN DIGITAL & DOWNLOAD/PRINT ==================== --}}
                 @elseif($step === 'selesai')
-                    <div class="space-y-5 sm:space-y-6">
+                    <div class="space-y-5 sm:space-y-6" x-data="{
+                        loadingPdf: false,
+                        loadingImg: false,
+                        
+                        async getCanvas() {
+                            const card = document.getElementById('tiket-antrian-card');
+                            if (!card) throw new Error('Elemen tiket tidak ditemukan');
+                            
+                            return await html2canvas(card, {
+                                scale: 2.5,
+                                useCORS: true,
+                                allowTaint: true,
+                                backgroundColor: '#ffffff',
+                                logging: false,
+                            });
+                        },
+
+                        async unduhPdf() {
+                            if (this.loadingPdf) return;
+                            this.loadingPdf = true;
+                            try {
+                                const canvas = await this.getCanvas();
+                                const imgData = canvas.toDataURL('image/png');
+                                const { jsPDF } = window.jspdf;
+                                
+                                const imgWidth = 140; // mm
+                                const pageHeight = (canvas.height * imgWidth) / canvas.width;
+                                
+                                const doc = new jsPDF({
+                                    orientation: 'portrait',
+                                    unit: 'mm',
+                                    format: [imgWidth + 16, pageHeight + 16]
+                                });
+
+                                doc.addImage(imgData, 'PNG', 8, 8, imgWidth, pageHeight);
+                                doc.save('Tiket-Antrian-KB-' + Date.now() + '.pdf');
+                            } catch (err) {
+                                console.error('PDF Error:', err);
+                                alert('Gagal mengunduh PDF: ' + err.message);
+                            } finally {
+                                this.loadingPdf = false;
+                            }
+                        },
+
+                        async unduhGambar() {
+                            if (this.loadingImg) return;
+                            this.loadingImg = true;
+                            try {
+                                const canvas = await this.getCanvas();
+                                const image = canvas.toDataURL('image/png');
+                                const link = document.createElement('a');
+                                link.download = 'Tiket-Antrian-KB-' + Date.now() + '.png';
+                                link.href = image;
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                            } catch (err) {
+                                console.error('Image Error:', err);
+                                alert('Gagal mengunduh gambar: ' + err.message);
+                            } finally {
+                                this.loadingImg = false;
+                            }
+                        }
+                    }">
 
                         <!-- Digital Boarding Pass / Ticket Card -->
-                        <div id="tiket-antrian-card" class="rounded-2xl sm:rounded-3xl border-2 border-dashed border-blue-400 dark:border-blue-800 bg-gradient-to-b from-blue-50/60 via-white to-white dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-900 p-5 sm:p-7 md:p-8 space-y-5 sm:space-y-6 shadow-xl shadow-blue-500/10">
+                        <div id="tiket-antrian-card" wire:ignore.self class="rounded-2xl sm:rounded-3xl border-2 border-dashed border-blue-400 dark:border-blue-800 bg-gradient-to-b from-blue-50/60 via-white to-white dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-900 p-5 sm:p-7 md:p-8 space-y-5 sm:space-y-6 shadow-xl shadow-blue-500/10">
 
                             <!-- Header Tiket -->
                             <div class="flex items-center justify-between border-b border-slate-200 dark:border-zinc-800 pb-4 gap-2">
@@ -502,7 +565,7 @@
                                     <div class="text-5xl sm:text-7xl font-black tracking-tight drop-shadow-md">
                                         {{ str_pad($nomorAntrian, 3, '0', STR_PAD_LEFT) }}
                                     </div>
-                                    <div class="text-2xs sm:text-xs text-blue-100 font-medium px-2">Harap simpan gambar atau cetak tiket ini</div>
+                                    <div class="text-2xs sm:text-xs text-blue-100 font-medium px-2">Harap simpan gambar atau unduh file PDF tiket ini</div>
                                 </div>
 
                                 <!-- Detail Grid -->
@@ -537,7 +600,7 @@
                                 </div>
                                 <ul class="list-disc list-inside space-y-1 pl-1">
                                     <li>Bawa KTP Asli dan Kartu BPJS/KIS (jika ada).</li>
-                                    <li>Tunjukkan nomor antrian atau screenshot tiket ini ke loket pelayanan KB.</li>
+                                    <li>Tunjukkan nomor antrian atau file tiket ini ke loket pelayanan KB.</li>
                                     <li>Hadir 15 menit sebelum waktu pelayanan dimulai.</li>
                                 </ul>
                             </div>
@@ -553,21 +616,39 @@
                         <div class="space-y-3 no-print">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                                 <!-- Tombol Unduh PDF Langsung -->
-                                <button type="button" id="btn-download-pdf" onclick="unduhPdfTiket()"
-                                    class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer">
-                                    <svg class="size-4 text-rose-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                                    </svg>
-                                    Unduh Tiket (PDF)
+                                <button type="button" @click="unduhPdf()" :disabled="loadingPdf"
+                                    class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer disabled:opacity-50">
+                                    <template x-if="loadingPdf">
+                                        <span class="inline-flex items-center gap-2">
+                                            <span class="animate-spin">⏳</span> Menyiapkan PDF...
+                                        </span>
+                                    </template>
+                                    <template x-if="!loadingPdf">
+                                        <span class="inline-flex items-center gap-2">
+                                            <svg class="size-4 text-rose-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                            </svg>
+                                            Unduh Tiket (PDF)
+                                        </span>
+                                    </template>
                                 </button>
 
                                 <!-- Tombol Download Screenshot PNG -->
-                                <button type="button" id="btn-download-image" onclick="unduhScreenshotTiket()"
-                                    class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-all cursor-pointer">
-                                    <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                                    </svg>
-                                    Unduh Gambar (PNG)
+                                <button type="button" @click="unduhGambar()" :disabled="loadingImg"
+                                    class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-all cursor-pointer disabled:opacity-50">
+                                    <template x-if="loadingImg">
+                                        <span class="inline-flex items-center gap-2">
+                                            <span class="animate-spin">⏳</span> Mengunduh Gambar...
+                                        </span>
+                                    </template>
+                                    <template x-if="!loadingImg">
+                                        <span class="inline-flex items-center gap-2">
+                                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                            </svg>
+                                            Unduh Gambar (PNG)
+                                        </span>
+                                    </template>
                                 </button>
                             </div>
 
@@ -592,76 +673,4 @@
     <footer class="py-5 sm:py-6 text-center text-3xs sm:text-xs text-slate-400 dark:text-zinc-600 border-t border-slate-200/80 dark:border-zinc-900 px-4 no-print">
         &copy; {{ now()->year }} SI Pelayanan KB Puskesmas Wundulako, Kab. Kolaka. All rights reserved.
     </footer>
-
-    <!-- Scripts: Direct PDF & PNG Download -->
-    <script>
-        function unduhPdfTiket() {
-            const card = document.getElementById('tiket-antrian-card');
-            const btn = document.getElementById('btn-download-pdf');
-            if (!card) return;
-
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="animate-spin mr-2">⏳</span> Membuat PDF...';
-            btn.disabled = true;
-
-            html2canvas(card, {
-                scale: 2.5, // High quality
-                useCORS: true,
-                backgroundColor: '#ffffff',
-            }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const { jsPDF } = window.jspdf;
-                
-                const imgWidth = 140; // mm
-                const pageHeight = (canvas.height * imgWidth) / canvas.width;
-                
-                const doc = new jsPDF({
-                    orientation: 'portrait',
-                    unit: 'mm',
-                    format: [imgWidth + 16, pageHeight + 16]
-                });
-
-                doc.addImage(imgData, 'PNG', 8, 8, imgWidth, pageHeight);
-                doc.save('Tiket-Antrian-KB-' + (new Date().getTime()) + '.pdf');
-
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }).catch(err => {
-                console.error(err);
-                alert('Gagal mengunduh file PDF. Silakan gunakan tombol Unduh Gambar (PNG).');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            });
-        }
-
-        function unduhScreenshotTiket() {
-            const card = document.getElementById('tiket-antrian-card');
-            const btn = document.getElementById('btn-download-image');
-            if (!card) return;
-
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="animate-spin mr-2">⏳</span> Mengunduh Gambar...';
-            btn.disabled = true;
-
-            html2canvas(card, {
-                scale: 2.5, // High resolution
-                useCORS: true,
-                backgroundColor: '#ffffff',
-            }).then(canvas => {
-                const image = canvas.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.download = 'Tiket-Antrian-KB-' + (new Date().getTime()) + '.png';
-                link.href = image;
-                link.click();
-
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }).catch(err => {
-                console.error(err);
-                alert('Gagal mengunduh gambar tiket.');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            });
-        }
-    </script>
 </div>
