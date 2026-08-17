@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between border-b border-zinc-200 pb-4 dark:border-zinc-700">
         <div>
             <flux:heading size="xl" level="1">Tambah Peserta KB</flux:heading>
-            <flux:text size="sm">Registrasi peserta baru oleh operator/admin</flux:text>
+            <flux:text size="sm">Registrasi peserta baru oleh operator/admin/bidan</flux:text>
         </div>
         <flux:button variant="outline" href="{{ route('peserta-kb.index') }}" icon="arrow-left" wire:navigate>
             Kembali

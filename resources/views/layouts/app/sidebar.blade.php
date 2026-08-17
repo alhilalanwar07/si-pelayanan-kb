@@ -36,6 +36,10 @@
                         :current="request()->routeIs('alokon.*')" wire:navigate>
                         Inventaris Alokon
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="calendar-days" :href="route('jadwal.index')"
+                        :current="request()->routeIs('jadwal.*')" wire:navigate>
+                        Jadwal Pelayanan
+                    </flux:sidebar.item>
                     <flux:sidebar.item icon="cog-6-tooth" :href="route('pengguna.index')"
                         :current="request()->routeIs('pengguna.*')" wire:navigate>
                         Manajemen Pengguna

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Alokon;
 use App\Models\Instansi;
+use App\Models\JadwalPelayanan;
 use App\Models\PesertaKb;
 use App\Models\User;
 use App\Models\Wilayah;
@@ -153,6 +154,45 @@ class DatabaseSeeder extends Seeder
                 'wilayah_id' => $wilayahs[$wilayahIndex]->id,
                 ...$data,
             ]);
+        }
+
+        // ──── 6. Jadwal Pelayanan (Jadwal Hari Ini + Jadwal Mendatang) ────
+        $jadwalData = [
+            ['hari_offset' => 0, 'waktu_mulai' => '08:00', 'waktu_selesai' => '12:00', 'keterangan' => 'Pelayanan KB Reguler & Konseling Hari Ini', 'kuota' => 20],
+            ['hari_offset' => 3, 'waktu_mulai' => '08:00', 'waktu_selesai' => '12:00', 'keterangan' => 'Pelayanan Suntik & Pil KB', 'kuota' => 20],
+            ['hari_offset' => 5, 'waktu_mulai' => '08:00', 'waktu_selesai' => '11:00', 'keterangan' => 'Pelayanan Implan & IUD', 'kuota' => 10],
+            ['hari_offset' => 7, 'waktu_mulai' => '09:00', 'waktu_selesai' => '13:00', 'keterangan' => 'Pelayanan KB Umum', 'kuota' => 25],
+            ['hari_offset' => 10, 'waktu_mulai' => '08:00', 'waktu_selesai' => '12:00', 'keterangan' => 'Konseling & Pelayanan KB', 'kuota' => 15],
+            ['hari_offset' => 14, 'waktu_mulai' => '08:30', 'waktu_selesai' => '11:30', 'keterangan' => 'Pelayanan KB Pasca Persalinan', 'kuota' => 12],
+        ];
+
+        $createdJadwals = [];
+        foreach ($jadwalData as $jd) {
+            $createdJadwals[] = JadwalPelayanan::create([
+                'instansi_id' => $instansi->id,
+                'tanggal' => now()->addDays($jd['hari_offset'])->toDateString(),
+                'waktu_mulai' => $jd['waktu_mulai'],
+                'waktu_selesai' => $jd['waktu_selesai'],
+                'keterangan' => $jd['keterangan'],
+                'kuota' => $jd['kuota'],
+                'is_aktif' => true,
+                'created_by' => $admin->id,
+            ]);
+        }
+
+        // ──── 7. Sample Antrian Hari Ini ────
+        $pesertaTerverifikasi = PesertaKb::terverifikasi()->get();
+        if ($pesertaTerverifikasi->count() > 0 && isset($createdJadwals[0])) {
+            $todayJadwal = $createdJadwals[0];
+            $antrianNum = 1;
+            foreach ($pesertaTerverifikasi->take(3) as $p) {
+                \App\Models\AntrianJadwal::create([
+                    'jadwal_pelayanan_id' => $todayJadwal->id,
+                    'peserta_kb_id' => $p->id,
+                    'nomor_antrian' => $antrianNum++,
+                    'status' => 'terdaftar',
+                ]);
+            }
         }
     }
 }

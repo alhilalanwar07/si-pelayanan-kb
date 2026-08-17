@@ -2,12 +2,24 @@
 
 namespace App\Livewire;
 
+use App\Models\AntrianJadwal;
+use App\Models\JadwalPelayanan;
 use App\Models\PesertaKb;
 use App\Models\Wilayah;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class RegistrasiMandiri extends Component
 {
+    // Flow state: 'cek_nik', 'registrasi', 'pilih_jadwal', 'selesai'
+    public string $step = 'cek_nik';
+
+    // Step: Cek NIK
+    public string $cekNik = '';
+    public ?PesertaKb $foundPeserta = null;
+    public string $nikStatus = ''; // '', 'terverifikasi', 'menunggu', 'not_found'
+
+    // Step: Registrasi (peserta baru)
     public $nik = '';
     public $nomor_hp = '';
     public $nama_lengkap = '';
@@ -15,73 +27,220 @@ class RegistrasiMandiri extends Component
     public $tanggal_lahir_istri = '';
     public $alamat_lengkap = '';
     public $wilayah_id = '';
-    public $penggunaan_asuransi = 'umum';
+    public $penggunaan_asuransi = 'bpjs';
     public $jumlah_anak_hidup = 0;
     public $umur_anak_terakhir = '';
 
-    public $successMessage = '';
+    // Step: Pilih Jadwal (baik pendaftar baru maupun peserta terverifikasi)
+    public ?int $selectedJadwalId = null;
 
-    protected $rules = [
-        'nik' => ['required', 'string', 'size:16', 'unique:peserta_kbs,nik'],
-        'nomor_hp' => ['required', 'string', 'min:10', 'max:15', 'regex:/^[0-9]+$/'],
-        'nama_lengkap' => ['required', 'string', 'max:255'],
-        'nama_suami_istri' => ['required', 'string', 'max:255'],
-        'tanggal_lahir_istri' => ['required', 'date', 'before:today'],
-        'alamat_lengkap' => ['required', 'string'],
-        'wilayah_id' => ['required', 'exists:wilayahs,id'],
-        'penggunaan_asuransi' => ['required', 'string', 'in:bpjs,kis,umum,lainnya'],
-        'jumlah_anak_hidup' => ['required', 'integer', 'min:0'],
-        'umur_anak_terakhir' => ['nullable', 'integer', 'min:0'],
-    ];
+    // Hasil Tiket Antrian
+    public string $successMessage = '';
+    public ?int $nomorAntrian = null;
+    public ?string $jadwalInfo = null;
+    public ?JadwalPelayanan $selectedJadwal = null;
 
-    protected $validationAttributes = [
-        'nik' => 'NIK',
-        'nomor_hp' => 'Nomor WhatsApp Aktif',
-        'nama_lengkap' => 'Nama Lengkap',
-        'nama_suami_istri' => 'Nama Suami/Istri',
-        'tanggal_lahir_istri' => 'Tanggal Lahir Istri',
-        'alamat_lengkap' => 'Alamat Lengkap',
-        'wilayah_id' => 'Desa/Kelurahan',
-        'penggunaan_asuransi' => 'Penggunaan Asuransi',
-        'jumlah_anak_hidup' => 'Jumlah Anak Hidup',
-        'umur_anak_terakhir' => 'Umur Anak Terakhir (Bulan)',
-    ];
+    /**
+     * Cek NIK di database
+     */
+    public function cekNikAction()
+    {
+        $this->validate([
+            'cekNik' => ['required', 'string', 'size:16', 'regex:/^[0-9]+$/'],
+        ], [], [
+            'cekNik' => 'NIK',
+        ]);
 
+        $peserta = PesertaKb::where('nik', $this->cekNik)->first();
+
+        if (!$peserta) {
+            $this->nikStatus = 'not_found';
+            $this->nik = $this->cekNik; // pre-fill NIK for registration form
+            return;
+        }
+
+        $this->foundPeserta = $peserta;
+
+        // Langsung aktif tanpa menunggu verifikasi
+        if (!$peserta->isTerverifikasi()) {
+            $peserta->update(['status' => 'terverifikasi']);
+        }
+
+        $this->nikStatus = 'terdaftar';
+        $this->step = 'pilih_jadwal';
+    }
+
+    /**
+     * Lanjut ke form registrasi (NIK not found)
+     */
+    public function lanjutRegistrasi()
+    {
+        $this->step = 'registrasi';
+    }
+
+    /**
+     * Kembali ke cek NIK
+     */
+    public function kembaliCekNik()
+    {
+        $this->step = 'cek_nik';
+        $this->nikStatus = '';
+        $this->foundPeserta = null;
+        $this->cekNik = '';
+    }
+
+    /**
+     * Simpan registrasi baru beserta jadwal & antrian
+     */
     public function daftar()
     {
-        $this->validate();
-
-        PesertaKb::create([
-            'user_id' => null, // Registrasi mandiri has no creator
-            'wilayah_id' => $this->wilayah_id,
-            'nik' => $this->nik,
-            'nomor_hp' => $this->nomor_hp,
-            'nama_lengkap' => $this->nama_lengkap,
-            'nama_suami_istri' => $this->nama_suami_istri,
-            'tanggal_lahir_istri' => $this->tanggal_lahir_istri,
-            'alamat_lengkap' => $this->alamat_lengkap,
-            'penggunaan_asuransi' => $this->penggunaan_asuransi,
-            'jumlah_anak_hidup' => $this->jumlah_anak_hidup,
-            'umur_anak_terakhir' => empty($this->umur_anak_terakhir) ? null : $this->umur_anak_terakhir,
-            'status' => 'menunggu', // Default status for self-registration
+        $this->validate([
+            'nik' => ['required', 'string', 'size:16', 'unique:peserta_kbs,nik'],
+            'nomor_hp' => ['required', 'string', 'min:10', 'max:15', 'regex:/^[0-9]+$/'],
+            'nama_lengkap' => ['required', 'string', 'max:255'],
+            'nama_suami_istri' => ['required', 'string', 'max:255'],
+            'tanggal_lahir_istri' => ['required', 'date', 'before:today'],
+            'alamat_lengkap' => ['required', 'string'],
+            'wilayah_id' => ['required', 'exists:wilayahs,id'],
+            'penggunaan_asuransi' => ['required', 'string', 'in:bpjs,kis,umum,lainnya'],
+            'jumlah_anak_hidup' => ['required', 'integer', 'min:0'],
+            'umur_anak_terakhir' => ['nullable', 'integer', 'min:0'],
+            'selectedJadwalId' => ['required', 'exists:jadwal_pelayanans,id'],
+        ], [
+            'selectedJadwalId.required' => 'Silakan pilih salah satu jadwal pelayanan.',
+        ], [
+            'nik' => 'NIK',
+            'nomor_hp' => 'Nomor WhatsApp Aktif',
+            'nama_lengkap' => 'Nama Lengkap',
+            'nama_suami_istri' => 'Nama Suami/Istri',
+            'tanggal_lahir_istri' => 'Tanggal Lahir Istri',
+            'alamat_lengkap' => 'Alamat Lengkap',
+            'wilayah_id' => 'Desa/Kelurahan',
+            'penggunaan_asuransi' => 'Penggunaan Asuransi',
+            'jumlah_anak_hidup' => 'Jumlah Anak Hidup',
+            'umur_anak_terakhir' => 'Umur Anak Terakhir (Bulan)',
+            'selectedJadwalId' => 'Jadwal Pelayanan',
         ]);
 
-        $this->successMessage = 'Registrasi berhasil! Data Anda telah terkirim dan saat ini berstatus "Menunggu Verifikasi" oleh Admin/Operator Kecamatan Wundulako. Silakan hubungi faskes terkait jika data Anda belum terverifikasi.';
-        
-        // Reset fields
-        $this->reset([
-            'nik', 'nomor_hp', 'nama_lengkap', 'nama_suami_istri', 'tanggal_lahir_istri',
-            'alamat_lengkap', 'wilayah_id', 'penggunaan_asuransi',
-            'jumlah_anak_hidup', 'umur_anak_terakhir'
+        $jadwal = JadwalPelayanan::aktif()->mendatang()->findOrFail($this->selectedJadwalId);
+
+        if ($jadwal->isFull()) {
+            $this->addError('selectedJadwalId', 'Maaf, kuota jadwal yang dipilih sudah penuh. Silakan pilih jadwal lain.');
+            return;
+        }
+
+        DB::transaction(function () use ($jadwal) {
+            // 1. Simpan Peserta Baru
+            $peserta = PesertaKb::create([
+                'user_id' => null,
+                'wilayah_id' => $this->wilayah_id,
+                'nik' => $this->nik,
+                'nomor_hp' => $this->nomor_hp,
+                'nama_lengkap' => $this->nama_lengkap,
+                'nama_suami_istri' => $this->nama_suami_istri,
+                'tanggal_lahir_istri' => $this->tanggal_lahir_istri,
+                'alamat_lengkap' => $this->alamat_lengkap,
+                'penggunaan_asuransi' => $this->penggunaan_asuransi,
+                'jumlah_anak_hidup' => $this->jumlah_anak_hidup,
+                'umur_anak_terakhir' => empty($this->umur_anak_terakhir) ? null : $this->umur_anak_terakhir,
+                'status' => 'terverifikasi', // Otomatis terverifikasi saat registrasi mandiri lengkap
+            ]);
+
+            // 2. Buat Nomor Antrian
+            $lastAntrian = AntrianJadwal::where('jadwal_pelayanan_id', $jadwal->id)->max('nomor_antrian');
+            $nomorAntrian = ($lastAntrian ?? 0) + 1;
+
+            AntrianJadwal::create([
+                'jadwal_pelayanan_id' => $jadwal->id,
+                'peserta_kb_id' => $peserta->id,
+                'nomor_antrian' => $nomorAntrian,
+                'status' => 'terdaftar',
+            ]);
+
+            $this->foundPeserta = $peserta;
+            $this->nomorAntrian = $nomorAntrian;
+            $this->selectedJadwal = $jadwal;
+            $this->jadwalInfo = $jadwal->tanggal->translatedFormat('l, d F Y') . ' (' . substr($jadwal->waktu_mulai, 0, 5) . ' - ' . substr($jadwal->waktu_selesai, 0, 5) . ' WITA)';
+            $this->successMessage = 'Pendaftaran dan pemesanan antrian pelayanan KB Anda berhasil!';
+        });
+
+        $this->step = 'selesai';
+    }
+
+    /**
+     * Pilih jadwal dan buat antrian (untuk peserta lama / yang sudah terdaftar)
+     */
+    public function pilihJadwal()
+    {
+        $this->validate([
+            'selectedJadwalId' => ['required', 'exists:jadwal_pelayanans,id'],
+        ], [
+            'selectedJadwalId.required' => 'Silakan pilih salah satu jadwal.',
         ]);
+
+        $jadwal = JadwalPelayanan::aktif()->mendatang()->findOrFail($this->selectedJadwalId);
+
+        // Check if already registered for this jadwal
+        $existing = AntrianJadwal::where('jadwal_pelayanan_id', $jadwal->id)
+            ->where('peserta_kb_id', $this->foundPeserta->id)
+            ->first();
+
+        if ($existing) {
+            $this->nomorAntrian = $existing->nomor_antrian;
+            $this->selectedJadwal = $jadwal;
+            $this->jadwalInfo = $jadwal->tanggal->translatedFormat('l, d F Y') . ' (' . substr($jadwal->waktu_mulai, 0, 5) . ' - ' . substr($jadwal->waktu_selesai, 0, 5) . ' WITA)';
+            $this->successMessage = 'Anda sudah terdaftar pada jadwal ini.';
+            $this->step = 'selesai';
+            return;
+        }
+
+        // Check kuota
+        if ($jadwal->isFull()) {
+            $this->addError('selectedJadwalId', 'Maaf, kuota jadwal ini sudah penuh. Silakan pilih jadwal lain.');
+            return;
+        }
+
+        // Calculate nomor antrian
+        $lastAntrian = AntrianJadwal::where('jadwal_pelayanan_id', $jadwal->id)->max('nomor_antrian');
+        $nomorAntrian = ($lastAntrian ?? 0) + 1;
+
+        AntrianJadwal::create([
+            'jadwal_pelayanan_id' => $jadwal->id,
+            'peserta_kb_id' => $this->foundPeserta->id,
+            'nomor_antrian' => $nomorAntrian,
+            'status' => 'terdaftar',
+        ]);
+
+        $this->nomorAntrian = $nomorAntrian;
+        $this->selectedJadwal = $jadwal;
+        $this->jadwalInfo = $jadwal->tanggal->translatedFormat('l, d F Y') . ' (' . substr($jadwal->waktu_mulai, 0, 5) . ' - ' . substr($jadwal->waktu_selesai, 0, 5) . ' WITA)';
+        $this->successMessage = 'Pendaftaran antrian berhasil!';
+        $this->step = 'selesai';
+    }
+
+    /**
+     * Reset semua dan mulai dari awal
+     */
+    public function resetForm()
+    {
+        $this->reset();
+        $this->step = 'cek_nik';
     }
 
     public function render()
     {
         $wilayahs = Wilayah::orderBy('nama_desa_kelurahan')->get();
 
+        $jadwalTersedia = JadwalPelayanan::aktif()
+            ->mendatang()
+            ->withCount('antrians')
+            ->orderBy('tanggal')
+            ->orderBy('waktu_mulai')
+            ->get();
+
         return view('livewire.registrasi-mandiri', [
             'wilayahs' => $wilayahs,
+            'jadwalTersedia' => $jadwalTersedia,
         ])->layout('layouts.plain', ['title' => 'Registrasi Mandiri Peserta KB']);
     }
 }

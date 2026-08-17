@@ -103,6 +103,14 @@ class PesertaKb extends Model
         return $this->hasMany(Pelayanan::class);
     }
 
+    /**
+     * Riwayat antrian jadwal peserta.
+     */
+    public function antrianJadwals(): HasMany
+    {
+        return $this->hasMany(AntrianJadwal::class);
+    }
+
     // ──── Scopes ────
 
     /**

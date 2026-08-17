@@ -79,11 +79,32 @@ class Create extends Component
     public $penanggung_jawab_nip = '';
     public $penanggung_jawab_jabatan = 'bidan'; // dokter, bidan, perawat
 
+    // Antrian Reference (if dispatched from queue)
+    public $antrian_id = null;
+    public ?\App\Models\AntrianJadwal $antrian = null;
+
     public function mount()
     {
         $this->tanggal_skrining = now()->toDateString();
         $this->tanggal_persetujuan = now()->toDateString();
         $this->tanggal_pelayanan = now()->toDateString();
+
+        // Default penanggung jawab
+        if (auth()->check()) {
+            $this->penanggung_jawab_nama = auth()->user()->name ?? '';
+            $this->penanggung_jawab_jabatan = auth()->user()->isBidan() ? 'bidan' : 'perawat';
+        }
+
+        // Auto-select patient from query string (e.g. from queue action)
+        if (request()->has('peserta_id')) {
+            $this->peserta_kb_id = (int) request()->query('peserta_id');
+            $this->updatedPesertaKbId($this->peserta_kb_id);
+        }
+
+        if (request()->has('antrian_id')) {
+            $this->antrian_id = (int) request()->query('antrian_id');
+            $this->antrian = \App\Models\AntrianJadwal::with('jadwalPelayanan')->find($this->antrian_id);
+        }
     }
 
     public function updatedPesertaKbId($value)
@@ -319,9 +340,21 @@ class Create extends Component
 
             // 4. Decrease stock
             $alokon->kurangiStok(1);
+
+            // 5. Mark queue status as hadir if associated
+            if ($this->antrian_id) {
+                \App\Models\AntrianJadwal::where('id', $this->antrian_id)->update(['status' => 'hadir']);
+            } else {
+                // Check if patient had an active queue today or near date
+                \App\Models\AntrianJadwal::where('peserta_kb_id', $this->peserta_kb_id)
+                    ->whereHas('jadwalPelayanan', function ($q) {
+                        $q->whereDate('tanggal', $this->tanggal_pelayanan);
+                    })
+                    ->update(['status' => 'hadir']);
+            }
         });
 
-        $this->dispatch('toast-show', slots: ['text' => 'Pencatatan pelayanan KB berhasil disimpan!'], dataset: ['variant' => 'success']);
+        $this->dispatch('toast-show', slots: ['text' => 'Pencatatan pelayanan KB berhasil disimpan dan antrian diperbarui!'], dataset: ['variant' => 'success']);
         return $this->redirectRoute('pelayanan.index', navigate: true);
     }
 

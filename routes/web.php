@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 // ──── Public Routes ────
-Route::view('/', 'welcome')->name('home');
+Route::get('/', \App\Livewire\Beranda::class)->name('home');
 Route::get('/registrasi', \App\Livewire\RegistrasiMandiri::class)->name('registrasi');
 
 // ──── Authenticated Routes ────
@@ -14,10 +14,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Data Wilayah (admin only)
     Route::get('wilayah', \App\Livewire\Wilayah\Index::class)->name('wilayah.index')->middleware('level:admin');
+    Route::get('jadwal', \App\Livewire\Jadwal\Index::class)->name('jadwal.index')->middleware('level:admin');
 
     // Data Peserta KB (admin, bidan)
     Route::get('peserta-kb', \App\Livewire\PesertaKb\Index::class)->name('peserta-kb.index')->middleware('level:admin,bidan');
-    Route::get('peserta-kb/create', \App\Livewire\PesertaKb\Create::class)->name('peserta-kb.create')->middleware('level:admin');
+    Route::get('peserta-kb/create', \App\Livewire\PesertaKb\Create::class)->name('peserta-kb.create')->middleware('level:admin,bidan');
     Route::get('peserta-kb/{pesertaKb}', \App\Livewire\PesertaKb\Show::class)->name('peserta-kb.show')->middleware('level:admin,bidan');
 
     // Inventaris Alokon (admin only)

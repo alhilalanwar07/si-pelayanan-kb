@@ -56,6 +56,32 @@
         </div>
     </flux:card>
 
+    <!-- Active Queue Ticket Banner (if dispatched from queue) -->
+    @if($antrian)
+        <div class="max-w-4xl mx-auto rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white p-4 sm:p-5 shadow-lg shadow-blue-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="size-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white font-black text-lg shrink-0">
+                    {{ str_pad($antrian->nomor_antrian, 3, '0', STR_PAD_LEFT) }}
+                </div>
+                <div>
+                    <div class="text-3xs uppercase tracking-widest font-extrabold text-blue-200">Melayani Antrian Pasien</div>
+                    <h3 class="font-extrabold text-base text-white leading-tight">
+                        {{ $antrian->pesertaKb->nama_lengkap ?? 'Pasien' }}
+                    </h3>
+                    <div class="text-xs text-blue-100 font-mono">
+                        NIK: {{ $antrian->pesertaKb->nik ?? '-' }} • Sesi: {{ $antrian->jadwalPelayanan->tanggal->translatedFormat('d M Y') }}
+                    </div>
+                </div>
+            </div>
+            <div class="self-start sm:self-auto">
+                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-md text-white border border-white/20">
+                    <span class="size-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Sesi Antrian Aktif
+                </span>
+            </div>
+        </div>
+    @endif
+
     <!-- Step Contents -->
     <flux:card class="max-w-4xl mx-auto">
         <!-- ==================== STEP 1: SKRINING MEDIS ==================== -->
@@ -83,12 +109,88 @@
                         <!-- Pilih Peserta -->
                         <flux:field>
                             <flux:label>Pilih Peserta KB</flux:label>
-                            <flux:select wire:model.live="peserta_kb_id">
-                                <option value="">Pilih Peserta</option>
-                                @foreach($pesertas as $peserta)
-                                    <option value="{{ $peserta->id }}">{{ $peserta->nama_lengkap }} (NIK: {{ $peserta->nik }})</option>
-                                @endforeach
-                            </flux:select>
+                            <div x-data="{
+                                open: false,
+                                search: '',
+                                selectedId: @entangle('peserta_kb_id').live,
+                                selectedLabel: '',
+                                items: @js($pesertas->map(fn($p) => ['id' => $p->id, 'label' => $p->nama_lengkap . ' (NIK: ' . $p->nik . ')'])->values()),
+                                get filtered() {
+                                    if (!this.search) return this.items;
+                                    const q = this.search.toLowerCase();
+                                    return this.items.filter(i => i.label.toLowerCase().includes(q));
+                                },
+                                select(item) {
+                                    this.selectedId = item.id;
+                                    this.selectedLabel = item.label;
+                                    this.search = '';
+                                    this.open = false;
+                                },
+                                clear() {
+                                    this.selectedId = '';
+                                    this.selectedLabel = '';
+                                    this.search = '';
+                                },
+                                init() {
+                                    if (this.selectedId) {
+                                        const found = this.items.find(i => i.id == this.selectedId);
+                                        if (found) this.selectedLabel = found.label;
+                                    }
+                                    this.$watch('selectedId', (val) => {
+                                        if (!val) { this.selectedLabel = ''; return; }
+                                        const found = this.items.find(i => i.id == val);
+                                        if (found) this.selectedLabel = found.label;
+                                    });
+                                }
+                            }" @click.outside="open = false" class="relative">
+                                {{-- Trigger Button --}}
+                                <button type="button" @click="open = !open"
+                                    class="flex w-full items-center justify-between h-10 rounded-lg border bg-white px-3 py-2 text-left text-sm shadow-xs
+                                        border-zinc-200 dark:border-white/10 dark:bg-white/10
+                                        text-zinc-700 dark:text-zinc-300
+                                        focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <span x-show="selectedLabel" x-text="selectedLabel" class="truncate"></span>
+                                    <span x-show="!selectedLabel" class="text-zinc-400">Cari atau pilih peserta...</span>
+                                    <div class="flex items-center gap-1 ml-2 shrink-0">
+                                        <template x-if="selectedLabel">
+                                            <button type="button" @click.stop="clear()" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200">
+                                                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+                                            </button>
+                                        </template>
+                                        <svg class="size-4 text-zinc-400 transition-transform" :class="open && 'rotate-180'" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                </button>
+
+                                {{-- Dropdown Panel --}}
+                                <div x-show="open" x-transition.opacity.duration.150ms
+                                    class="absolute z-50 mt-1 w-full rounded-lg border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-800">
+                                    {{-- Search Input --}}
+                                    <div class="p-2 border-b border-zinc-100 dark:border-zinc-700">
+                                        <div class="relative">
+                                            <svg class="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+                                            <input type="text" x-model="search" x-ref="searchInput" @keydown.escape="open = false"
+                                                placeholder="Ketik nama atau NIK..."
+                                                class="w-full rounded-md border border-zinc-200 bg-zinc-50 py-1.5 pl-8 pr-3 text-sm text-zinc-700
+                                                    placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500
+                                                    dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-blue-400">
+                                        </div>
+                                    </div>
+                                    {{-- Options List --}}
+                                    <ul class="max-h-60 overflow-y-auto py-1" x-ref="optionsList">
+                                        <template x-for="item in filtered" :key="item.id">
+                                            <li @click="select(item)"
+                                                :class="selectedId == item.id ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700'"
+                                                class="cursor-pointer px-3 py-2 text-sm transition-colors flex items-center justify-between">
+                                                <span x-text="item.label" class="truncate"></span>
+                                                <svg x-show="selectedId == item.id" class="size-4 text-blue-600 dark:text-blue-400 shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                                            </li>
+                                        </template>
+                                        <li x-show="filtered.length === 0" class="px-3 py-4 text-center text-sm text-zinc-400 dark:text-zinc-500">
+                                            Peserta tidak ditemukan
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                             <flux:error name="peserta_kb_id" />
                         </flux:field>
 

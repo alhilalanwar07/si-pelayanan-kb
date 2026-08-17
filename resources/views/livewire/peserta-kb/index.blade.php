@@ -5,7 +5,7 @@
             <flux:heading size="xl" level="1">Data Peserta KB</flux:heading>
             <flux:text size="sm">Kelola seluruh data peserta pelayanan kontrasepsi</flux:text>
         </div>
-        @if(auth()->user()->isAdmin())
+        @if(auth()->user()->isAdmin() || auth()->user()->isBidan())
             <flux:button variant="primary" icon="plus" href="{{ route('peserta-kb.create') }}" wire:navigate>
                 Tambah Peserta
             </flux:button>
@@ -121,9 +121,9 @@
                                             Verifikasi
                                         </flux:button>
                                     @elseif(auth()->user()->isAdmin() && $peserta->isTerverifikasi() && $peserta->nomor_hp)
-                                        <flux:button size="xs" variant="outline" href="{{ $peserta->whatsapp_link }}" target="_blank" icon="chat-bubble-left-right" class="text-emerald-600 dark:text-emerald-400">
+                                        <!-- <flux:button size="xs" variant="outline" href="{{ $peserta->whatsapp_link }}" target="_blank" icon="chat-bubble-left-right" class="text-emerald-600 dark:text-emerald-400">
                                             Kirim Jadwal (WA)
-                                        </flux:button>
+                                        </flux:button> -->
                                     @endif
 
                                     <!-- Hapus Button -->
