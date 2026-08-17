@@ -83,7 +83,7 @@ class JadwalPelayanan extends Model
      */
     public function sisaKuota(): int
     {
-        return max(0, $this->kuota - $this->antrians()->count());
+        return max(0, $this->kuota - $this->antrians()->where('status', '!=', 'batal')->count());
     }
 
     /**

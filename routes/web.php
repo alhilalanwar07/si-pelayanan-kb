@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 // ──── Public Routes ────
 Route::get('/', \App\Livewire\Beranda::class)->name('home');
 Route::get('/registrasi', \App\Livewire\RegistrasiMandiri::class)->name('registrasi');
+Route::get('/tiket-antrian/{antrian}/pdf', [\App\Http\Controllers\TiketAntrianPdfController::class, 'download'])->name('tiket.pdf');
 
 // ──── Authenticated Routes ────
 Route::middleware(['auth'])->group(function () {

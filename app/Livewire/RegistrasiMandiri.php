@@ -6,6 +6,7 @@ use App\Models\AntrianJadwal;
 use App\Models\JadwalPelayanan;
 use App\Models\PesertaKb;
 use App\Models\Wilayah;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -17,7 +18,7 @@ class RegistrasiMandiri extends Component
     // Step: Cek NIK
     public string $cekNik = '';
     public ?PesertaKb $foundPeserta = null;
-    public string $nikStatus = ''; // '', 'terverifikasi', 'menunggu', 'not_found'
+    public string $nikStatus = ''; // '', 'terdaftar', 'not_found'
 
     // Step: Registrasi (peserta baru)
     public $nik = '';
@@ -35,6 +36,7 @@ class RegistrasiMandiri extends Component
     public ?int $selectedJadwalId = null;
 
     // Hasil Tiket Antrian
+    public ?int $antrianId = null;
     public string $successMessage = '';
     public ?int $nomorAntrian = null;
     public ?string $jadwalInfo = null;
@@ -143,14 +145,14 @@ class RegistrasiMandiri extends Component
                 'penggunaan_asuransi' => $this->penggunaan_asuransi,
                 'jumlah_anak_hidup' => $this->jumlah_anak_hidup,
                 'umur_anak_terakhir' => empty($this->umur_anak_terakhir) ? null : $this->umur_anak_terakhir,
-                'status' => 'terverifikasi', // Otomatis terverifikasi saat registrasi mandiri lengkap
+                'status' => 'terverifikasi',
             ]);
 
             // 2. Buat Nomor Antrian
             $lastAntrian = AntrianJadwal::where('jadwal_pelayanan_id', $jadwal->id)->max('nomor_antrian');
             $nomorAntrian = ($lastAntrian ?? 0) + 1;
 
-            AntrianJadwal::create([
+            $antrian = AntrianJadwal::create([
                 'jadwal_pelayanan_id' => $jadwal->id,
                 'peserta_kb_id' => $peserta->id,
                 'nomor_antrian' => $nomorAntrian,
@@ -158,6 +160,7 @@ class RegistrasiMandiri extends Component
             ]);
 
             $this->foundPeserta = $peserta;
+            $this->antrianId = $antrian->id;
             $this->nomorAntrian = $nomorAntrian;
             $this->selectedJadwal = $jadwal;
             $this->jadwalInfo = $jadwal->tanggal->translatedFormat('l, d F Y') . ' (' . substr($jadwal->waktu_mulai, 0, 5) . ' - ' . substr($jadwal->waktu_selesai, 0, 5) . ' WITA)';
@@ -183,13 +186,15 @@ class RegistrasiMandiri extends Component
         // Check if already registered for this jadwal
         $existing = AntrianJadwal::where('jadwal_pelayanan_id', $jadwal->id)
             ->where('peserta_kb_id', $this->foundPeserta->id)
+            ->where('status', 'terdaftar')
             ->first();
 
         if ($existing) {
+            $this->antrianId = $existing->id;
             $this->nomorAntrian = $existing->nomor_antrian;
             $this->selectedJadwal = $jadwal;
             $this->jadwalInfo = $jadwal->tanggal->translatedFormat('l, d F Y') . ' (' . substr($jadwal->waktu_mulai, 0, 5) . ' - ' . substr($jadwal->waktu_selesai, 0, 5) . ' WITA)';
-            $this->successMessage = 'Anda sudah terdaftar pada jadwal ini.';
+            $this->successMessage = 'Anda sudah memiliki antrian aktif pada jadwal ini.';
             $this->step = 'selesai';
             return;
         }
@@ -204,18 +209,77 @@ class RegistrasiMandiri extends Component
         $lastAntrian = AntrianJadwal::where('jadwal_pelayanan_id', $jadwal->id)->max('nomor_antrian');
         $nomorAntrian = ($lastAntrian ?? 0) + 1;
 
-        AntrianJadwal::create([
+        $antrian = AntrianJadwal::create([
             'jadwal_pelayanan_id' => $jadwal->id,
             'peserta_kb_id' => $this->foundPeserta->id,
             'nomor_antrian' => $nomorAntrian,
             'status' => 'terdaftar',
         ]);
 
+        $this->antrianId = $antrian->id;
         $this->nomorAntrian = $nomorAntrian;
         $this->selectedJadwal = $jadwal;
         $this->jadwalInfo = $jadwal->tanggal->translatedFormat('l, d F Y') . ' (' . substr($jadwal->waktu_mulai, 0, 5) . ' - ' . substr($jadwal->waktu_selesai, 0, 5) . ' WITA)';
-        $this->successMessage = 'Pendaftaran antrian berhasil!';
+        $this->successMessage = 'Pemesanan nomor antrian jadwal pelayanan KB berhasil!';
         $this->step = 'selesai';
+    }
+
+    /**
+     * Batalkan antrian yang belum dilayani agar peserta bisa memilih jadwal lain
+     */
+    public function batalkanAntrian(int $antrianId)
+    {
+        $antrian = AntrianJadwal::where('id', $antrianId)
+            ->where('peserta_kb_id', $this->foundPeserta->id)
+            ->firstOrFail();
+
+        $antrian->update(['status' => 'batal']);
+
+        $this->selectedJadwalId = null;
+        $this->antrianId = null;
+        $this->nomorAntrian = null;
+
+        session()->flash('success_pembatalan', 'Jadwal antrian Anda berhasil dibatalkan. Kuota telah dikembalikan dan Anda dapat memilih jadwal pelayanan baru di bawah.');
+    }
+
+    /**
+     * Tampilkan tiket antrian yang sudah ada
+     */
+    public function lihatTiket(int $antrianId)
+    {
+        $antrian = AntrianJadwal::where('id', $antrianId)
+            ->where('peserta_kb_id', $this->foundPeserta->id)
+            ->with('jadwalPelayanan')
+            ->firstOrFail();
+
+        $jadwal = $antrian->jadwalPelayanan;
+        $this->antrianId = $antrian->id;
+        $this->nomorAntrian = $antrian->nomor_antrian;
+        $this->selectedJadwal = $jadwal;
+        $this->jadwalInfo = $jadwal ? ($jadwal->tanggal->translatedFormat('l, d F Y') . ' (' . substr($jadwal->waktu_mulai, 0, 5) . ' - ' . substr($jadwal->waktu_selesai, 0, 5) . ' WITA)') : '-';
+        $this->successMessage = 'Tiket antrian Anda.';
+        $this->step = 'selesai';
+    }
+
+    /**
+     * Unduh PDF Tiket Antrian Resmi (DomPDF)
+     */
+    public function unduhPdf()
+    {
+        if (!$this->antrianId) {
+            return;
+        }
+
+        $antrian = AntrianJadwal::with(['pesertaKb.wilayah', 'jadwalPelayanan'])->findOrFail($this->antrianId);
+        $pdf = Pdf::loadView('pdf.tiket-antrian', compact('antrian'));
+        $pdf->setPaper('a5', 'portrait');
+
+        $filename = 'Tiket-Antrian-KB-' . str_pad($antrian->nomor_antrian, 3, '0', STR_PAD_LEFT) . '-' . ($antrian->pesertaKb->nik ?? 'pasien') . '.pdf';
+
+        return response()->streamDownload(
+            fn () => print($pdf->output()),
+            $filename
+        );
     }
 
     /**
@@ -233,14 +297,43 @@ class RegistrasiMandiri extends Component
 
         $jadwalTersedia = JadwalPelayanan::aktif()
             ->mendatang()
-            ->withCount('antrians')
+            ->withCount(['antrians' => fn($q) => $q->where('status', '!=', 'batal')])
             ->orderBy('tanggal')
             ->orderBy('waktu_mulai')
             ->get();
 
+        // Antrian aktif pasien yang belum dilayani (status 'terdaftar')
+        $antrianAktif = $this->foundPeserta
+            ? AntrianJadwal::where('peserta_kb_id', $this->foundPeserta->id)
+                ->where('status', 'terdaftar')
+                ->with('jadwalPelayanan')
+                ->latest()
+                ->first()
+            : null;
+
+        // Riwayat pelayanan medis yang sudah dijalani oleh pasien
+        $riwayatPelayanan = $this->foundPeserta
+            ? $this->foundPeserta->pelayanans()
+                ->with(['alokon', 'user'])
+                ->latest('tanggal_pelayanan')
+                ->get()
+            : collect();
+
+        // Riwayat antrian sebelumnya (hadir / batal)
+        $riwayatAntrian = $this->foundPeserta
+            ? AntrianJadwal::where('peserta_kb_id', $this->foundPeserta->id)
+                ->whereIn('status', ['hadir', 'batal'])
+                ->with('jadwalPelayanan')
+                ->latest()
+                ->get()
+            : collect();
+
         return view('livewire.registrasi-mandiri', [
             'wilayahs' => $wilayahs,
             'jadwalTersedia' => $jadwalTersedia,
+            'antrianAktif' => $antrianAktif,
+            'riwayatPelayanan' => $riwayatPelayanan,
+            'riwayatAntrian' => $riwayatAntrian,
         ])->layout('layouts.plain', ['title' => 'Registrasi Mandiri Peserta KB']);
     }
 }

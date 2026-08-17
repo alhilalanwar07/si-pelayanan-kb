@@ -1,43 +1,44 @@
 <div class="min-h-screen bg-slate-50 dark:bg-zinc-950 font-sans text-slate-800 dark:text-zinc-100 selection:bg-blue-600 selection:text-white">
     <!-- ============ TOP NAVBAR ============ -->
     <header class="sticky top-0 z-50 bg-white/85 dark:bg-zinc-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-zinc-800/80 transition-all">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
-            <a href="{{ route('home') }}" class="flex items-center gap-3 group" wire:navigate>
-                <div class="flex size-10 sm:size-11 items-center justify-center rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-black text-base shadow-lg shadow-blue-500/25 group-hover:scale-105 transition-transform">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3.5 flex items-center justify-between gap-2">
+            <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-3 group min-w-0 flex-1 sm:flex-initial" wire:navigate>
+                <div class="flex size-8 sm:size-10 items-center justify-center rounded-xl sm:rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-black text-xs sm:text-base shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform shrink-0">
                     KB
                 </div>
-                <div>
-                    <div class="font-extrabold text-base tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
-                        SI Pelayanan KB
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-2xs font-semibold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                <div class="min-w-0">
+                    <div class="font-extrabold text-xs sm:text-base tracking-tight text-slate-900 dark:text-white flex items-center gap-1 sm:gap-1.5 truncate">
+                        <span>SI Pelayanan KB</span>
+                        <span class="hidden sm:inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-full text-3xs sm:text-2xs font-semibold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                             Wundulako
                         </span>
                     </div>
-                    <div class="text-xs text-slate-500 dark:text-zinc-400 font-medium">Puskesmas Wundulako, Kolaka</div>
+                    <div class="text-3xs sm:text-xs text-slate-500 dark:text-zinc-400 font-medium truncate">Puskesmas Wundulako, Kolaka</div>
                 </div>
             </a>
 
             <!-- Navigation Actions -->
-            <div class="flex items-center gap-2.5 sm:gap-3">
-                <a href="#jadwal" class="hidden sm:inline-flex text-xs font-semibold text-slate-600 hover:text-blue-600 dark:text-zinc-400 dark:hover:text-white px-3 py-2 transition-colors">
+            <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+                <a href="#jadwal" class="hidden sm:inline-flex text-xs font-semibold text-slate-600 hover:text-blue-600 dark:text-zinc-400 dark:hover:text-white px-2.5 py-1.5 transition-colors">
                     Jadwal Layanan
                 </a>
-                <a href="#metode" class="hidden md:inline-flex text-xs font-semibold text-slate-600 hover:text-blue-600 dark:text-zinc-400 dark:hover:text-white px-3 py-2 transition-colors">
+                <a href="#metode" class="hidden md:inline-flex text-xs font-semibold text-slate-600 hover:text-blue-600 dark:text-zinc-400 dark:hover:text-white px-2.5 py-1.5 transition-colors">
                     Metode KB
                 </a>
-                <a href="#faq" class="hidden md:inline-flex text-xs font-semibold text-slate-600 hover:text-blue-600 dark:text-zinc-400 dark:hover:text-white px-3 py-2 transition-colors">
+                <a href="#faq" class="hidden md:inline-flex text-xs font-semibold text-slate-600 hover:text-blue-600 dark:text-zinc-400 dark:hover:text-white px-2.5 py-1.5 transition-colors">
                     FAQ
                 </a>
 
                 @auth
-                    <flux:button variant="primary" size="sm" href="{{ route('dashboard') }}" icon="squares-2x2" wire:navigate class="rounded-xl shadow-md shadow-blue-600/20">
+                    <flux:button variant="primary" size="sm" href="{{ route('dashboard') }}" icon="squares-2x2" wire:navigate class="rounded-xl shadow-md shadow-blue-600/20 text-xs px-2.5 sm:px-3 h-8 sm:h-9">
                         Dashboard
                     </flux:button>
                 @else
-                    <flux:button variant="outline" size="sm" href="{{ route('registrasi') }}" icon="user-plus" wire:navigate class="rounded-xl font-semibold border-slate-300 dark:border-zinc-700">
-                        Daftar Antrian
+                    <flux:button variant="outline" size="sm" href="{{ route('registrasi') }}" icon="user-plus" wire:navigate class="rounded-xl font-semibold border-slate-300 dark:border-zinc-700 text-xs px-2 sm:px-3 h-8 sm:h-9">
+                        <span class="hidden sm:inline">Daftar Antrian</span>
+                        <span class="sm:hidden">Daftar</span>
                     </flux:button>
-                    <flux:button variant="primary" size="sm" href="{{ route('login') }}" icon="arrow-right-end-on-rectangle" wire:navigate class="rounded-xl font-semibold shadow-md shadow-blue-600/20">
+                    <flux:button variant="primary" size="sm" href="{{ route('login') }}" icon="arrow-right-end-on-rectangle" wire:navigate class="rounded-xl font-semibold shadow-md shadow-blue-600/20 text-xs px-2.5 sm:px-3 h-8 sm:h-9">
                         Masuk
                     </flux:button>
                 @endauth

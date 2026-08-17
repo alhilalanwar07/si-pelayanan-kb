@@ -31,9 +31,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznubP9wIIqxDaVJxPX49P4944noKmKE5WubqF5109i2E64po0oSmqOzybi+7/ZAE6TE8Ksw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- ============ TOP NAVBAR ============ -->
-    <header class="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-zinc-800/80 px-3 sm:px-8 py-3 flex items-center justify-between sticky top-0 z-40 no-print">
-        <a href="{{ route('home') }}" class="flex items-center gap-2.5 sm:gap-3 group min-w-0" wire:navigate>
-            <div class="flex size-9 sm:size-10 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-black text-xs sm:text-sm shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform shrink-0">
+    <header class="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-zinc-800/80 px-3 sm:px-6 md:px-8 py-2.5 sm:py-3.5 flex items-center justify-between sticky top-0 z-40 no-print gap-2">
+        <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-3 group min-w-0 flex-1 sm:flex-initial" wire:navigate>
+            <div class="flex size-8 sm:size-10 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-black text-xs sm:text-sm shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform shrink-0">
                 KB
             </div>
             <div class="min-w-0">
@@ -42,10 +42,10 @@
             </div>
         </a>
         <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-            <flux:button variant="outline" size="sm" href="{{ route('home') }}" icon="home" wire:navigate class="rounded-xl border-slate-300 dark:border-zinc-700 px-2.5 sm:px-3 text-xs">
+            <flux:button variant="outline" size="sm" href="{{ route('home') }}" icon="home" wire:navigate class="rounded-xl border-slate-300 dark:border-zinc-700 px-2 sm:px-3 text-xs h-8 sm:h-9">
                 <span class="hidden sm:inline">Beranda</span>
             </flux:button>
-            <flux:button variant="primary" size="sm" href="{{ route('login') }}" icon="arrow-right-end-on-rectangle" wire:navigate class="rounded-xl shadow-md shadow-blue-600/20 px-2.5 sm:px-3 text-xs">
+            <flux:button variant="primary" size="sm" href="{{ route('login') }}" icon="arrow-right-end-on-rectangle" wire:navigate class="rounded-xl shadow-md shadow-blue-600/20 px-2 sm:px-3 text-xs h-8 sm:h-9">
                 <span class="hidden sm:inline">Masuk Petugas</span>
                 <span class="sm:hidden">Masuk</span>
             </flux:button>
@@ -359,190 +359,330 @@
                         </div>
                     </form>
 
-                {{-- ==================== STEP 2B: PILIH JADWAL (PESERTA LAMA TERVERIFIKASI) ==================== --}}
+                {{-- ==================== STEP 2B: DASHBOARD PASIEN (ANTRIAN AKTIF, BATALKAN, RIWAYAT, & PILIH JADWAL) ==================== --}}
                 @elseif($step === 'pilih_jadwal')
-                    <div class="space-y-5 sm:space-y-6">
+                    <div class="space-y-6 sm:space-y-8">
                         <!-- Top Header -->
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-zinc-800 pb-4">
                             <div>
-                                <h3 class="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">Pilih Jadwal Pelayanan</h3>
-                                <p class="text-2xs sm:text-xs text-slate-500 dark:text-zinc-400">Pilih sesi waktu kunjungan untuk mendapatkan nomor antrian resmi.</p>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">Dashboard Pasien & Pemilihan Jadwal</h3>
+                                <p class="text-2xs sm:text-xs text-slate-500 dark:text-zinc-400">Pantau tiket antrian aktif, riwayat pelayanan, atau pilih jadwal kunjungan baru.</p>
                             </div>
                             <flux:button variant="ghost" size="sm" wire:click="kembaliCekNik" icon="arrow-left" class="rounded-xl font-semibold self-start sm:self-auto text-xs">
                                 Ganti NIK
                             </flux:button>
                         </div>
 
-                        <!-- Verified Patient Banner -->
+                        <!-- Flash Alert Pembatalan / Notifikasi -->
+                        @if(session()->has('success_pembatalan'))
+                            <div class="rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 p-4 flex items-start gap-3">
+                                <div class="size-8 rounded-xl bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0">
+                                    <flux:icon name="check-circle" class="size-5" />
+                                </div>
+                                <div class="text-xs text-emerald-900 dark:text-emerald-200">
+                                    <div class="font-bold">Pembatalan Berhasil</div>
+                                    <p class="mt-0.5 text-2xs sm:text-xs leading-relaxed text-emerald-800/90 dark:text-emerald-300/90">
+                                        {{ session('success_pembatalan') }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Patient Profile Card -->
                         @if($foundPeserta)
-                            <div class="rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-blue-500/10 border border-emerald-200 dark:border-emerald-900/60 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
-                                <div class="flex items-center gap-3 min-w-0">
-                                    <div class="size-10 sm:size-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center font-bold text-sm sm:text-base shadow-md shadow-emerald-500/20 shrink-0">
+                            <div class="rounded-2xl sm:rounded-3xl bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-teal-500/10 border border-blue-200/80 dark:border-blue-900/60 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div class="flex items-center gap-3.5 min-w-0">
+                                    <div class="size-11 sm:size-13 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-base shadow-md shadow-blue-500/20 shrink-0">
                                         {{ strtoupper(substr($foundPeserta->nama_lengkap, 0, 2)) }}
                                     </div>
                                     <div class="min-w-0">
                                         <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
                                             <h4 class="font-black text-sm sm:text-base text-slate-900 dark:text-white truncate">{{ $foundPeserta->nama_lengkap }}</h4>
-                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-3xs sm:text-2xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 shrink-0">
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-3xs sm:text-2xs font-bold bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300 shrink-0">
                                                 <flux:icon name="check-badge" class="size-3" />
-                                                Terdaftar
+                                                Pasien Terdaftar
                                             </span>
                                         </div>
-                                        <p class="text-2xs sm:text-xs text-slate-500 dark:text-zinc-400 font-mono mt-0.5 truncate">NIK: {{ $foundPeserta->nik }} • {{ $foundPeserta->wilayah->nama_desa_kelurahan ?? 'Wundulako' }}</p>
+                                        <p class="text-2xs sm:text-xs text-slate-600 dark:text-zinc-400 font-mono mt-0.5 truncate">
+                                            NIK: {{ $foundPeserta->nik }} • {{ $foundPeserta->wilayah->nama_desa_kelurahan ?? 'Kec. Wundulako' }}
+                                        </p>
                                     </div>
+                                </div>
+
+                                <div class="flex flex-wrap items-center gap-2 text-2xs sm:text-xs text-slate-600 dark:text-zinc-400 pt-2 md:pt-0 border-t md:border-t-0 border-slate-200/60 dark:border-zinc-800">
+                                    <span class="px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 font-semibold">
+                                        Asuransi: <strong class="text-slate-900 dark:text-white">{{ strtoupper($foundPeserta->penggunaan_asuransi ?? 'UMUM') }}</strong>
+                                    </span>
+                                    <span class="px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 font-semibold">
+                                        Anak: <strong class="text-slate-900 dark:text-white">{{ $foundPeserta->jumlah_anak_hidup ?? 0 }} Orang</strong>
+                                    </span>
                                 </div>
                             </div>
                         @endif
 
-                        <!-- Error Message if Any -->
-                        <flux:error name="selectedJadwalId" />
+                        {{-- ==================== 1. JADWAL / ANTRIAN AKTIF (BELUM DILAKUKAN) ==================== --}}
+                        @if($antrianAktif)
+                            <div class="rounded-2xl sm:rounded-3xl border-2 border-blue-500/40 bg-gradient-to-b from-blue-50/80 via-white to-white dark:from-blue-950/30 dark:via-zinc-900 dark:to-zinc-900 p-5 sm:p-6 space-y-4 shadow-lg shadow-blue-500/5">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-blue-200/60 dark:border-zinc-800 pb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="relative flex size-3">
+                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full size-3 bg-blue-600"></span>
+                                        </span>
+                                        <h4 class="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
+                                            Jadwal Antrian Aktif Anda
+                                        </h4>
+                                    </div>
+                                    <span class="px-2.5 py-0.5 rounded-full text-3xs sm:text-2xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800 self-start sm:self-auto">
+                                        Menunggu Kehadiran
+                                    </span>
+                                </div>
 
-                        <!-- Schedule List Selection -->
-                        @if($jadwalTersedia->count() > 0)
-                            <div class="space-y-3">
-                                <flux:label class="font-bold text-xs">Pilih Jadwal yang Tersedia</flux:label>
-                                @foreach($jadwalTersedia as $jadwal)
-                                    @php
-                                        $sisa = max(0, $jadwal->kuota - $jadwal->antrians_count);
-                                        $isFull = $sisa <= 0;
-                                        $isSelected = $selectedJadwalId === $jadwal->id;
-                                    @endphp
-                                    <label class="block cursor-pointer {{ $isFull ? 'opacity-50 cursor-not-allowed pointer-events-none' : '' }}">
-                                        <input type="radio" wire:model.live="selectedJadwalId" value="{{ $jadwal->id }}"
-                                            class="peer hidden" {{ $isFull ? 'disabled' : '' }}>
-                                        <div class="rounded-2xl border-2 p-4 sm:p-5 transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 sm:gap-4
-                                            {{ $isSelected ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-950/30 dark:border-blue-500 shadow-md ring-2 ring-blue-500/20' : 'border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-slate-300 dark:hover:border-zinc-700' }}
-                                        ">
-                                            <!-- Schedule Info -->
-                                            <div class="space-y-1.5 min-w-0">
-                                                <div class="flex flex-wrap items-center gap-2">
-                                                    <span class="font-black text-sm sm:text-base text-slate-900 dark:text-white">
-                                                        {{ $jadwal->tanggal->translatedFormat('l, d F Y') }}
-                                                    </span>
-                                                    @if($isFull)
-                                                        <span class="px-2 py-0.5 rounded-full text-3xs sm:text-2xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-400">Penuh</span>
-                                                    @else
-                                                        <span class="px-2 py-0.5 rounded-full text-3xs sm:text-2xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Tersedia</span>
-                                                    @endif
-                                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+                                    <!-- Nomor Antrian Box -->
+                                    <div class="sm:col-span-4 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl p-4 text-center text-white shadow-md shadow-blue-600/25 space-y-1">
+                                        <div class="text-3xs uppercase tracking-widest font-extrabold text-blue-200">Nomor Antrian</div>
+                                        <div class="text-4xl sm:text-5xl font-black tracking-tight">
+                                            {{ str_pad($antrianAktif->nomor_antrian, 3, '0', STR_PAD_LEFT) }}
+                                        </div>
+                                        <div class="text-3xs text-blue-100 font-medium">Tiket Terverifikasi</div>
+                                    </div>
 
-                                                <div class="flex flex-wrap items-center gap-2 text-2xs sm:text-xs text-slate-600 dark:text-zinc-400">
-                                                    <span class="flex items-center gap-1 font-semibold text-blue-600 dark:text-blue-400 shrink-0">
-                                                        <flux:icon name="clock" class="size-3.5" />
-                                                        {{ substr($jadwal->waktu_mulai, 0, 5) }} - {{ substr($jadwal->waktu_selesai, 0, 5) }} WITA
-                                                    </span>
-                                                    @if($jadwal->keterangan)
-                                                        <span class="truncate">• {{ $jadwal->keterangan }}</span>
-                                                    @endif
-                                                </div>
+                                    <!-- Schedule Details -->
+                                    <div class="sm:col-span-8 space-y-2.5 text-xs">
+                                        <div class="space-y-1">
+                                            <span class="text-slate-400 font-semibold text-2xs">Waktu & Sesi Pelayanan:</span>
+                                            <div class="font-extrabold text-slate-900 dark:text-white text-sm sm:text-base flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
+                                                <flux:icon name="calendar-days" class="size-4 shrink-0" />
+                                                <span>{{ $antrianAktif->jadwalPelayanan->tanggal->translatedFormat('l, d F Y') }}</span>
                                             </div>
-
-                                            <!-- Quota & Check Indicator -->
-                                            <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-zinc-800">
-                                                <div class="text-left sm:text-right">
-                                                    <div class="text-3xs sm:text-2xs uppercase tracking-wider text-slate-400 font-bold">Sisa Kuota</div>
-                                                    <div class="text-xs sm:text-sm font-black {{ $sisa > 5 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600' }}">
-                                                        {{ $sisa }} / {{ $jadwal->kuota }} Kursi
-                                                    </div>
-                                                </div>
-
-                                                <div class="size-6 rounded-full border-2 flex items-center justify-center transition-colors shrink-0
-                                                    {{ $isSelected ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300 dark:border-zinc-700' }}">
-                                                    @if($isSelected)
-                                                        <flux:icon name="check" class="size-3.5 stroke-[3]" />
-                                                    @endif
-                                                </div>
+                                            <div class="text-2xs sm:text-xs text-slate-600 dark:text-zinc-400 flex items-center gap-1.5 font-medium">
+                                                <flux:icon name="clock" class="size-3.5 text-slate-400" />
+                                                <span>Pukul {{ substr($antrianAktif->jadwalPelayanan->waktu_mulai, 0, 5) }} - {{ substr($antrianAktif->jadwalPelayanan->waktu_selesai, 0, 5) }} WITA</span>
+                                                @if($antrianAktif->jadwalPelayanan->keterangan)
+                                                    <span class="truncate">• {{ $antrianAktif->jadwalPelayanan->keterangan }}</span>
+                                                @endif
                                             </div>
                                         </div>
-                                    </label>
-                                @endforeach
+
+                                        <div class="text-2xs text-slate-500 dark:text-zinc-400 bg-white dark:bg-zinc-800/60 p-2.5 rounded-xl border border-slate-200/70 dark:border-zinc-800">
+                                            📍 Lokasi: Loket Pelayanan KB UPTD Puskesmas Wundulako. Harap hadir 15 menit sebelum sesi dimulai.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons for Active Queue -->
+                                <div class="pt-2 border-t border-slate-100 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+                                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                                        <flux:button variant="primary" size="sm" wire:click="lihatTiket({{ $antrianAktif->id }})" icon="ticket" class="rounded-xl text-xs font-bold w-full sm:w-auto justify-center">
+                                            Buka Kartu Tiket
+                                        </flux:button>
+                                        <a href="{{ route('tiket.pdf', $antrianAktif->id) }}" target="_blank"
+                                            class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition-all w-full sm:w-auto">
+                                            <flux:icon name="arrow-down-tray" class="size-3.5 text-rose-400" />
+                                            Unduh PDF Tiket
+                                        </a>
+                                    </div>
+
+                                    <!-- Tombol Batalkan Antrian -->
+                                    <flux:button variant="danger" size="sm" wire:click="batalkanAntrian({{ $antrianAktif->id }})"
+                                        wire:confirm="Apakah Anda yakin ingin membatalkan jadwal antrian ini? Nomor antrian dan kuota akan dibatalkan sehingga Anda dapat memilih jadwal pelayanan yang baru."
+                                        icon="x-mark" class="rounded-xl text-xs font-bold w-full sm:w-auto justify-center">
+                                        Batalkan / Ubah Jadwal
+                                    </flux:button>
+                                </div>
                             </div>
 
-                            <div class="pt-4 border-t border-slate-100 dark:border-zinc-800">
-                                <flux:button variant="primary" wire:click="pilihJadwal" :disabled="!$selectedJadwalId"
-                                    class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-blue-600/25 text-xs sm:text-sm justify-center">
-                                    <flux:icon name="ticket" class="size-4 mr-2" />
-                                    Konfirmasi & Ambil Nomor Antrian
-                                </flux:button>
-                            </div>
+                        {{-- ==================== 2. PILIH JADWAL BARU (JIKA TIDAK ADA ANTRIAN AKTIF) ==================== --}}
                         @else
-                            <div class="text-center py-12 px-6 rounded-3xl bg-slate-50 dark:bg-zinc-800/40 border border-dashed border-slate-300 dark:border-zinc-700 space-y-3">
-                                <flux:icon name="calendar" class="size-10 text-slate-400 mx-auto" />
-                                <h4 class="font-bold text-sm text-slate-800 dark:text-zinc-200">Belum Ada Jadwal Pelayanan Aktif</h4>
-                                <p class="text-xs text-slate-500 dark:text-zinc-400">Silakan hubungi faskes atau cek kembali dalam beberapa waktu ke depan.</p>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs sm:text-sm">
+                                        <flux:icon name="calendar-days" class="size-4 shrink-0" />
+                                        Pilih Jadwal Pelayanan yang Tersedia
+                                    </div>
+                                    <span class="text-3xs sm:text-2xs text-slate-400 font-semibold">*Pilih salah satu jadwal</span>
+                                </div>
+
+                                <flux:error name="selectedJadwalId" />
+
+                                @if($jadwalTersedia->count() > 0)
+                                    <div class="space-y-3">
+                                        @foreach($jadwalTersedia as $jadwal)
+                                            @php
+                                                $sisa = max(0, $jadwal->kuota - $jadwal->antrians_count);
+                                                $isFull = $sisa <= 0;
+                                                $isSelected = $selectedJadwalId === $jadwal->id;
+                                            @endphp
+                                            <label class="block cursor-pointer {{ $isFull ? 'opacity-50 cursor-not-allowed pointer-events-none' : '' }}">
+                                                <input type="radio" wire:model.live="selectedJadwalId" value="{{ $jadwal->id }}"
+                                                    class="peer hidden" {{ $isFull ? 'disabled' : '' }}>
+                                                <div class="rounded-2xl border-2 p-4 sm:p-5 transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 sm:gap-4
+                                                    {{ $isSelected ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-950/30 dark:border-blue-500 shadow-md ring-2 ring-blue-500/20' : 'border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-slate-300 dark:hover:border-zinc-700' }}
+                                                ">
+                                                    <!-- Schedule Info -->
+                                                    <div class="space-y-1.5 min-w-0">
+                                                        <div class="flex flex-wrap items-center gap-2">
+                                                            <span class="font-black text-sm sm:text-base text-slate-900 dark:text-white">
+                                                                {{ $jadwal->tanggal->translatedFormat('l, d F Y') }}
+                                                            </span>
+                                                            @if($isFull)
+                                                                <span class="px-2 py-0.5 rounded-full text-3xs sm:text-2xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-400">Penuh</span>
+                                                            @else
+                                                                <span class="px-2 py-0.5 rounded-full text-3xs sm:text-2xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Tersedia</span>
+                                                            @endif
+                                                        </div>
+
+                                                        <div class="flex flex-wrap items-center gap-2 text-2xs sm:text-xs text-slate-600 dark:text-zinc-400">
+                                                            <span class="flex items-center gap-1 font-semibold text-blue-600 dark:text-blue-400 shrink-0">
+                                                                <flux:icon name="clock" class="size-3.5" />
+                                                                {{ substr($jadwal->waktu_mulai, 0, 5) }} - {{ substr($jadwal->waktu_selesai, 0, 5) }} WITA
+                                                            </span>
+                                                            @if($jadwal->keterangan)
+                                                                <span class="truncate">• {{ $jadwal->keterangan }}</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Quota & Check Indicator -->
+                                                    <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-zinc-800">
+                                                        <div class="text-left sm:text-right">
+                                                            <div class="text-3xs sm:text-2xs uppercase tracking-wider text-slate-400 font-bold">Sisa Kuota</div>
+                                                            <div class="text-xs sm:text-sm font-black {{ $sisa > 5 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600' }}">
+                                                                {{ $sisa }} / {{ $jadwal->kuota }} Kursi
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="size-6 rounded-full border-2 flex items-center justify-center transition-colors shrink-0
+                                                            {{ $isSelected ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300 dark:border-zinc-700' }}">
+                                                            @if($isSelected)
+                                                                <flux:icon name="check" class="size-3.5 stroke-[3]" />
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        @endforeach
+                                    </div>
+
+                                    <div class="pt-2">
+                                        <flux:button variant="primary" wire:click="pilihJadwal" :disabled="!$selectedJadwalId"
+                                            class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-blue-600/25 text-xs sm:text-sm justify-center">
+                                            <flux:icon name="ticket" class="size-4 mr-2" />
+                                            Konfirmasi & Ambil Nomor Antrian
+                                        </flux:button>
+                                    </div>
+                                @else
+                                    <div class="text-center py-10 px-6 rounded-3xl bg-slate-50 dark:bg-zinc-800/40 border border-dashed border-slate-300 dark:border-zinc-700 space-y-2">
+                                        <flux:icon name="calendar" class="size-8 text-slate-400 mx-auto" />
+                                        <h4 class="font-bold text-sm text-slate-800 dark:text-zinc-200">Belum Ada Jadwal Pelayanan Aktif</h4>
+                                        <p class="text-xs text-slate-500 dark:text-zinc-400">Silakan cek kembali dalam waktu dekat atau hubungi petugas puskesmas.</p>
+                                    </div>
+                                @endif
                             </div>
                         @endif
+
+                        {{-- ==================== 3. RIWAYAT PELAYANAN MEDIS KB YANG SUDAH DIJALANI ==================== --}}
+                        <div class="space-y-4 pt-4 border-t border-slate-100 dark:border-zinc-800">
+                            <div class="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-xs sm:text-sm">
+                                <flux:icon name="clipboard-document-check" class="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                Riwayat Pelayanan KB yang Telah Dijalani
+                            </div>
+
+                            @if($riwayatPelayanan->count() > 0)
+                                <div class="space-y-3">
+                                    @foreach($riwayatPelayanan as $pelayanan)
+                                        <div class="rounded-2xl bg-slate-50 dark:bg-zinc-800/50 border border-slate-200/80 dark:border-zinc-700/80 p-4 space-y-2.5">
+                                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-slate-200/60 dark:border-zinc-700/60 pb-2">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="size-2 rounded-full bg-emerald-500"></span>
+                                                    <span class="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white">
+                                                        {{ $pelayanan->alokon->nama_alokon ?? 'Pelayanan KB' }}
+                                                    </span>
+                                                    <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                                                        Selesai Dilayani ✓
+                                                    </span>
+                                                </div>
+                                                <span class="text-2xs font-semibold text-slate-500 dark:text-zinc-400">
+                                                    {{ $pelayanan->tanggal_pelayanan ? $pelayanan->tanggal_pelayanan->translatedFormat('d F Y') : '-' }}
+                                                </span>
+                                            </div>
+
+                                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-2xs text-slate-600 dark:text-zinc-400">
+                                                <div>
+                                                    <span class="text-slate-400 font-medium">Bidan Pemeriksa:</span>
+                                                    <div class="font-bold text-slate-800 dark:text-zinc-200">{{ $pelayanan->user->name ?? 'Bidan Puskesmas' }}</div>
+                                                </div>
+                                                <div>
+                                                    <span class="text-slate-400 font-medium">Jenis Akseptor:</span>
+                                                    <div class="font-bold text-slate-800 dark:text-zinc-200">{{ ucfirst($pelayanan->jenis_peserta ?? 'Peserta Aktif') }}</div>
+                                                </div>
+                                                <div>
+                                                    <span class="text-slate-400 font-medium">Jadwal Kontrol Ulang:</span>
+                                                    <div class="font-bold text-blue-600 dark:text-blue-400">
+                                                        {{ $pelayanan->tanggal_kembali_peserta ? $pelayanan->tanggal_kembali_peserta->translatedFormat('d F Y') : 'Sesuai Kebutuhan' }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @if($pelayanan->keluhan_efek_samping || $pelayanan->tindakan_diberikan)
+                                                <div class="text-3xs sm:text-2xs text-slate-500 dark:text-zinc-400 pt-1.5 border-t border-slate-200/50 dark:border-zinc-700/50">
+                                                    Catatan / Tindakan: {{ $pelayanan->tindakan_diberikan ?? $pelayanan->keluhan_efek_samping ?? '-' }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="text-center py-6 px-4 rounded-2xl bg-slate-50/60 dark:bg-zinc-800/30 border border-slate-200/60 dark:border-zinc-800 text-slate-500 dark:text-zinc-400 text-2xs sm:text-xs">
+                                    Belum ada catatan rekam pelayanan medis sebelumnya di Puskesmas Wundulako.
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- ==================== 4. RIWAYAT ANTRIAN SEBELUMNYA ==================== --}}
+                        @if($riwayatAntrian->count() > 0)
+                            <div class="space-y-3 pt-4 border-t border-slate-100 dark:border-zinc-800">
+                                <div class="flex items-center gap-2 text-slate-700 dark:text-zinc-300 font-bold text-xs">
+                                    <flux:icon name="clock" class="size-3.5 text-slate-400 shrink-0" />
+                                    Riwayat Pemesanan Antrian Sebelumnya
+                                </div>
+
+                                <div class="space-y-2">
+                                    @foreach($riwayatAntrian as $antrian)
+                                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 dark:bg-zinc-800/40 border border-slate-200/60 dark:border-zinc-800 text-2xs">
+                                            <div class="flex items-center gap-2 min-w-0">
+                                                <span class="font-mono font-bold text-slate-700 dark:text-zinc-300 shrink-0">
+                                                    #{{ str_pad($antrian->nomor_antrian, 3, '0', STR_PAD_LEFT) }}
+                                                </span>
+                                                <span class="truncate text-slate-600 dark:text-zinc-400">
+                                                    {{ $antrian->jadwalPelayanan ? $antrian->jadwalPelayanan->tanggal->translatedFormat('d M Y') : '-' }}
+                                                </span>
+                                            </div>
+
+                                            @if($antrian->status === 'hadir')
+                                                <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                                                    Selesai Hadir
+                                                </span>
+                                            @elseif($antrian->status === 'batal')
+                                                <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-400">
+                                                    Dibatalkan
+                                                </span>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
                     </div>
 
                 {{-- ==================== STEP 3: TIKET ANTRIAN DIGITAL & DOWNLOAD/PRINT ==================== --}}
                 @elseif($step === 'selesai')
-                    <div class="space-y-5 sm:space-y-6" x-data="{
-                        loadingPdf: false,
-                        loadingImg: false,
-                        
-                        async getCanvas() {
-                            const card = document.getElementById('tiket-antrian-card');
-                            if (!card) throw new Error('Elemen tiket tidak ditemukan');
-                            
-                            return await html2canvas(card, {
-                                scale: 2.5,
-                                useCORS: true,
-                                allowTaint: true,
-                                backgroundColor: '#ffffff',
-                                logging: false,
-                            });
-                        },
-
-                        async unduhPdf() {
-                            if (this.loadingPdf) return;
-                            this.loadingPdf = true;
-                            try {
-                                const canvas = await this.getCanvas();
-                                const imgData = canvas.toDataURL('image/png');
-                                const { jsPDF } = window.jspdf;
-                                
-                                const imgWidth = 140; // mm
-                                const pageHeight = (canvas.height * imgWidth) / canvas.width;
-                                
-                                const doc = new jsPDF({
-                                    orientation: 'portrait',
-                                    unit: 'mm',
-                                    format: [imgWidth + 16, pageHeight + 16]
-                                });
-
-                                doc.addImage(imgData, 'PNG', 8, 8, imgWidth, pageHeight);
-                                doc.save('Tiket-Antrian-KB-' + Date.now() + '.pdf');
-                            } catch (err) {
-                                console.error('PDF Error:', err);
-                                alert('Gagal mengunduh PDF: ' + err.message);
-                            } finally {
-                                this.loadingPdf = false;
-                            }
-                        },
-
-                        async unduhGambar() {
-                            if (this.loadingImg) return;
-                            this.loadingImg = true;
-                            try {
-                                const canvas = await this.getCanvas();
-                                const image = canvas.toDataURL('image/png');
-                                const link = document.createElement('a');
-                                link.download = 'Tiket-Antrian-KB-' + Date.now() + '.png';
-                                link.href = image;
-                                document.body.appendChild(link);
-                                link.click();
-                                document.body.removeChild(link);
-                            } catch (err) {
-                                console.error('Image Error:', err);
-                                alert('Gagal mengunduh gambar: ' + err.message);
-                            } finally {
-                                this.loadingImg = false;
-                            }
-                        }
-                    }">
+                    <div class="space-y-5 sm:space-y-6">
 
                         <!-- Digital Boarding Pass / Ticket Card -->
-                        <div id="tiket-antrian-card" wire:ignore.self class="rounded-2xl sm:rounded-3xl border-2 border-dashed border-blue-400 dark:border-blue-800 bg-gradient-to-b from-blue-50/60 via-white to-white dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-900 p-5 sm:p-7 md:p-8 space-y-5 sm:space-y-6 shadow-xl shadow-blue-500/10">
+                        <div id="tiket-antrian-card" class="rounded-2xl sm:rounded-3xl border-2 border-dashed border-blue-400 dark:border-blue-800 bg-gradient-to-b from-blue-50/60 via-white to-white dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-900 p-5 sm:p-7 md:p-8 space-y-5 sm:space-y-6 shadow-xl shadow-blue-500/10">
 
                             <!-- Header Tiket -->
                             <div class="flex items-center justify-between border-b border-slate-200 dark:border-zinc-800 pb-4 gap-2">
@@ -565,7 +705,7 @@
                                     <div class="text-5xl sm:text-7xl font-black tracking-tight drop-shadow-md">
                                         {{ str_pad($nomorAntrian, 3, '0', STR_PAD_LEFT) }}
                                     </div>
-                                    <div class="text-2xs sm:text-xs text-blue-100 font-medium px-2">Harap simpan gambar atau unduh file PDF tiket ini</div>
+                                    <div class="text-2xs sm:text-xs text-blue-100 font-medium px-2">Harap simpan file PDF atau cetak tiket ini</div>
                                 </div>
 
                                 <!-- Detail Grid -->
@@ -600,7 +740,7 @@
                                 </div>
                                 <ul class="list-disc list-inside space-y-1 pl-1">
                                     <li>Bawa KTP Asli dan Kartu BPJS/KIS (jika ada).</li>
-                                    <li>Tunjukkan nomor antrian atau file tiket ini ke loket pelayanan KB.</li>
+                                    <li>Tunjukkan lembar tiket PDF atau nomor antrian ini ke loket pelayanan KB.</li>
                                     <li>Hadir 15 menit sebelum waktu pelayanan dimulai.</li>
                                 </ul>
                             </div>
@@ -612,43 +752,44 @@
                             </div>
                         </div>
 
-                        <!-- Action Buttons: Direct PDF Download & Screenshot PNG Download -->
+                        <!-- Action Buttons: Direct DomPDF Download & Print -->
                         <div class="space-y-3 no-print">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-                                <!-- Tombol Unduh PDF Langsung -->
-                                <button type="button" @click="unduhPdf()" :disabled="loadingPdf"
-                                    class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer disabled:opacity-50">
-                                    <template x-if="loadingPdf">
-                                        <span class="inline-flex items-center gap-2">
-                                            <span class="animate-spin">⏳</span> Menyiapkan PDF...
-                                        </span>
-                                    </template>
-                                    <template x-if="!loadingPdf">
-                                        <span class="inline-flex items-center gap-2">
+                                <!-- Tombol Unduh PDF Langsung via DomPDF -->
+                                @if($antrianId)
+                                    <a href="{{ route('tiket.pdf', $antrianId) }}" target="_blank"
+                                        class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer">
+                                        <svg class="size-4 text-rose-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                        </svg>
+                                        Unduh Tiket (PDF)
+                                    </a>
+                                @else
+                                    <button type="button" wire:click="unduhPdf"
+                                        class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer">
+                                        <span wire:loading.remove wire:target="unduhPdf" class="flex items-center gap-2">
                                             <svg class="size-4 text-rose-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                                             </svg>
                                             Unduh Tiket (PDF)
                                         </span>
-                                    </template>
-                                </button>
-
-                                <!-- Tombol Download Screenshot PNG -->
-                                <button type="button" @click="unduhGambar()" :disabled="loadingImg"
-                                    class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-all cursor-pointer disabled:opacity-50">
-                                    <template x-if="loadingImg">
-                                        <span class="inline-flex items-center gap-2">
-                                            <span class="animate-spin">⏳</span> Mengunduh Gambar...
-                                        </span>
-                                    </template>
-                                    <template x-if="!loadingImg">
-                                        <span class="inline-flex items-center gap-2">
-                                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                        <span wire:loading wire:target="unduhPdf" class="flex items-center gap-2">
+                                            <svg class="animate-spin size-4 text-rose-400" viewBox="0 0 24 24" fill="none">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                                             </svg>
-                                            Unduh Gambar (PNG)
+                                            Menyiapkan PDF...
                                         </span>
-                                    </template>
+                                    </button>
+                                @endif
+
+                                <!-- Tombol Cetak Langsung -->
+                                <button type="button" onclick="window.print()"
+                                    class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-600/20 transition-all cursor-pointer">
+                                    <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.656" />
+                                    </svg>
+                                    Cetak Tiket / Print
                                 </button>
                             </div>
 
