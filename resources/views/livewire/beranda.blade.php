@@ -3,9 +3,7 @@
     <header class="sticky top-0 z-50 bg-white/85 dark:bg-zinc-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-zinc-800/80 transition-all">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3.5 flex items-center justify-between gap-2">
             <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-3 group min-w-0 flex-1 sm:flex-initial" wire:navigate>
-                <div class="flex size-8 sm:size-10 items-center justify-center rounded-xl sm:rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-black text-xs sm:text-base shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform shrink-0">
-                    KB
-                </div>
+                <img src="{{ asset('img-logo-login.webp') }}" alt="Logo SI Pelayanan KB" class="size-8 sm:size-10 object-contain group-hover:scale-105 transition-transform shrink-0" />
                 <div class="min-w-0">
                     <div class="font-extrabold text-xs sm:text-base tracking-tight text-slate-900 dark:text-white flex items-center gap-1 sm:gap-1.5 truncate">
                         <span>SI Pelayanan KB</span>

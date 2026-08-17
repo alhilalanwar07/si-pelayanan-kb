@@ -33,9 +33,7 @@
     <!-- ============ TOP NAVBAR ============ -->
     <header class="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-zinc-800/80 px-3 sm:px-6 md:px-8 py-2.5 sm:py-3.5 flex items-center justify-between sticky top-0 z-40 no-print gap-2">
         <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-3 group min-w-0 flex-1 sm:flex-initial" wire:navigate>
-            <div class="flex size-8 sm:size-10 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-black text-xs sm:text-sm shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform shrink-0">
-                KB
-            </div>
+            <img src="{{ asset('img-logo-login.webp') }}" alt="Logo SI Pelayanan KB" class="size-8 sm:size-10 object-contain group-hover:scale-105 transition-transform shrink-0" />
             <div class="min-w-0">
                 <div class="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white leading-tight truncate">SI Pelayanan KB</div>
                 <div class="text-3xs sm:text-2xs text-slate-500 dark:text-zinc-400 font-medium truncate">Puskesmas Wundulako</div>
