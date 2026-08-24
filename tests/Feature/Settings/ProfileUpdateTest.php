@@ -16,7 +16,7 @@ test('profile information can be updated', function () {
 
     $response = Livewire::test('pages::settings.profile')
         ->set('name', 'Test User')
-        ->set('email', 'test@example.com')
+        ->set('username', 'newusername')
         ->call('updateProfileInformation');
 
     $response->assertHasNoErrors();
@@ -24,23 +24,7 @@ test('profile information can be updated', function () {
     $user->refresh();
 
     expect($user->name)->toEqual('Test User');
-    expect($user->email)->toEqual('test@example.com');
-    expect($user->email_verified_at)->toBeNull();
-});
-
-test('email verification status is unchanged when email address is unchanged', function () {
-    $user = User::factory()->create();
-
-    $this->actingAs($user);
-
-    $response = Livewire::test('pages::settings.profile')
-        ->set('name', 'Test User')
-        ->set('email', $user->email)
-        ->call('updateProfileInformation');
-
-    $response->assertHasNoErrors();
-
-    expect($user->refresh()->email_verified_at)->not->toBeNull();
+    expect($user->username)->toEqual('newusername');
 });
 
 test('user can delete their account', function () {
@@ -49,7 +33,7 @@ test('user can delete their account', function () {
     $this->actingAs($user);
 
     $response = Livewire::test('pages::settings.delete-user-modal')
-        ->set('password', 'password')
+        ->set('password', '12345678')
         ->call('deleteUser');
 
     $response

@@ -29,6 +29,14 @@ class Wilayah extends Model
     }
 
     /**
+     * Pelayanan KB untuk peserta di wilayah ini.
+     */
+    public function pelayanans(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    {
+        return $this->hasManyThrough(Pelayanan::class, PesertaKb::class);
+    }
+
+    /**
      * Jumlah peserta KB di wilayah ini.
      */
     public function pesertaCount(): int

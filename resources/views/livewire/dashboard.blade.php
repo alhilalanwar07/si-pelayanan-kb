@@ -198,30 +198,47 @@
         <!-- Chart Pelayanan -->
         <flux:card>
             <div class="flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-700">
-                <flux:heading size="lg">📊 Pelayanan per Bulan ({{ now()->year }})</flux:heading>
+                <div>
+                    <flux:heading size="lg">📊 Pelayanan per Bulan ({{ now()->year }})</flux:heading>
+                    <flux:text size="xs">Total {{ array_sum($chartData) }} pelayanan terlaksana tahun ini</flux:text>
+                </div>
+                <flux:badge size="sm" color="blue">{{ array_sum($chartData) }} Total</flux:badge>
             </div>
 
-            <!-- CSS Bar Chart (Clean & Premium without external JS first) -->
-            <div class="mt-6 flex h-48 items-end justify-around gap-2 px-2">
+            <!-- CSS Bar Chart -->
+            <div class="mt-6 flex h-48 items-end justify-around gap-2 px-2 pb-2">
+                @php
+                    $maxTotal = max(1, ...$chartData);
+                @endphp
                 @foreach($chartData as $index => $total)
-                    <div class="group flex flex-1 flex-col items-center gap-2">
+                    <div class="group relative flex flex-1 flex-col items-center gap-2">
                         <div class="relative w-full flex justify-center items-end h-36">
                             <!-- Tooltip on hover -->
-                            <div class="absolute -top-6 hidden rounded bg-zinc-800 px-1.5 py-0.5 text-3xs text-white group-hover:block dark:bg-zinc-700">
-                                {{ $total }}
+                            <div class="absolute -top-7 z-10 hidden whitespace-nowrap rounded bg-zinc-800 px-2 py-0.5 text-[10px] font-medium text-white shadow-md group-hover:block dark:bg-zinc-700">
+                                {{ $total }} pelayanan
                             </div>
                             
                             @php
-                                $maxTotal = max(1, ...$chartData);
-                                $heightPercentage = ($total / $maxTotal) * 100;
+                                $heightPercentage = $total > 0 ? ($total / $maxTotal) * 100 : 0;
                                 $isCurrentMonth = ($index + 1) === now()->month;
-                                $barColor = $isCurrentMonth ? 'bg-gradient-to-t from-cyan-500 to-cyan-400' : 'bg-gradient-to-t from-blue-600 to-blue-500';
+                                $barColor = $isCurrentMonth 
+                                    ? 'bg-gradient-to-t from-cyan-500 to-cyan-400 shadow-sm shadow-cyan-500/20' 
+                                    : 'bg-gradient-to-t from-blue-600 to-blue-500';
                             @endphp
-                            <div class="w-full max-w-[32px] rounded-t-md {{ $barColor }} transition-all duration-500 hover:opacity-80" 
-                                 style="height: {{ max(4, $heightPercentage) }}%">
-                            </div>
+
+                            @if($total > 0)
+                                <div class="w-full max-w-[28px] rounded-t-md {{ $barColor }} transition-all duration-300 hover:opacity-85" 
+                                     style="height: {{ max(10, $heightPercentage) }}%">
+                                </div>
+                            @else
+                                <div class="h-1.5 w-full max-w-[20px] rounded-full bg-zinc-200 dark:bg-zinc-700/60 transition-all duration-300 group-hover:bg-zinc-300 dark:group-hover:bg-zinc-600"></div>
+                            @endif
                         </div>
-                        <span class="text-2xs font-semibold text-zinc-500 dark:text-zinc-400">{{ $chartLabels[$index] }}</span>
+
+                        <!-- Month label -->
+                        <span class="text-xs font-semibold {{ $isCurrentMonth ? 'text-cyan-600 dark:text-cyan-400 font-bold' : 'text-zinc-500 dark:text-zinc-400' }}">
+                            {{ $chartLabels[$index] }}
+                        </span>
                     </div>
                 @endforeach
             </div>
@@ -230,27 +247,41 @@
         <!-- Sebaran Wilayah -->
         <flux:card>
             <div class="flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-700">
-                <flux:heading size="lg">🗺️ Peserta per Wilayah</flux:heading>
+                <div>
+                    <flux:heading size="lg">🗺️ Peserta per Wilayah</flux:heading>
+                    <flux:text size="xs">{{ $wilayahRank->count() }} desa/kelurahan terdaftar</flux:text>
+                </div>
                 <flux:button size="sm" variant="outline" href="{{ route('peta-sebaran.index') }}" wire:navigate>Lihat Peta</flux:button>
             </div>
 
-            <div class="mt-4 divide-y divide-zinc-100 dark:divide-zinc-850">
+            <div class="mt-4 divide-y divide-zinc-100 dark:divide-zinc-800 max-h-56 overflow-y-auto pr-1">
                 @forelse($wilayahRank as $index => $wilayah)
                     <div class="flex items-center gap-3 py-2.5">
-                        <div class="flex size-7 items-center justify-center rounded-lg text-xs font-bold 
+                        <div class="flex size-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold 
                             {{ $index === 0 ? 'bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400' : '' }}
                             {{ $index === 1 ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400' : '' }}
                             {{ $index === 2 ? 'bg-amber-50 text-amber-600 dark:bg-amber-950 dark:text-amber-400' : '' }}
-                            {{ $index > 2 ? 'bg-zinc-50 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400' : '' }}
+                            {{ $index > 2 ? 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400' : '' }}
                         ">
                             {{ $index + 1 }}
                         </div>
-                        <div class="flex-1">
-                            <flux:heading size="sm" class="font-semibold">{{ $wilayah->nama_desa_kelurahan }}</flux:heading>
-                            <flux:text size="xs">{{ $wilayah->persentase }}% dari total peserta</flux:text>
-                        </div>
-                        <div class="text-right">
-                            <span class="font-extrabold text-zinc-900 dark:text-white">{{ $wilayah->peserta_kbs_count }}</span>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between gap-2">
+                                <flux:heading size="sm" class="font-semibold truncate">{{ $wilayah->nama_desa_kelurahan }}</flux:heading>
+                                <span class="text-xs font-bold text-zinc-900 dark:text-white shrink-0">
+                                    {{ $wilayah->peserta_kbs_count }} <span class="font-normal text-zinc-500">peserta</span>
+                                </span>
+                            </div>
+                            
+                            <!-- Progress bar percentage -->
+                            <div class="mt-1.5 flex items-center gap-2">
+                                <div class="h-1.5 w-full rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+                                    <div class="h-full rounded-full {{ $index === 0 ? 'bg-blue-500' : ($index === 1 ? 'bg-emerald-500' : ($index === 2 ? 'bg-amber-500' : 'bg-zinc-400 dark:bg-zinc-500')) }}" 
+                                         style="width: {{ $wilayah->persentase }}%">
+                                    </div>
+                                </div>
+                                <span class="text-3xs text-zinc-400 font-medium shrink-0">{{ $wilayah->persentase }}%</span>
+                            </div>
                         </div>
                     </div>
                 @empty

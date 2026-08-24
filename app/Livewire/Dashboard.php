@@ -52,16 +52,13 @@ class Dashboard extends Component
         });
 
         // 5. Chart data: Pelayanan per Bulan (running year)
-        $monthlyPelayanans = Pelayanan::select(
-            DB::raw('count(id) as total'),
-            DB::raw('MONTH(tanggal_pelayanan) as month')
-        )
-        ->whereYear('tanggal_pelayanan', Carbon::now()->year)
-        ->groupBy('month')
-        ->orderBy('month')
-        ->get()
-        ->pluck('total', 'month')
-        ->toArray();
+        $yearPelayanans = Pelayanan::whereYear('tanggal_pelayanan', Carbon::now()->year)
+            ->get(['tanggal_pelayanan']);
+
+        $monthlyPelayanans = $yearPelayanans
+            ->groupBy(fn ($item) => (int) Carbon::parse($item->tanggal_pelayanan)->month)
+            ->map(fn ($group) => $group->count())
+            ->toArray();
 
         $chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
         $chartData = [];

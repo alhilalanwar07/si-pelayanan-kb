@@ -19,6 +19,7 @@ return new class extends Migration
 
         // Drop email-related columns (sistem ini login pakai username)
         Schema::table('users', function (Blueprint $table) {
+            $table->dropUnique(['email']);
             $table->dropColumn(['email', 'email_verified_at']);
         });
     }
