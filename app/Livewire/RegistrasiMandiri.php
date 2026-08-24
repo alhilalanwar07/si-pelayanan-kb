@@ -302,10 +302,23 @@ class RegistrasiMandiri extends Component
             ->orderBy('waktu_mulai')
             ->get();
 
-        // Antrian aktif pasien yang belum dilayani (status 'terdaftar')
+        // Otomatis tandai antrian lampau yang belum diproses sebagai 'tidak_hadir' (lewat jadwal)
+        if ($this->foundPeserta) {
+            AntrianJadwal::where('peserta_kb_id', $this->foundPeserta->id)
+                ->where('status', 'terdaftar')
+                ->whereHas('jadwalPelayanan', function ($q) {
+                    $q->whereDate('tanggal', '<', now()->toDateString());
+                })
+                ->update(['status' => 'tidak_hadir']);
+        }
+
+        // Antrian aktif pasien yang belum dilayani (status 'terdaftar' dan jadwal hari ini atau mendatang)
         $antrianAktif = $this->foundPeserta
             ? AntrianJadwal::where('peserta_kb_id', $this->foundPeserta->id)
                 ->where('status', 'terdaftar')
+                ->whereHas('jadwalPelayanan', function ($q) {
+                    $q->whereDate('tanggal', '>=', now()->toDateString());
+                })
                 ->with('jadwalPelayanan')
                 ->latest()
                 ->first()
@@ -319,10 +332,10 @@ class RegistrasiMandiri extends Component
                 ->get()
             : collect();
 
-        // Riwayat antrian sebelumnya (hadir / batal)
+        // Riwayat antrian sebelumnya (hadir / batal / tidak_hadir)
         $riwayatAntrian = $this->foundPeserta
             ? AntrianJadwal::where('peserta_kb_id', $this->foundPeserta->id)
-                ->whereIn('status', ['hadir', 'batal'])
+                ->whereIn('status', ['hadir', 'batal', 'tidak_hadir'])
                 ->with('jadwalPelayanan')
                 ->latest()
                 ->get()

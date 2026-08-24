@@ -106,9 +106,8 @@
                                             wire:model="cekNik" wire:keydown.enter="cekNikAction"
                                             class="rounded-xl h-11 text-sm sm:text-base tracking-wider font-mono w-full" />
                                     </div>
-                                    <flux:button variant="primary" wire:click="cekNikAction"
+                                    <flux:button variant="primary" wire:click="cekNikAction" icon="magnifying-glass"
                                         class="h-11 px-5 sm:px-6 rounded-xl font-bold bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/20 text-xs sm:text-sm shrink-0 justify-center">
-                                        <flux:icon name="magnifying-glass" class="size-4 mr-1.5" />
                                         Cari Data
                                     </flux:button>
                                 </div>
@@ -349,9 +348,8 @@
 
                         <!-- Submit Button -->
                         <div class="pt-4 border-t border-slate-100 dark:border-zinc-800">
-                            <flux:button type="submit" variant="primary"
+                            <flux:button type="submit" variant="primary" icon="ticket"
                                 class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-blue-600/25 text-xs sm:text-sm justify-center">
-                                <flux:icon name="ticket" class="size-4 mr-2" />
                                 Daftar & Ambil Nomor Antrian
                             </flux:button>
                         </div>
@@ -564,9 +562,8 @@
                                     </div>
 
                                     <div class="pt-2">
-                                        <flux:button variant="primary" wire:click="pilihJadwal" :disabled="!$selectedJadwalId"
+                                        <flux:button variant="primary" wire:click="pilihJadwal" :disabled="!$selectedJadwalId" icon="ticket"
                                             class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-blue-600/25 text-xs sm:text-sm justify-center">
-                                            <flux:icon name="ticket" class="size-4 mr-2" />
                                             Konfirmasi & Ambil Nomor Antrian
                                         </flux:button>
                                     </div>
@@ -662,8 +659,12 @@
                                                 <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
                                                     Selesai Hadir
                                                 </span>
-                                            @elseif($antrian->status === 'batal')
+                                            @elseif($antrian->status === 'tidak_hadir')
                                                 <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-400">
+                                                    Tidak Hadir / Lewat Jadwal
+                                                </span>
+                                            @elseif($antrian->status === 'batal')
+                                                <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-slate-100 text-slate-700 dark:bg-zinc-800 dark:text-zinc-400">
                                                     Dibatalkan
                                                 </span>
                                             @endif

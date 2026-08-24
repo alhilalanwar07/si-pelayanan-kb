@@ -203,9 +203,8 @@
                                     <flux:table.cell class="text-right">
                                         <div class="flex items-center justify-end gap-2">
                                             @if($antrian->status !== 'hadir')
-                                                <flux:button size="sm" variant="primary" wire:click="layaniPeserta({{ $antrian->pesertaKb->id }}, {{ $antrian->id }})"
+                                                <flux:button size="sm" variant="primary" wire:click="layaniPeserta({{ $antrian->pesertaKb->id }}, {{ $antrian->id }})" icon="sparkles"
                                                     class="rounded-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-xs shadow-md">
-                                                    <flux:icon name="sparkles" class="size-3.5 mr-1" />
                                                     Layani Pasien
                                                 </flux:button>
                                                 <flux:button size="sm" variant="outline" wire:click="tandaiTidakHadir({{ $antrian->id }})" class="rounded-xl text-xs text-rose-600 hover:bg-rose-50">
