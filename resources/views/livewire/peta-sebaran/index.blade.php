@@ -523,7 +523,9 @@
 
             init() {
                 this.$nextTick(() => {
-                    this.initLeafletMap();
+                    if (this.viewMode === 'map') {
+                        this.initLeafletMap();
+                    }
                 });
 
                 // Listen for Livewire selection changes
@@ -538,10 +540,14 @@
 
                 // Re-invalidate map size when view mode switches
                 this.$watch('viewMode', (mode) => {
-                    if (mode === 'map' && this.map) {
-                        setTimeout(() => {
-                            this.map.invalidateSize();
-                        }, 200);
+                    if (mode === 'map') {
+                        if (!this.map) {
+                            this.initLeafletMap();
+                        } else {
+                            setTimeout(() => {
+                                this.map.invalidateSize();
+                            }, 200);
+                        }
                     }
                 });
             },

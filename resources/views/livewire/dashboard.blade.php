@@ -251,7 +251,7 @@
                     <flux:heading size="lg">🗺️ Peserta per Wilayah</flux:heading>
                     <flux:text size="xs">{{ $wilayahRank->count() }} desa/kelurahan terdaftar</flux:text>
                 </div>
-                <flux:button size="sm" variant="outline" href="{{ route('peta-sebaran.index') }}" wire:navigate>Lihat Peta</flux:button>
+                <flux:button size="sm" variant="outline" href="{{ route('peta-sebaran.index', ['viewMode' => 'vector']) }}" wire:navigate>Lihat Peta</flux:button>
             </div>
 
             <div class="mt-4 divide-y divide-zinc-100 dark:divide-zinc-800 max-h-56 overflow-y-auto pr-1">

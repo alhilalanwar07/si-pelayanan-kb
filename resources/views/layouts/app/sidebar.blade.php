@@ -82,7 +82,7 @@
                     :current="request()->routeIs('laporan.*')" wire:navigate>
                     Cetak Laporan
                 </flux:sidebar.item>
-                <flux:sidebar.item icon="map" :href="route('peta-sebaran.index')"
+                <flux:sidebar.item icon="map" :href="route('peta-sebaran.index', ['viewMode' => 'vector'])"
                     :current="request()->routeIs('peta-sebaran.*')" wire:navigate>
                     Peta Sebaran
                 </flux:sidebar.item>

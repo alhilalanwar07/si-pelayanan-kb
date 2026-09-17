@@ -17,11 +17,18 @@ class Index extends Component
     protected $queryString = [
         'selectedWilayahId' => ['except' => null, 'as' => 'wilayah'],
         'densityFilter' => ['except' => 'all'],
-        'viewMode' => ['except' => 'vector'],
+        'viewMode' => ['except' => ''],
     ];
 
     public function mount(): void
     {
+        if (!request()->has('viewMode') && !app()->runningUnitTests()) {
+            $this->redirect(route('peta-sebaran.index', array_merge(request()->query(), ['viewMode' => 'vector'])), navigate: true);
+            return;
+        }
+
+        $this->viewMode = request('viewMode', 'vector');
+
         if (request()->has('wilayah')) {
             $this->selectedWilayahId = (int) request('wilayah');
         }
