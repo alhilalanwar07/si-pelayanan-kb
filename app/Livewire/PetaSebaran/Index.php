@@ -12,12 +12,12 @@ class Index extends Component
     public ?int $selectedWilayahId = null;
     public string $search = '';
     public string $densityFilter = 'all'; // all, high, medium, low
-    public string $viewMode = 'map'; // 'map' (Leaflet interactive GIS) or 'vector' (Choropleth SVG)
+    public string $viewMode = 'vector'; // 'vector' (Choropleth SVG default) or 'map' (Leaflet interactive GIS)
 
     protected $queryString = [
         'selectedWilayahId' => ['except' => null, 'as' => 'wilayah'],
         'densityFilter' => ['except' => 'all'],
-        'viewMode' => ['except' => 'map'],
+        'viewMode' => ['except' => 'vector'],
     ];
 
     public function mount(): void
