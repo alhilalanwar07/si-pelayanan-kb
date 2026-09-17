@@ -1,0 +1,148 @@
+<mxfile host="Electron" agent="Antigravity">
+  <diagram id="flowmap-berjalan" name="Flowmap Sistem Berjalan (Konvensional)">
+    <mxGraphModel dx="2020" dy="1201" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1180" pageHeight="1350" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="shape=rect;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=1.5;fontStyle=1;fontSize=13;fontFamily=Segoe UI;fontColor=#BF360C;align=center;verticalAlign=middle;rounded=1;arcSize=6;" value="DIAGRAM ALUR PROSES BISNIS SISTEM BERJALAN (KONVENSIONAL / MANUAL)&lt;br&gt;PELAYANAN KELUARGA BERENCANA DPPKB KECAMATAN WUNDULAKO" vertex="1">
+          <mxGeometry height="46" width="1100" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_user" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=32;horizontal=1;fillColor=#E3F2FD;strokeColor=#1976D2;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;fontColor=#0D47A1;rounded=1;arcSize=4;" value="&lt;b&gt;Masyarakat / Calon Akseptor&lt;/b&gt;" vertex="1">
+          <mxGeometry height="1220" width="275" x="40" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="end_gagal" parent="lane_user" style="ellipse;html=1;shape=endState;fillColor=#C62828;strokeColor=#B71C1C;whiteSpace=wrap;html=1;fontFamily=Segoe UI;fontSize=13;" value="" vertex="1">
+          <mxGeometry height="26" width="26" x="122" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="end_sukses" parent="lane_user" style="ellipse;html=1;shape=endState;fillColor=#2E7D32;strokeColor=#1B5E20;whiteSpace=wrap;html=1;fontFamily=Segoe UI;fontSize=13;" value="" vertex="1">
+          <mxGeometry height="26" width="26" x="122" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="start" parent="lane_user" style="ellipse;html=1;shape=startState;fillColor=#2E7D32;strokeColor=#1B5E20;whiteSpace=wrap;html=1;fontFamily=Segoe UI;fontSize=13;" value="" vertex="1">
+          <mxGeometry height="26" width="26" x="122" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_bidan" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=32;horizontal=1;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;fontColor=#F57F17;rounded=1;arcSize=4;" value="&lt;b&gt;Bidan / Petugas Medis Faskes&lt;/b&gt;" vertex="1">
+          <mxGeometry height="1220" width="275" x="315" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_admin" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=32;horizontal=1;fillColor=#E8F5E9;strokeColor=#388E3C;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;fontColor=#1B5E20;rounded=1;arcSize=4;" value="&lt;b&gt;Admin / Operator DPPKB&lt;/b&gt;" vertex="1">
+          <mxGeometry height="1220" width="275" x="590" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_pimpinan" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=32;horizontal=1;fillColor=#EDE7F6;strokeColor=#5E35B1;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;fontColor=#311B92;rounded=1;arcSize=4;" value="&lt;b&gt;Pimpinan DPPKB Wundulako&lt;/b&gt;" vertex="1">
+          <mxGeometry height="1220" width="275" x="865" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="act_datang" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#1976D2;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Mendatangi Puskesmas /&lt;br&gt;Faskes secara Langsung" vertex="1">
+          <mxGeometry height="45" width="170" x="90" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="act_isi_manual" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#1976D2;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Menulis Identitas pada Buku&lt;br&gt;Registrasi Kertas &amp;amp; Antre" vertex="1">
+          <mxGeometry height="45" width="170" x="90" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_kuota_fisik" parent="1" style="rhombus;fillColor=#FFF9C4;strokeColor=#FBC02D;fontStyle=1;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Kuota / Stok&lt;br&gt;Tersedia?" vertex="1">
+          <mxGeometry height="60" width="80" x="135" y="335" as="geometry" />
+        </mxCell>
+        <mxCell id="act_pulang_gagal" parent="1" style="rounded=1;fillColor=#FFEBEE;strokeColor=#C62828;fontColor=#B71C1C;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Pulang Tanpa Layanan&lt;br&gt;(Harus Datang Lain Hari)" vertex="1">
+          <mxGeometry height="45" width="170" x="90" y="425" as="geometry" />
+        </mxCell>
+        <mxCell id="act_tanda_tangan" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#1976D2;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Menandatangani Lembar&lt;br&gt;Informed Consent Fisik" vertex="1">
+          <mxGeometry height="45" width="170" x="90" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="act_terima_kartu" parent="1" style="rounded=1;fillColor=#E8F5E9;strokeColor=#2E7D32;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Menerima Kartu KB Kertas&lt;br&gt;&amp;amp; Pulang ke Rumah" vertex="1">
+          <mxGeometry height="45" width="170" x="90" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="act_panggil_manual" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#F57F17;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Memanggil Antrean Pasien&lt;br&gt;&amp;amp; Periksa Buku Tamu" vertex="1">
+          <mxGeometry height="45" width="175" x="365" y="342" as="geometry" />
+        </mxCell>
+        <mxCell id="act_skrining_kertas" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#F57F17;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Pemeriksaan Fisik &amp;amp; Tulis&lt;br&gt;Hasil Anamnesa di Kertas" vertex="1">
+          <mxGeometry height="45" width="175" x="365" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="act_cek_stok_lemari" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#F57F17;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Cek Ketersediaan Fisik&lt;br&gt;Alokon di Lemari Faskes" vertex="1">
+          <mxGeometry height="45" width="175" x="365" y="675" as="geometry" />
+        </mxCell>
+        <mxCell id="act_pasang_kb" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#F57F17;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Melakukan Tindakan KB&lt;br&gt;&amp;amp; Tulis Kartu Peserta KB" vertex="1">
+          <mxGeometry height="45" width="175" x="365" y="755" as="geometry" />
+        </mxCell>
+        <mxCell id="act_rekap_buku" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#F57F17;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Mencatat Pemakaian di Buku&lt;br&gt;Register Harian Faskes" vertex="1">
+          <mxGeometry height="45" width="175" x="365" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="act_kirim_berkas" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#F57F17;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Kirim Berkas Register Fisik&lt;br&gt;ke Kantor DPPKB (Bulanan)" vertex="1">
+          <mxGeometry height="45" width="175" x="365" y="930" as="geometry" />
+        </mxCell>
+        <mxCell id="act_terima_berkas" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#2E7D32;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Menerima Tumpukan Berkas&lt;br&gt;Register dari Berbagai Faskes" vertex="1">
+          <mxGeometry height="45" width="175" x="640" y="930" as="geometry" />
+        </mxCell>
+        <mxCell id="act_input_ulang" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#2E7D32;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Ketik Ulang &amp;amp; Rekapitulasi&lt;br&gt;Manual ke Lembar Kerja" vertex="1">
+          <mxGeometry height="45" width="175" x="640" y="1010" as="geometry" />
+        </mxCell>
+        <mxCell id="act_cetak_laporan_fisik" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#2E7D32;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Cetak Laporan Bulanan &amp;amp;&lt;br&gt;Serahkan ke Pimpinan" vertex="1">
+          <mxGeometry height="45" width="175" x="640" y="1090" as="geometry" />
+        </mxCell>
+        <mxCell id="act_terima_laporan" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#512DA8;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Menerima Laporan Terlambat&lt;br&gt;(Data Sering Tidak Sinkron)" vertex="1">
+          <mxGeometry height="45" width="175" x="915" y="1090" as="geometry" />
+        </mxCell>
+        <mxCell id="act_evaluasi_sulit" parent="1" style="rounded=1;fillColor=#FFF3E0;strokeColor=#E65100;fontSize=13;whiteSpace=wrap;html=1;fontFamily=Segoe UI;" value="Evaluasi Capaian &amp;amp; Stok&lt;br&gt;Sulit Dipantau Realtime" vertex="1">
+          <mxGeometry height="45" width="175" x="915" y="1170" as="geometry" />
+        </mxCell>
+        <mxCell id="end_pimpinan" parent="1" style="ellipse;html=1;shape=endState;fillColor=#512DA8;strokeColor=#311B92;whiteSpace=wrap;html=1;fontFamily=Segoe UI;fontSize=13;" value="" vertex="1">
+          <mxGeometry height="26" width="26" x="990" y="1245" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="start" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_datang" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="act_datang" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_isi_manual" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="act_isi_manual" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="dec_kuota_fisik" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="dec_kuota_fisik" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_pulang_gagal" value="Tidak">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="act_pulang_gagal" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="end_gagal" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="dec_kuota_fisik" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_panggil_manual" value="Ya">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="act_panggil_manual" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_skrining_kertas" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="act_skrining_kertas" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_tanda_tangan" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="act_tanda_tangan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_cek_stok_lemari" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="act_cek_stok_lemari" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_pasang_kb" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="act_pasang_kb" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_rekap_buku" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="act_pasang_kb" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_terima_kartu" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="act_terima_kartu" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="end_sukses" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="act_rekap_buku" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_kirim_berkas" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="act_kirim_berkas" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_terima_berkas" value="Kirim Fisik">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="act_terima_berkas" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_input_ulang" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="act_input_ulang" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_cetak_laporan_fisik" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="act_cetak_laporan_fisik" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_terima_laporan" value="Serahkan Fisik">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="act_terima_laporan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="act_evaluasi_sulit" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="act_evaluasi_sulit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" target="end_pimpinan" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

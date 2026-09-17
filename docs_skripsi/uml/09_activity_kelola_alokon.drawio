@@ -1,163 +1,167 @@
-<?xml version="1.0" ?>
 <mxfile host="Electron" agent="Antigravity">
   <diagram id="act-kelola-alokon" name="Activity Diagram Manajemen Stok Alokon">
-    <mxGraphModel dx="1200" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1050" pageHeight="1450" background="#FFFFFF" math="0" shadow="0">
+    <mxGraphModel dx="2020" dy="1201" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1050" pageHeight="1450" background="#FFFFFF" math="0" shadow="0">
       <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-        <mxCell id="doc_title" value="ACTIVITY DIAGRAM: PENGELOLAAN INVENTARIS ALOKON (RESTOCK &amp; DISTRIBUSI)&lt;br&gt;SISTEM INFORMASI PELAYANAN KB DPPKB KECAMATAN WUNDULAKO" style="shape=rect;whiteSpace=wrap;html=1;fillColor=#F8F9FA;strokeColor=#B0BEC5;strokeWidth=1.5;fontStyle=1;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;align=center;verticalAlign=middle;rounded=1;arcSize=8;shadow=1;" vertex="1" parent="1">
-          <mxGeometry x="50" y="20" width="950" height="46" as="geometry"/>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="doc_title" parent="1" style="shape=rect;whiteSpace=wrap;html=1;fillColor=#F8F9FA;strokeColor=#B0BEC5;strokeWidth=1.5;fontStyle=1;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;align=center;verticalAlign=middle;rounded=1;arcSize=8;shadow=1;" value="ACTIVITY DIAGRAM: PENGELOLAAN INVENTARIS ALOKON (RESTOCK &amp;amp; DISTRIBUSI)&lt;br&gt;SISTEM INFORMASI PELAYANAN KB DPPKB KECAMATAN WUNDULAKO" vertex="1">
+          <mxGeometry height="46" width="950" x="50" y="20" as="geometry" />
         </mxCell>
-        <mxCell id="lane_admin" value="&lt;b&gt;Admin / Pengelola Logistik&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;startSize=32;horizontal=1;fillColor=#E0F2F1;strokeColor=#00897B;strokeWidth=1.5;fontSize=11;fontFamily=Segoe UI;fontColor=#004D40;rounded=1;arcSize=4;" vertex="1" parent="1">
-          <mxGeometry x="50" y="80" width="475" height="1320" as="geometry"/>
+        <mxCell id="lane_admin" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=32;horizontal=1;fillColor=#E0F2F1;strokeColor=#00897B;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;fontColor=#004D40;rounded=1;arcSize=4;" value="&lt;b&gt;Admin / Pengelola Logistik&lt;/b&gt;" vertex="1">
+          <mxGeometry height="1100" width="475" x="50" y="80" as="geometry" />
         </mxCell>
-        <mxCell id="lane_sistem" value="&lt;b&gt;Sistem Informasi Pelayanan KB&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;startSize=32;horizontal=1;fillColor=#ECEFF1;strokeColor=#455A64;strokeWidth=1.5;fontSize=11;fontFamily=Segoe UI;fontColor=#263238;rounded=1;arcSize=4;" vertex="1" parent="1">
-          <mxGeometry x="525" y="80" width="475" height="1320" as="geometry"/>
+        <mxCell id="act_klik_edit" parent="lane_admin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" value="Klik Tombol &#39;Edit&#39;&lt;br&gt;pada Baris Alokon" vertex="1">
+          <mxGeometry height="45" width="150" x="260" y="380" as="geometry" />
         </mxCell>
-        <mxCell id="start_node" value="" style="ellipse;html=1;shape=startState;fillColor=#2E7D32;strokeColor=#1B5E20;" vertex="1" parent="1">
-          <mxGeometry x="275" y="130" width="26" height="26" as="geometry"/>
+        <mxCell id="act_buka_alokon" parent="lane_admin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" value="Membuka Menu Alokon&lt;br&gt;(/alokon)" vertex="1">
+          <mxGeometry height="45" width="185" x="145.5" y="105" as="geometry" />
         </mxCell>
-        <mxCell id="act_buka_alokon" value="Membuka Menu Alokon&lt;br&gt;(/alokon)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
-          <mxGeometry x="185" y="185" width="185" height="45" as="geometry"/>
+        <mxCell id="lane_sistem" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=32;horizontal=1;fillColor=#ECEFF1;strokeColor=#455A64;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;rounded=1;arcSize=4;" value="&lt;b&gt;Sistem Informasi Pelayanan KB&lt;/b&gt;" vertex="1">
+          <mxGeometry height="1100" width="475" x="525" y="80" as="geometry" />
         </mxCell>
-        <mxCell id="act_tampil_tabel" value="Query &amp; Render Tabel Alokon&lt;br&gt;+ Peringatan Stok Rendah (&lt;10)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
-          <mxGeometry x="670" y="185" width="185" height="45" as="geometry"/>
+        <mxCell id="dec_val_alokon" parent="lane_sistem" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;fontStyle=1;" value="Input&lt;br&gt;Valid?" vertex="1">
+          <mxGeometry height="55" width="75" x="105" y="720" as="geometry" />
         </mxCell>
-        <mxCell id="act_pilih_operasi" value="Pilih Operasi Logistik:&lt;br&gt;Tambah Baru atau Edit/Restock" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
-          <mxGeometry x="185" y="265" width="185" height="45" as="geometry"/>
+        <mxCell id="act_modal_edit" parent="lane_sistem" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" value="Buka Modal Edit Alokon&lt;br&gt;(Pre-fill Data &amp;amp; Saldo Stok Lama)" vertex="1">
+          <mxGeometry height="45" width="185" x="145" y="492.5" as="geometry" />
         </mxCell>
-        <mxCell id="dec_jenis_op" value="Jenis&lt;br&gt;Operasi?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="240" y="345" width="75" height="55" as="geometry"/>
+        <mxCell id="act_modal_tambah" parent="lane_sistem" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" value="Buka Modal Tambah Alokon&lt;br&gt;(Pilih Instansi &amp;amp; Stok Awal)" vertex="1">
+          <mxGeometry height="45" width="185" x="145" y="310" as="geometry" />
         </mxCell>
-        <mxCell id="act_klik_tambah" value="Klik Tombol&lt;br&gt;'Tambah Alokon'" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;" vertex="1" parent="1">
-          <mxGeometry x="110" y="435" width="150" height="45" as="geometry"/>
+        <mxCell id="start_node" parent="1" style="ellipse;html=1;shape=startState;fillColor=#2E7D32;strokeColor=#1B5E20;fontSize=13;" value="" vertex="1">
+          <mxGeometry height="26" width="26" x="275" y="130" as="geometry" />
         </mxCell>
-        <mxCell id="act_modal_tambah" value="Buka Modal Tambah Alokon&lt;br&gt;(Pilih Instansi &amp; Stok Awal)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
-          <mxGeometry x="670" y="435" width="185" height="45" as="geometry"/>
+        <mxCell id="act_tampil_tabel" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" value="Query &amp;amp; Render Tabel Alokon&lt;br&gt;+ Peringatan Stok Rendah (&amp;lt;10)" vertex="1">
+          <mxGeometry height="45" width="185" x="670" y="185" as="geometry" />
         </mxCell>
-        <mxCell id="act_klik_edit" value="Klik Tombol 'Edit'&lt;br&gt;pada Baris Alokon" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;" vertex="1" parent="1">
-          <mxGeometry x="310" y="435" width="150" height="45" as="geometry"/>
+        <mxCell id="act_pilih_operasi" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" value="Pilih Operasi Logistik:&lt;br&gt;Tambah Baru atau Edit/Restock" vertex="1">
+          <mxGeometry height="45" width="185" x="185" y="265" as="geometry" />
         </mxCell>
-        <mxCell id="act_modal_edit" value="Buka Modal Edit Alokon&lt;br&gt;(Pre-fill Data &amp; Saldo Stok Lama)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
-          <mxGeometry x="670" y="515" width="185" height="45" as="geometry"/>
+        <mxCell id="dec_jenis_op" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;fontStyle=1;" value="Jenis&lt;br&gt;Operasi?" vertex="1">
+          <mxGeometry height="55" width="75" x="240" y="345" as="geometry" />
         </mxCell>
-        <mxCell id="merge_modal_alokon" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=1.5;" vertex="1" parent="1">
-          <mxGeometry x="263" y="580" width="30" height="30" as="geometry"/>
+        <mxCell id="act_klik_tambah" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" value="Klik Tombol&lt;br&gt;&#39;Tambah Alokon&#39;" vertex="1">
+          <mxGeometry height="45" width="150" x="110" y="435" as="geometry" />
         </mxCell>
-        <mxCell id="act_input_alokon" value="Input / Sesuaikan Nama Alokon&lt;br&gt;&amp; Jumlah Saldo Stok Fisik" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
-          <mxGeometry x="185" y="640" width="185" height="52" as="geometry"/>
+        <mxCell id="merge_modal_alokon" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=1.5;fontSize=13;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="263" y="580" as="geometry" />
         </mxCell>
-        <mxCell id="act_klik_simpan_alokon" value="Klik Tombol 'Simpan'" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
-          <mxGeometry x="185" y="720" width="185" height="42" as="geometry"/>
+        <mxCell id="act_input_alokon" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" value="Input / Sesuaikan Nama Alokon&lt;br&gt;&amp;amp; Jumlah Saldo Stok Fisik" vertex="1">
+          <mxGeometry height="52" width="185" x="185" y="640" as="geometry" />
         </mxCell>
-        <mxCell id="act_validasi_alokon" value="Validasi Input Form:&lt;br&gt;nama string &amp; stok integer &gt;= 0" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
-          <mxGeometry x="670" y="720" width="185" height="45" as="geometry"/>
+        <mxCell id="act_klik_simpan_alokon" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" value="Klik Tombol &#39;Simpan&#39;" vertex="1">
+          <mxGeometry height="42" width="185" x="185" y="720" as="geometry" />
         </mxCell>
-        <mxCell id="dec_val_alokon" value="Input&lt;br&gt;Valid?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="725" y="800" width="75" height="55" as="geometry"/>
+        <mxCell id="act_validasi_alokon" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" value="Validasi Input Form:&lt;br&gt;nama string &amp;amp; stok integer &amp;gt;= 0" vertex="1">
+          <mxGeometry height="45" width="185" x="670" y="720" as="geometry" />
         </mxCell>
-        <mxCell id="act_notif_err_alokon" value="Tampilkan Error Validasi&lt;br&gt;pada Form Modal" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFEBEE;strokeColor=#E53935;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;fontColor=#B71C1C;" vertex="1" parent="1">
-          <mxGeometry x="830" y="805" width="150" height="45" as="geometry"/>
+        <mxCell id="act_notif_err_alokon" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFEBEE;strokeColor=#E53935;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;fontColor=#B71C1C;" value="Tampilkan Error Validasi&lt;br&gt;pada Form Modal" vertex="1">
+          <mxGeometry height="45" width="150" x="830" y="805" as="geometry" />
         </mxCell>
-        <mxCell id="act_simpan_db_alokon" value="Eksekusi Create / Update&lt;br&gt;pada Tabel alokons" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
-          <mxGeometry x="670" y="890" width="185" height="48" as="geometry"/>
+        <mxCell id="act_simpan_db_alokon" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" value="Eksekusi Create / Update&lt;br&gt;pada Tabel alokons" vertex="1">
+          <mxGeometry height="48" width="185" x="670" y="890" as="geometry" />
         </mxCell>
-        <mxCell id="act_tutup_modal_alokon" value="Tutup Modal &amp; Kirim Toast:&lt;br&gt;'Stok Berhasil Disimpan!'" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
-          <mxGeometry x="670" y="965" width="185" height="45" as="geometry"/>
+        <mxCell id="act_tutup_modal_alokon" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" value="Tutup Modal &amp;amp; Kirim Toast:&lt;br&gt;&#39;Stok Berhasil Disimpan!&#39;" vertex="1">
+          <mxGeometry height="45" width="185" x="670" y="965" as="geometry" />
         </mxCell>
-        <mxCell id="act_refresh_tabel_alokon" value="Perbarui Tabel Daftar Alokon&lt;br&gt;&amp; Hitung Ulang Saldo Stok" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#E8F5E9;strokeColor=#43A047;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;fontColor=#1B5E20;" vertex="1" parent="1">
-          <mxGeometry x="670" y="1040" width="185" height="45" as="geometry"/>
+        <mxCell id="act_refresh_tabel_alokon" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#E8F5E9;strokeColor=#43A047;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;fontColor=#1B5E20;" value="Perbarui Tabel Daftar Alokon&lt;br&gt;&amp;amp; Hitung Ulang Saldo Stok" vertex="1">
+          <mxGeometry height="45" width="185" x="670" y="1040" as="geometry" />
         </mxCell>
-        <mxCell id="act_lihat_stok_baru" value="Memantau Saldo Stok Terkini&lt;br&gt;Tersedia untuk Pelayanan KB" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
-          <mxGeometry x="185" y="1040" width="185" height="45" as="geometry"/>
+        <mxCell id="act_lihat_stok_baru" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#00897B;strokeWidth=1.5;fontSize=13;fontFamily=Segoe UI;" value="Memantau Saldo Stok Terkini&lt;br&gt;Tersedia untuk Pelayanan KB" vertex="1">
+          <mxGeometry height="45" width="185" x="185" y="1040" as="geometry" />
         </mxCell>
-        <mxCell id="end_node" value="" style="ellipse;html=1;shape=endState;fillColor=#C62828;strokeColor=#B71C1C;" vertex="1" parent="1">
-          <mxGeometry x="275" y="1125" width="26" height="26" as="geometry"/>
+        <mxCell id="end_node" parent="1" style="ellipse;html=1;shape=endState;fillColor=#C62828;strokeColor=#B71C1C;fontSize=13;" value="" vertex="1">
+          <mxGeometry height="26" width="26" x="275" y="1125" as="geometry" />
         </mxCell>
-        <mxCell id="ae1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="start_node" target="act_buka_alokon">
-          <mxGeometry relative="1" as="geometry"/>
+        <mxCell id="ae1" edge="1" parent="1" source="start_node" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" target="act_buka_alokon" value="">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ae2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_buka_alokon" target="act_tampil_tabel">
-          <mxGeometry relative="1" as="geometry"/>
+        <mxCell id="ae2" edge="1" parent="1" source="act_buka_alokon" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" target="act_tampil_tabel" value="">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ae3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.8;exitDx=0;exitDy=0;entryX=1.0;entryY=0.2;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_tampil_tabel" target="act_pilih_operasi">
-          <mxGeometry relative="1" as="geometry"/>
+        <mxCell id="ae3" edge="1" parent="1" source="act_tampil_tabel" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1.0;entryY=0.2;entryDx=0;entryDy=0;" target="act_pilih_operasi" value="">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ae4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_pilih_operasi" target="dec_jenis_op">
-          <mxGeometry relative="1" as="geometry"/>
+        <mxCell id="ae4" edge="1" parent="1" source="act_pilih_operasi" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" target="dec_jenis_op" value="">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ae5_tambah" value="[Tambah Baru]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dec_jenis_op" target="act_klik_tambah">
+        <mxCell id="ae5_tambah" edge="1" parent="1" source="dec_jenis_op" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" target="act_klik_tambah" value="[Tambah Baru]">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="185" y="372"/>
+              <mxPoint x="185" y="372" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ae6_tambah" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_klik_tambah" target="act_modal_tambah">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="ae7_tambah_merge" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_modal_tambah" target="merge_modal_alokon">
+        <mxCell id="ae6_tambah" edge="1" parent="1" source="act_klik_tambah" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="act_modal_tambah" value="">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="500" y="457"/>
-              <mxPoint x="500" y="595"/>
+              <mxPoint x="185" y="500" />
+              <mxPoint x="290" y="500" />
+              <mxPoint x="290" y="412.5" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ae5_edit" value="[Edit/Restock]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dec_jenis_op" target="act_klik_edit">
+        <mxCell id="ae7_tambah_merge" edge="1" parent="1" source="act_modal_tambah" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="merge_modal_alokon" value="">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="385" y="372"/>
+              <mxPoint x="762.5" y="540" />
+              <mxPoint x="278" y="540" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ae6_edit" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_klik_edit" target="act_modal_edit">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="ae7_edit_merge" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_modal_edit" target="merge_modal_alokon">
+        <mxCell id="ae5_edit" edge="1" parent="1" source="dec_jenis_op" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" target="act_klik_edit" value="[Edit/Restock]">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="385" y="537"/>
-              <mxPoint x="385" y="595"/>
+              <mxPoint x="385" y="372" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ae8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="merge_modal_alokon" target="act_input_alokon">
-          <mxGeometry relative="1" as="geometry"/>
+        <mxCell id="ae6_edit" edge="1" parent="1" source="act_klik_edit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="act_modal_edit" value="">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ae9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_input_alokon" target="act_klik_simpan_alokon">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="ae10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_klik_simpan_alokon" target="act_validasi_alokon">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="ae11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_validasi_alokon" target="dec_val_alokon">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="ae12_gagal" value="[Tidak Valid]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="dec_val_alokon" target="act_notif_err_alokon">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="ae12_loop" value="perbaiki input" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=0.0;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_notif_err_alokon" target="act_input_alokon">
+        <mxCell id="ae7_edit_merge" edge="1" parent="1" source="act_modal_edit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="merge_modal_alokon" value="">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="905" y="666"/>
+              <mxPoint x="670" y="595" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ae12_sukses" value="[Valid]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dec_val_alokon" target="act_simpan_db_alokon">
-          <mxGeometry relative="1" as="geometry"/>
+        <mxCell id="ae8" edge="1" parent="1" source="merge_modal_alokon" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" target="act_input_alokon" value="">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ae13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_simpan_db_alokon" target="act_tutup_modal_alokon">
-          <mxGeometry relative="1" as="geometry"/>
+        <mxCell id="ae9" edge="1" parent="1" source="act_input_alokon" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" target="act_klik_simpan_alokon" value="">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ae14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_tutup_modal_alokon" target="act_refresh_tabel_alokon">
-          <mxGeometry relative="1" as="geometry"/>
+        <mxCell id="ae10" edge="1" parent="1" source="act_klik_simpan_alokon" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" target="act_validasi_alokon" value="">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ae15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_refresh_tabel_alokon" target="act_lihat_stok_baru">
-          <mxGeometry relative="1" as="geometry"/>
+        <mxCell id="ae11" edge="1" parent="1" source="act_validasi_alokon" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" target="dec_val_alokon" value="">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ae16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_lihat_stok_baru" target="end_node">
-          <mxGeometry relative="1" as="geometry"/>
+        <mxCell id="ae12_gagal" edge="1" parent="1" source="dec_val_alokon" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" target="act_notif_err_alokon" value="[Tidak Valid]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ae12_loop" edge="1" parent="1" source="act_notif_err_alokon" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=0.0;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" target="act_input_alokon" value="perbaiki input">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="905" y="666" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ae12_sukses" edge="1" parent="1" source="dec_val_alokon" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" target="act_simpan_db_alokon" value="[Valid]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ae13" edge="1" parent="1" source="act_simpan_db_alokon" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" target="act_tutup_modal_alokon" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ae14" edge="1" parent="1" source="act_tutup_modal_alokon" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" target="act_refresh_tabel_alokon" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ae15" edge="1" parent="1" source="act_refresh_tabel_alokon" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" target="act_lihat_stok_baru" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ae16" edge="1" parent="1" source="act_lihat_stok_baru" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" target="end_node" value="">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

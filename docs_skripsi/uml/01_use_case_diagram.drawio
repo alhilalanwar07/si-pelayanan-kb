@@ -1,212 +1,228 @@
 <mxfile host="Electron" agent="Antigravity">
   <diagram id="use-case-pelayanan-kb" name="Use Case Diagram SI Pelayanan KB">
-    <mxGraphModel dx="1471" dy="894" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1885" dy="1121" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="sys-boundary" parent="1" style="shape=rect;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#2D7DD2;strokeWidth=2;dashed=0;verticalAlign=top;fontStyle=1;fontSize=13;fontFamily=Segoe UI;align=center;spacingTop=8;arcSize=6;rounded=1;" value="Sistem Informasi Pelayanan Keluarga Berencana (KB)&#xa;DPPKB Kecamatan Wundulako" vertex="1">
-          <mxGeometry height="1050" width="920" x="340" y="20" as="geometry" />
+          <mxGeometry height="961" width="920" x="340" y="20" as="geometry" />
         </mxCell>
-        <mxCell id="actor-masyarakat" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontFamily=Segoe UI;fontStyle=1;" value="Masyarakat /&#xa;Calon Akseptor" vertex="1">
+        <mxCell id="actor-masyarakat" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontFamily=Segoe UI;fontStyle=1;" value="Masyarakat /&#xa;Calon Akseptor" vertex="1">
           <mxGeometry height="60" width="40" x="110" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="actor-admin" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontFamily=Segoe UI;fontStyle=1;" value="Admin /&#xa;Operator Kecamatan" vertex="1">
+        <mxCell id="actor-admin" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontFamily=Segoe UI;fontStyle=1;" value="Admin /&#xa;Operator Kecamatan" vertex="1">
           <mxGeometry height="60" width="40" x="110" y="430" as="geometry" />
         </mxCell>
-        <mxCell id="actor-bidan" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontFamily=Segoe UI;fontStyle=1;" value="Bidan /&#xa;Petugas Medis" vertex="1">
+        <mxCell id="actor-bidan" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;fontFamily=Segoe UI;fontStyle=1;" value="Bidan /&#xa;Petugas Medis" vertex="1">
           <mxGeometry height="60" width="40" x="1440" y="290" as="geometry" />
         </mxCell>
-        <mxCell id="actor-pimpinan" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontFamily=Segoe UI;fontStyle=1;" value="Pimpinan&#xa;DPPKB" vertex="1">
+        <mxCell id="actor-pimpinan" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontFamily=Segoe UI;fontStyle=1;" value="Pimpinan&#xa;DPPKB" vertex="1">
           <mxGeometry height="60" width="40" x="1440" y="750" as="geometry" />
         </mxCell>
-        <mxCell id="uc01" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;spacingTop=0;" value="UC01&#xa;Melihat Informasi&#xa;Beranda" vertex="1">
+        <mxCell id="uc01" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;spacingTop=0;" value="UC01&#xa;Melihat Informasi&#xa;Beranda" vertex="1">
           <mxGeometry height="70" width="180" x="400" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="uc02" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC02&#xa;Melakukan Registrasi&#xa;Mandiri" vertex="1">
+        <mxCell id="uc02" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC02&#xa;Melakukan Registrasi&#xa;Mandiri" vertex="1">
           <mxGeometry height="70" width="180" x="400" y="160" as="geometry" />
         </mxCell>
-        <mxCell id="uc03" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC03&#xa;Memilih Jadwal &amp;&#xa;Booking Antrian" vertex="1">
+        <mxCell id="uc03" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC03&#xa;Memilih Jadwal &amp;amp;&#xa;Booking Antrian" vertex="1">
           <mxGeometry height="70" width="180" x="660" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="uc04" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC04&#xa;Mengunduh Tiket&#xa;Antrian (PDF)" vertex="1">
+        <mxCell id="uc04" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC04&#xa;Mengunduh Tiket&#xa;Antrian (PDF)" vertex="1">
           <mxGeometry height="70" width="180" x="660" y="200" as="geometry" />
         </mxCell>
-        <mxCell id="uc05" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC05&#xa;Login Sistem" vertex="1">
+        <mxCell id="uc05" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC05&#xa;Login Sistem" vertex="1">
           <mxGeometry height="70" width="180" x="400" y="300" as="geometry" />
         </mxCell>
-        <mxCell id="uc06" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC06&#xa;Mengelola Data&#xa;Wilayah" vertex="1">
-          <mxGeometry height="70" width="180" x="400" y="420" as="geometry" />
+        <mxCell id="uc06" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC06&#xa;Mengelola Data&#xa;Wilayah" vertex="1">
+          <mxGeometry height="70" width="180" x="440" y="410" as="geometry" />
         </mxCell>
-        <mxCell id="uc07" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC07&#xa;Mengelola Jadwal&#xa;Pelayanan" vertex="1">
-          <mxGeometry height="70" width="180" x="400" y="520" as="geometry" />
+        <mxCell id="uc07" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC07&#xa;Mengelola Jadwal&#xa;Pelayanan" vertex="1">
+          <mxGeometry height="70" width="180" x="490" y="500" as="geometry" />
         </mxCell>
-        <mxCell id="uc08" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC08&#xa;Mengelola Data&#xa;Peserta KB" vertex="1">
-          <mxGeometry height="70" width="180" x="400" y="620" as="geometry" />
+        <mxCell id="uc08" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC08&#xa;Mengelola Data&#xa;Peserta KB" vertex="1">
+          <mxGeometry height="70" width="180" x="420" y="620" as="geometry" />
         </mxCell>
-        <mxCell id="uc09" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC09&#xa;Mengelola Inventaris&#xa;Alokon" vertex="1">
-          <mxGeometry height="70" width="180" x="400" y="720" as="geometry" />
+        <mxCell id="uc09" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC09&#xa;Mengelola Inventaris&#xa;Alokon" vertex="1">
+          <mxGeometry height="70" width="180" x="400" y="770" as="geometry" />
         </mxCell>
-        <mxCell id="uc10" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC10&#xa;Mengelola Akun&#xa;Pengguna" vertex="1">
-          <mxGeometry height="70" width="180" x="400" y="820" as="geometry" />
+        <mxCell id="uc10" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC10&#xa;Mengelola Akun&#xa;Pengguna" vertex="1">
+          <mxGeometry height="70" width="180" x="390" y="850" as="geometry" />
         </mxCell>
-        <mxCell id="uc11" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontFamily=Segoe UI;fontStyle=1;verticalAlign=middle;" value="UC11&#xa;Melakukan&#xa;Pelayanan KB" vertex="1">
-          <mxGeometry height="70" width="180" x="900" y="340" as="geometry" />
+        <mxCell id="uc11" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;fontFamily=Segoe UI;fontStyle=1;verticalAlign=middle;" value="UC11&#xa;Melakukan&#xa;Pelayanan KB" vertex="1">
+          <mxGeometry height="70" width="180" x="910" y="270" as="geometry" />
         </mxCell>
-        <mxCell id="uc11a" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC11a&#xa;Mengisi Skrining&#xa;Medis" vertex="1">
-          <mxGeometry height="60" width="160" x="700" y="430" as="geometry" />
+        <mxCell id="uc11a" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC11a&#xa;Mengisi Skrining&#xa;Medis" vertex="1">
+          <mxGeometry height="60" width="160" x="730" y="360" as="geometry" />
         </mxCell>
-        <mxCell id="uc11b" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC11b&#xa;Mengisi Informed&#xa;Consent" vertex="1">
-          <mxGeometry height="60" width="160" x="900" y="450" as="geometry" />
+        <mxCell id="uc11b" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC11b&#xa;Mengisi Informed&#xa;Consent" vertex="1">
+          <mxGeometry height="60" width="160" x="910" y="400" as="geometry" />
         </mxCell>
-        <mxCell id="uc11c" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC11c&#xa;Mencatat Tindakan&#xa;&amp; Memilih Alokon" vertex="1">
-          <mxGeometry height="60" width="160" x="1100" y="430" as="geometry" />
+        <mxCell id="uc11c" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC11c&#xa;Mencatat Tindakan&#xa;&amp;amp; Memilih Alokon" vertex="1">
+          <mxGeometry height="60" width="160" x="1080" y="340" as="geometry" />
         </mxCell>
-        <mxCell id="uc12" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC12&#xa;Mencetak Kartu&#xa;Pelayanan KB" vertex="1">
-          <mxGeometry height="70" width="180" x="900" y="550" as="geometry" />
+        <mxCell id="uc12" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC12&#xa;Mencetak Kartu&#xa;Pelayanan KB" vertex="1">
+          <mxGeometry height="70" width="180" x="920" y="510" as="geometry" />
         </mxCell>
-        <mxCell id="uc13" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC13&#xa;Melihat Dashboard&#xa;Statistik" vertex="1">
-          <mxGeometry height="70" width="180" x="900" y="700" as="geometry" />
+        <mxCell id="uc13" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC13&#xa;Melihat Dashboard&#xa;Statistik" vertex="1">
+          <mxGeometry height="70" width="180" x="880" y="640" as="geometry" />
         </mxCell>
-        <mxCell id="uc14" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC14&#xa;Melihat Peta Sebaran&#xa;Akseptor (GIS)" vertex="1">
-          <mxGeometry height="70" width="180" x="900" y="810" as="geometry" />
+        <mxCell id="uc14" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC14&lt;br&gt;Melihat Peta Sebaran&lt;br&gt;Akseptor" vertex="1">
+          <mxGeometry height="70" width="180" x="880" y="750" as="geometry" />
         </mxCell>
-        <mxCell id="uc15" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC15&#xa;Mencetak Laporan&#xa;Pelayanan" vertex="1">
-          <mxGeometry height="70" width="180" x="900" y="920" as="geometry" />
+        <mxCell id="uc15" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" value="UC15&#xa;Mencetak Laporan&#xa;Pelayanan" vertex="1">
+          <mxGeometry height="70" width="180" x="890" y="860" as="geometry" />
         </mxCell>
-        <mxCell id="rel-m-uc01" edge="1" parent="1" source="actor-masyarakat" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#6c8ebf;" target="uc01">
+        <mxCell id="rel-m-uc01" edge="1" parent="1" source="actor-masyarakat" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#6c8ebf;fontSize=13;" target="uc01">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel-m-uc02" edge="1" parent="1" source="actor-masyarakat" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#6c8ebf;" target="uc02">
+        <mxCell id="rel-m-uc02" edge="1" parent="1" source="actor-masyarakat" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#6c8ebf;fontSize=13;" target="uc02">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel-inc-uc02-uc03" edge="1" parent="1" source="uc02" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#999999;endSize=10;" target="uc03">
+        <mxCell id="rel-inc-uc02-uc03" edge="1" parent="1" source="uc02" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#999999;endSize=10;fontSize=13;" target="uc03">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel-inc-uc02-uc04" edge="1" parent="1" source="uc02" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#999999;endSize=10;" target="uc04">
+        <mxCell id="rel-inc-uc02-uc04" edge="1" parent="1" source="uc02" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#999999;endSize=10;fontSize=13;" target="uc04">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel-a-uc05" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" target="uc05">
+        <mxCell id="rel-a-uc05" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;fontSize=13;" target="uc05">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel-a-uc06" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" target="uc06">
+        <mxCell id="rel-a-uc06" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;fontSize=13;" target="uc06">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel-a-uc07" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" target="uc07">
+        <mxCell id="rel-a-uc07" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;fontSize=13;" target="uc07">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel-a-uc08" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" target="uc08">
+        <mxCell id="rel-a-uc08" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;fontSize=13;" target="uc08">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel-a-uc09" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" target="uc09">
+        <mxCell id="rel-a-uc09" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;fontSize=13;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="uc09">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel-a-uc10" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" target="uc10">
+        <mxCell id="rel-a-uc10" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;fontSize=13;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="uc10">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel-a-uc13" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" target="uc13">
+        <mxCell id="rel-a-uc13" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;fontSize=13;" target="uc13">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel-a-uc14" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" target="uc14">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-a-uc15" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" target="uc15">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-b-uc05" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" target="uc05">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-b-uc08" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" target="uc08">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-b-uc11" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" target="uc11">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-b-uc12" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" target="uc12">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-b-uc13" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" target="uc13">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-b-uc14" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" target="uc14">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-b-uc15" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" target="uc15">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-inc-uc11-11a" edge="1" parent="1" source="uc11" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#b85450;endSize=10;" target="uc11a">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-inc-uc11-11b" edge="1" parent="1" source="uc11" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#b85450;endSize=10;" target="uc11b">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-inc-uc11-11c" edge="1" parent="1" source="uc11" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#b85450;endSize=10;" target="uc11c">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-p-uc05" edge="1" parent="1" source="actor-pimpinan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#9673a6;" target="uc05">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-p-uc13" edge="1" parent="1" source="actor-pimpinan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#9673a6;" target="uc13">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-p-uc14" edge="1" parent="1" source="actor-pimpinan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#9673a6;" target="uc14">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="rel-p-uc15" edge="1" parent="1" source="actor-pimpinan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#9673a6;" target="uc15">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="legend-box" parent="1" style="shape=rect;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=1;rounded=1;arcSize=8;" value="" vertex="1">
-          <mxGeometry height="240" width="260" x="40" y="810" as="geometry" />
-        </mxCell>
-        <mxCell id="legend-title" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;fontFamily=Segoe UI;" value="KETERANGAN (LEGENDA)" vertex="1">
-          <mxGeometry height="25" width="260" x="40" y="815" as="geometry" />
-        </mxCell>
-        <mxCell id="leg-color1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="" vertex="1">
-          <mxGeometry height="14" width="20" x="60" y="850" as="geometry" />
-        </mxCell>
-        <mxCell id="leg-label1" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" value="= Masyarakat / Calon Akseptor" vertex="1">
-          <mxGeometry height="24" width="200" x="88" y="845" as="geometry" />
-        </mxCell>
-        <mxCell id="leg-color2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="" vertex="1">
-          <mxGeometry height="14" width="20" x="60" y="878" as="geometry" />
-        </mxCell>
-        <mxCell id="leg-label2" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" value="= Admin / Operator Kecamatan" vertex="1">
-          <mxGeometry height="24" width="200" x="88" y="873" as="geometry" />
-        </mxCell>
-        <mxCell id="leg-color3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="" vertex="1">
-          <mxGeometry height="14" width="20" x="60" y="906" as="geometry" />
-        </mxCell>
-        <mxCell id="leg-label3" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" value="= Bidan / Petugas Medis" vertex="1">
-          <mxGeometry height="24" width="200" x="88" y="901" as="geometry" />
-        </mxCell>
-        <mxCell id="leg-color4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="" vertex="1">
-          <mxGeometry height="14" width="20" x="60" y="934" as="geometry" />
-        </mxCell>
-        <mxCell id="leg-label4" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" value="= Pimpinan DPPKB" vertex="1">
-          <mxGeometry height="24" width="200" x="88" y="929" as="geometry" />
-        </mxCell>
-        <mxCell id="leg-dash" edge="1" parent="1" style="endArrow=open;html=1;dashed=1;strokeWidth=1;strokeColor=#999999;endSize=8;" value="">
+        <mxCell id="rel-a-uc14" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;fontSize=13;" target="uc14">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="60" y="968" as="sourcePoint" />
-            <mxPoint x="80" y="968" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="410" y="690" />
+            </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="leg-label5" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" value="= Relasi &amp;laquo;include&amp;raquo; (wajib ada)" vertex="1">
-          <mxGeometry height="24" width="200" x="88" y="957" as="geometry" />
-        </mxCell>
-        <mxCell id="leg-solid" edge="1" parent="1" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#333333;" value="">
+        <mxCell id="rel-a-uc15" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;fontSize=13;" target="uc15">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="60" y="995" as="sourcePoint" />
-            <mxPoint x="80" y="995" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="400" y="710" />
+            </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="leg-label6" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" value="= Relasi Asosiasi (aktor ↔ use case)" vertex="1">
-          <mxGeometry height="24" width="200" x="88" y="985" as="geometry" />
+        <mxCell id="rel-b-uc05" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;fontSize=13;" target="uc05">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1020" y="250" />
+            </Array>
+          </mxGeometry>
         </mxCell>
-        <mxCell id="leg-rect" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#2D7DD2;strokeWidth=1.5;" value="" vertex="1">
-          <mxGeometry height="16" width="28" x="56" y="1018" as="geometry" />
+        <mxCell id="rel-b-uc08" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;fontSize=13;" target="uc08">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="leg-label7" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" value="= System Boundary (Batas Sistem)" vertex="1">
-          <mxGeometry height="24" width="200" x="88" y="1013" as="geometry" />
+        <mxCell id="rel-b-uc11" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;fontSize=13;" target="uc11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-b-uc12" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;fontSize=13;" target="uc12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-b-uc13" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;fontSize=13;" target="uc13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-b-uc14" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;fontSize=13;entryX=1;entryY=0;entryDx=0;entryDy=0;" target="uc14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-b-uc15" edge="1" parent="1" source="actor-bidan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;fontSize=13;" target="uc15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-inc-uc11-11a" edge="1" parent="1" source="uc11" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#b85450;endSize=10;fontSize=13;" target="uc11a">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-inc-uc11-11b" edge="1" parent="1" source="uc11" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#b85450;endSize=10;fontSize=13;" target="uc11b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-inc-uc11-11c" edge="1" parent="1" source="uc11" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#b85450;endSize=10;fontSize=13;" target="uc11c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-p-uc05" edge="1" parent="1" source="actor-pimpinan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#9673a6;fontSize=13;" target="uc05">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1000" y="620" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-p-uc13" edge="1" parent="1" source="actor-pimpinan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#9673a6;fontSize=13;" target="uc13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-p-uc14" edge="1" parent="1" source="actor-pimpinan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#9673a6;fontSize=13;" target="uc14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-p-uc15" edge="1" parent="1" source="actor-pimpinan" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#9673a6;fontSize=13;" target="uc15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-box" parent="1" style="shape=rect;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=1;rounded=1;arcSize=8;fontSize=13;" value="" vertex="1">
+          <mxGeometry height="240" width="260" x="40" y="738" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-title" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=13;fontFamily=Segoe UI;" value="KETERANGAN" vertex="1">
+          <mxGeometry height="25" width="260" x="40" y="743" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-color1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" value="" vertex="1">
+          <mxGeometry height="14" width="20" x="60" y="778" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-label1" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontFamily=Segoe UI;" value="= Masyarakat / Calon Akseptor" vertex="1">
+          <mxGeometry height="24" width="200" x="88" y="773" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-color2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" value="" vertex="1">
+          <mxGeometry height="14" width="20" x="60" y="806" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-label2" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontFamily=Segoe UI;" value="= Admin / Operator Kecamatan" vertex="1">
+          <mxGeometry height="24" width="200" x="88" y="801" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-color3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;" value="" vertex="1">
+          <mxGeometry height="14" width="20" x="60" y="834" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-label3" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontFamily=Segoe UI;" value="= Bidan / Petugas Medis" vertex="1">
+          <mxGeometry height="24" width="200" x="88" y="829" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-color4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;" value="" vertex="1">
+          <mxGeometry height="14" width="20" x="60" y="862" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-label4" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontFamily=Segoe UI;" value="= Pimpinan DPPKB" vertex="1">
+          <mxGeometry height="24" width="200" x="88" y="857" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-dash" edge="1" parent="1" style="endArrow=open;html=1;dashed=1;strokeWidth=1;strokeColor=#999999;endSize=8;fontSize=13;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="896" as="sourcePoint" />
+            <mxPoint x="80" y="896" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="leg-label5" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontFamily=Segoe UI;" value="= Relasi «include» (wajib ada)" vertex="1">
+          <mxGeometry height="24" width="200" x="88" y="885" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-solid" edge="1" parent="1" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#333333;fontSize=13;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="923" as="sourcePoint" />
+            <mxPoint x="80" y="923" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="leg-label6" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontFamily=Segoe UI;" value="= Relasi Asosiasi (aktor ↔ use case)" vertex="1">
+          <mxGeometry height="24" width="200" x="88" y="913" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-rect" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#2D7DD2;strokeWidth=1.5;fontSize=13;" value="" vertex="1">
+          <mxGeometry height="16" width="28" x="56" y="946" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-label7" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontFamily=Segoe UI;" value="= System Boundary (Batas Sistem)" vertex="1">
+          <mxGeometry height="24" width="200" x="88" y="941" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

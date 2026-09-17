@@ -7,9 +7,10 @@ Folder ini memuat seluruh diagram perancangan sistem (*software engineering desi
 
 ## 📂 Struktur Berkas Diagram & Skripsi (Lengkap)
 
-| # | Modul Diagram | Berkas Draw.io (`.drawio`) | Berkas Skripsi (`.docx`) | Deskripsi & Ruang Lingkup |
-|---|---------------|-----------------------------|--------------------------|---------------------------|
-| 1 | **Use Case Diagram** | [`01_use_case_diagram.drawio`](01_use_case_diagram.drawio) | - *(sudah di bab perancangan)* | 15 Use Case + 4 Aktor (Masyarakat, Admin, Bidan, Pimpinan). |
+| # | Modul Dokumen / Diagram | Berkas Draw.io (`.drawio`) | Berkas Skripsi (`.docx`) | Deskripsi & Ruang Lingkup |
+|---|-------------------------|-----------------------------|--------------------------|---------------------------|
+| 0 | **4.1 Analisis Sistem** | [`00_flowmap_sistem_berjalan.drawio`](00_flowmap_sistem_berjalan.drawio)<br>[`00_flowmap_sistem_diusulkan.drawio`](00_flowmap_sistem_diusulkan.drawio) | [**`4.1_Analisis_Sistem.docx`**](4.1_Analisis_Sistem.docx) | Analisis sistem berjalan (konvensional), flowmap As-Is, evaluasi PIECES, sistem diusulkan, flowmap To-Be, tabel komparasi, serta spesifikasi kebutuhan fungsional (SKF) & non-fungsional (SKNF). |
+| 1 | **Use Case Diagram** | [`01_use_case_diagram.drawio`](01_use_case_diagram.drawio) | [**`01_use_case_diagram.docx`**](01_use_case_diagram.docx) | 15 Use Case + 4 Aktor (Masyarakat, Admin, Bidan, Pimpinan), relasi include, serta spesifikasi skenario alur kerja (UC02 & UC11). |
 | 2 | **Entity Relationship Diagram (ERD)** | [`02_erd.drawio`](02_erd.drawio) | [`02_erd.docx`](02_erd.docx) | 10 Entitas database, penanda PK/FK/UQ, kardinalitas Crow's foot (1:1, 1:N), dan 5 aturan bisnis relasional (*business rules*). |
 | 3 | **Class Diagram** | [`03_class_diagram.drawio`](03_class_diagram.drawio) | [`03_class_diagram.docx`](03_class_diagram.docx) | 10 Model Eloquent Laravel (`«Authenticatable»` & `«Model»`), visibilitas (`+`, `#`, `-`), atribut tipe data, method relasi, scopes, dan helper. |
 | 4 | **Activity Diagram: Registrasi Mandiri** | [`04_activity_registrasi_mandiri.drawio`](04_activity_registrasi_mandiri.drawio) | [`04_activity_registrasi_mandiri.docx`](04_activity_registrasi_mandiri.docx) | Swimlane (Masyarakat vs Sistem): Cek NIK (lama vs baru), pemilihan jadwal, validasi kuota, pembuatan nomor antrean urut, dan unduh PDF tiket antrean (A5). |
@@ -18,6 +19,7 @@ Folder ini memuat seluruh diagram perancangan sistem (*software engineering desi
 | 7 | **Activity Diagram: Pengelolaan Jadwal** | [`07_activity_kelola_jadwal.drawio`](07_activity_kelola_jadwal.drawio) | [`07_activity_kelola_jadwal.docx`](07_activity_kelola_jadwal.docx) | Swimlane (Admin vs Sistem): Pengaturan kalender operasional, penentuan kuota harian, rentang jam pelayanan, serta aktivasi status agenda. |
 | 8 | **Activity Diagram: Laporan & Monitoring GIS** | [`08_activity_laporan_gis.drawio`](08_activity_laporan_gis.drawio) | [`08_activity_laporan_gis.docx`](08_activity_laporan_gis.docx) | Swimlane (Pimpinan/Admin vs Sistem): Filter data periode/desa, rekapitulasi data, cetak laporan PDF resmi A4 Landscape dengan lembar pengesahan, serta analisis spasial Leaflet GIS. |
 | 9 | **Activity Diagram: Manajemen Stok Alokon** | [`09_activity_kelola_alokon.drawio`](09_activity_kelola_alokon.drawio) | [`09_activity_kelola_alokon.docx`](09_activity_kelola_alokon.docx) | Swimlane (Admin vs Sistem): Pencatatan komoditas alokon baru, penyesuaian/restock saldo kuantitas fisik, dan peringatan dini stok menipis (< 10 unit). |
+| ⭐️ | **Activity Diagram Lengkap (Gabungan 6 Alur)** | *(Semua Draw.io terpisah)* | [**`04_activity_diagram_lengkap.docx`**](04_activity_diagram_lengkap.docx) | **Gabungan lengkap seluruh 6 activity diagram** (4.4.1 s.d. 4.4.6) dalam 1 dokumen Word siap pakai lengkap dengan tabel langkah, narasi, dan placeholder gambar (Margin 4-4-3-3 cm, Times New Roman 12pt). |
 
 ---
 
