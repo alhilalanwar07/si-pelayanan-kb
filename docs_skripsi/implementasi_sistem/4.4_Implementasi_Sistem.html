@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>4.4 Implementasi Sistem - SI Pelayanan KB</title>
+<style>
+    body {
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 12pt;
+        line-height: 1.5;
+        color: #000;
+        background-color: #f8fafc;
+        padding: 40px 20px;
+        margin: 0;
+    }
+    .container {
+        max-width: 960px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 50px 60px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        border-radius: 8px;
+    }
+    .action-bar {
+        position: sticky;
+        top: 20px;
+        background: #059669;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 6px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        z-index: 100;
+    }
+    .action-bar button {
+        background: #fff;
+        color: #059669;
+        border: none;
+        padding: 8px 18px;
+        font-weight: bold;
+        font-size: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .action-bar button:hover {
+        background: #ecfdf5;
+        transform: translateY(-1px);
+    }
+    h2 {
+        font-size: 14pt;
+        font-weight: bold;
+        margin-bottom: 12px;
+        color: #000;
+    }
+    h3 {
+        font-size: 12pt;
+        font-weight: bold;
+        margin-top: 24px;
+        margin-bottom: 6px;
+        color: #000;
+    }
+    h4 {
+        font-size: 12pt;
+        font-weight: bold;
+        margin-top: 18px;
+        margin-bottom: 4px;
+        color: #000;
+    }
+    p {
+        text-align: justify;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    .table-caption {
+        font-size: 11pt;
+        margin-top: 14px;
+        margin-bottom: 6px;
+        text-align: left;
+    }
+    .table-caption strong {
+        font-weight: bold;
+    }
+    .image-caption {
+        font-size: 11pt;
+        margin-top: 6px;
+        margin-bottom: 12px;
+        text-align: center;
+    }
+    .image-caption strong {
+        font-weight: bold;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 24px;
+        font-size: 10pt;
+    }
+    th, td {
+        border: 1px solid #333333;
+        padding: 6px 10px;
+        vertical-align: middle;
+    }
+    th {
+        background-color: #eaeaea;
+        font-weight: bold;
+        text-align: center;
+    }
+    td.center {
+        text-align: center;
+    }
+    td.left {
+        text-align: left;
+    }
+    .placeholder-box {
+        background-color: #fef3c7;
+        border: 2px dashed #d97706;
+        border-radius: 6px;
+        padding: 16px 20px;
+        margin: 14px 0 6px 0;
+        text-align: center;
+    }
+    .placeholder-box .tag {
+        font-weight: bold;
+        font-size: 11pt;
+        color: #b45309;
+        margin-bottom: 6px;
+    }
+    .placeholder-box .guide {
+        font-size: 10pt;
+        color: #374151;
+        white-space: pre-line;
+        font-style: italic;
+        line-height: 1.4;
+    }
+    .placeholder-box .hint {
+        font-size: 8.5pt;
+        color: #6b7280;
+        margin-top: 6px;
+    }
+    pre {
+        background: #f3f4f6;
+        border: 1px solid #9ca3af;
+        border-radius: 4px;
+        padding: 12px;
+        font-family: Consolas, monospace;
+        font-size: 9pt;
+        overflow-x: auto;
+        line-height: 1.35;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="action-bar">
+        <span><strong>Tips Word:</strong> Salin dokumen ini langsung ke Microsoft Word dengan sekali klik tombol di samping.</span>
+        <button onclick="copyToWord()">Salin Semua ke Word</button>
+    </div>
+
+    <div id="skripsi-content">
+        <h2>4.4 Implementasi Sistem</h2>
+        <p>
+            Implementasi sistem merupakan tahapan krusial dalam siklus pengembangan perangkat lunak yang mentransformasikan rancangan model <em>use case</em>, perancangan diagram aktivitas, serta struktur basis data yang telah dibahas pada sub-bab sebelumnya ke dalam bentuk program aplikasi yang utuh dan dapat dioperasikan. Pada sub-bab ini diuraikan spesifikasi lingkungan implementasi (perangkat keras dan lunak), implementasi antarmuka pengguna (<em>User Interface</em>) pada setiap modul sistem, serta implementasi logika kode program kunci yang mendukung proses bisnis.
+        </p>
+
+        <h3>4.4.1 Lingkungan Implementasi</h3>
+        <p>
+            Lingkungan implementasi menggambarkan batasan spesifikasi perangkat keras (<em>hardware</em>) dan perangkat lunak (<em>software</em>) yang dibutuhkan untuk menunjang operasional Sistem Informasi Pelayanan KB, baik pada sisi server pengembangan maupun pada sisi pengguna (klien).
+        </p>
+
+        <h4>1. Implementasi Perangkat Keras (Hardware)</h4>
+        <div class="table-caption"><strong>Tabel 4.11</strong> Spesifikasi Kebutuhan Perangkat Keras</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Komponen Perangkat Keras</th>
+                    <th>Spesifikasi Minimum Klien</th>
+                    <th>Spesifikasi Server Pengembang</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">1</td>
+                    <td class="left">Processor</td>
+                    <td class="left">Dual-Core 2.0 GHz (Intel / AMD)</td>
+                    <td class="left">Intel Core i5 / AMD Ryzen 5 ke atas</td>
+                </tr>
+                <tr>
+                    <td class="center">2</td>
+                    <td class="left">Memori (RAM)</td>
+                    <td class="left">2 GB</td>
+                    <td class="left">8 GB DDR4 / DDR5</td>
+                </tr>
+                <tr>
+                    <td class="center">3</td>
+                    <td class="left">Media Penyimpanan</td>
+                    <td class="left">Tersedia 500 MB ruang bebas</td>
+                    <td class="left">SSD NVMe / SATA minimal 256 GB</td>
+                </tr>
+                <tr>
+                    <td class="center">4</td>
+                    <td class="left">Layar Monitor / Display</td>
+                    <td class="left">Resolusi 1366 × 768 piksel / Mobile Display</td>
+                    <td class="left">Resolusi Full HD 1920 × 1080 piksel</td>
+                </tr>
+                <tr>
+                    <td class="center">5</td>
+                    <td class="left">Perangkat Input/Output</td>
+                    <td class="left">Keyboard, Mouse, Printer (opsional)</td>
+                    <td class="left">Keyboard, Mouse, Printer</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>2. Implementasi Perangkat Lunak (Software)</h4>
+        <div class="table-caption"><strong>Tabel 4.12</strong> Spesifikasi Kebutuhan Perangkat Lunak</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Perangkat Lunak</th>
+                    <th>Nama / Versi yang Digunakan</th>
+                    <th>Fungsi dan Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">1</td>
+                    <td class="left">Sistem Operasi</td>
+                    <td class="left">Microsoft Windows 10/11 64-bit</td>
+                    <td class="left">Sistem operasi lingkungan pengembangan</td>
+                </tr>
+                <tr>
+                    <td class="center">2</td>
+                    <td class="left">Web Server</td>
+                    <td class="left">Apache HTTP Server (via Laragon)</td>
+                    <td class="left">Server lokal pemroses permintaan HTTP</td>
+                </tr>
+                <tr>
+                    <td class="center">3</td>
+                    <td class="left">Database Engine</td>
+                    <td class="left">MySQL / MariaDB 10.4+</td>
+                    <td class="left">Sistem manajemen basis data relasional</td>
+                </tr>
+                <tr>
+                    <td class="center">4</td>
+                    <td class="left">Bahasa Pemrograman</td>
+                    <td class="left">PHP versi 8.2 ke atas &amp; JavaScript</td>
+                    <td class="left">Bahasa pemrograman backend &amp; frontend</td>
+                </tr>
+                <tr>
+                    <td class="center">5</td>
+                    <td class="left">Framework Aplikasi</td>
+                    <td class="left">Laravel versi 11</td>
+                    <td class="left">Kerangka kerja backend MVC arsitektur modern</td>
+                </tr>
+                <tr>
+                    <td class="center">6</td>
+                    <td class="left">Framework Komponen UI</td>
+                    <td class="left">Laravel Livewire 3 &amp; Flux UI</td>
+                    <td class="left">Komponen antarmuka reaktif tanpa reload halaman</td>
+                </tr>
+                <tr>
+                    <td class="center">7</td>
+                    <td class="left">CSS Framework</td>
+                    <td class="left">Tailwind CSS versi 3.4+</td>
+                    <td class="left">Desain antarmuka responsif dan konsisten</td>
+                </tr>
+                <tr>
+                    <td class="center">8</td>
+                    <td class="left">Library GIS &amp; Peta</td>
+                    <td class="left">Leaflet.js (OpenStreetMap)</td>
+                    <td class="left">Visualisasi pemetaan sebaran akseptor KB</td>
+                </tr>
+                <tr>
+                    <td class="center">9</td>
+                    <td class="left">Library Dokumen PDF</td>
+                    <td class="left">Barryvdh Laravel-DomPDF</td>
+                    <td class="left">Pembangkit dokumen PDF tiket &amp; laporan pelayanan</td>
+                </tr>
+                <tr>
+                    <td class="center">10</td>
+                    <td class="left">Web Browser</td>
+                    <td class="left">Google Chrome, Edge, atau Firefox</td>
+                    <td class="left">Aplikasi peramban web sisi pengguna</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4.4.2 Implementasi Antarmuka Pengguna (User Interface)</h3>
+        <p>
+            Implementasi antarmuka pengguna memvisualisasikan bagaimana pengguna berinteraksi langsung dengan sistem. Antarmuka Sistem Informasi Pelayanan KB dikembangkan dengan mengutamakan prinsip <em>User-Centered Design</em> yang responsif, intuitif, dan terbagi ke dalam dua kelompok hak akses, yaitu antarmuka publik (untuk masyarakat umum/akseptor) dan antarmuka terautentikasi (untuk Bidan, Administrator, dan Pimpinan).
+        </p>
+
+        <h4>4.4.2.1 Halaman Beranda (Landing Page)</h4>
+        <p>Halaman Beranda merupakan gerbang antarmuka utama yang dapat diakses oleh masyarakat umum tanpa perlu melakukan proses login. Halaman ini berfungsi sebagai sarana sosialisasi informasi program Keluarga Berencana, ragam alat kontrasepsi yang tersedia pada fasilitas kesehatan, serta menyediakan tombol aksi cepat menuju pendaftaran mandiri.</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/ (Role: Publik / Pengunjung)<br>Buka halaman depan utama sistem. Tangkap layar bagian banner atas (hero section), deskripsi profil layanan KB, serta tombol navigasi cepat pendaftaran.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.1</strong> Tampilan Halaman Beranda (Landing Page)</div>
+        <p>Berdasarkan Gambar 4.1, halaman beranda menyajikan tata letak yang ramah pengguna dengan tipografi modern dan tombol panggilan tindakan (Call-to-Action) berupa tombol 'Daftar Pelayanan KB'. Masyarakat calon akseptor dapat langsung memilih tautan tersebut untuk melakukan registrasi antrean secara daring.</p>
+
+        <h4>4.4.2.2 Halaman Registrasi Mandiri Akseptor</h4>
+        <p>Halaman Registrasi Mandiri dirancang untuk memfasilitasi calon akseptor dalam mendaftarkan diri secara mandiri dari rumah menggunakan peramban web pada ponsel maupun komputer. Data yang dihimpun mencakup identitas kependudukan, riwayat anak, serta pemilihan jadwal kedatangan.</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/registrasi (Role: Calon Akseptor)<br>Buka formulir registrasi mandiri. Tangkap layar form input data diri (NIK, Nama Suami/Istri, Alamat, Wilayah Desa) dan bagian pemilihan sesi jadwal pelayanan KB.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.2</strong> Tampilan Halaman Registrasi Mandiri Akseptor</div>
+        <p>Pada Gambar 4.2, formulir pendaftaran dilengkapi dengan validasi otomatis terhadap panjang digit NIK (16 karakter). Pengguna juga diarahkan untuk memilih jadwal pelayanan yang masih memiliki kuota kosong. Sistem secara reaktif akan menghitung ketersediaan kuota pada tanggal yang dipilih oleh calon akseptor.</p>
+
+        <h4>4.4.2.3 Hasil Unduh Tiket Antrean Pelayanan (Format PDF)</h4>
+        <p>Setelah calon akseptor berhasil menyelesaikan pengisian formulir pendaftaran mandiri, sistem secara otomatis menghasilkan bukti registrasi berupa lembar tiket antrean berformat Portable Document Format (PDF) yang siap diunduh atau dicetak.</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/tiket-antrian/{id}/pdf (Role: Calon Akseptor)<br>Lakukan tes pendaftaran mandiri hingga muncul tombol unduh tiket antrean, lalu buka/download file PDF tiket tersebut dan ambil tangkapan layarnya.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.3</strong> Tampilan Tiket Antrean Pelayanan (Format PDF)</div>
+        <p>Gambar 4.3 memperlihatkan lembaran tiket antrean digital yang memuat informasi esensial, antara lain nama instansi/faskes, nomor urut antrean pelayanan, nama lengkap akseptor, NIK, tanggal kunjungan, serta perkiraan jam layanan. Lembaran ini wajib dibawa akseptor saat mendatangi faskes.</p>
+
+        <h4>4.4.2.4 Halaman Autentikasi Pengguna (Login)</h4>
+        <p>Halaman Login merupakan pintu masuk keamanan bagi petugas berwenang (Administrator, Bidan, dan Pimpinan) untuk mengakses modul-modul internal sistem informasi. Halaman ini menggunakan autentikasi berbasis username dan kata sandi yang terenkripsi.</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/login (Role: Petugas / Pengguna Terdaftar)<br>Buka form login sistem. Tangkap layar kotak dialog login yang memuat isian username, kata sandi (password), serta tombol Masuk.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.4</strong> Tampilan Halaman Login Petugas</div>
+        <p>Seperti yang ditunjukkan pada Gambar 4.4, formulir login dirancang dengan antarmuka yang bersih dan dilengkapi fitur validasi keamanan untuk menangkal kesalahan autentikasi dan upaya akses ilegal (unauthorized access).</p>
+
+        <h4>4.4.2.5 Halaman Dashboard Utama</h4>
+        <p>Halaman Dashboard merupakan pusat informasi operasional yang pertama kali ditampilkan setelah pengguna berhasil melakukan autentikasi ke dalam sistem. Modul ini menyajikan ringkasan indikator kinerja utama pelayanan KB secara visual dan waktu-nyata (real-time).</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/dashboard (Role: Bidan / Admin / Pimpinan)<br>Masuk ke sistem, tangkap layar dashboard yang memuat kartu indikator statistik (Total Peserta, Pelayanan Bulan Ini, Kuota Hari Ini, Stok Alokon) dan grafik rekap pelayanan.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.5</strong> Tampilan Halaman Dashboard Utama Sistem</div>
+        <p>Pada Gambar 4.5, dashboard menampilkan kartu ringkasan (metric cards) yang mencakup jumlah total akseptor terdaftar, akumulasi pelayanan pada bulan berjalan, persentase sisa kuota harian, serta peringatan persediaan stok kontrasepsi yang menipis. Terdapat pula grafik batang/garis tren pelayanan KB.</p>
+
+        <h4>4.4.2.6 Halaman Manajemen Data Wilayah</h4>
+        <p>Halaman Manajemen Data Wilayah digunakan oleh Administrator untuk mengelola master data desa atau kelurahan yang berada di bawah wilayah kerja fasilitas kesehatan yang bersangkutan.</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/wilayah (Role: Administrator)<br>Tangkap layar tabel daftar master desa/kelurahan cakupan pelayanan, kolom aksi ubah/hapus, serta tombol 'Tambah Wilayah'.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.6</strong> Tampilan Halaman Manajemen Data Wilayah</div>
+        <p>Gambar 4.6 menampilkan antarmuka tabel data wilayah yang dilengkapi fitur pencarian data dan formulir modal interaktif untuk menambah maupun memperbarui nama desa/kelurahan binaan.</p>
+
+        <h4>4.4.2.7 Halaman Pengaturan Jadwal Pelayanan dan Kuota</h4>
+        <p>Halaman Pengaturan Jadwal Pelayanan berfungsi untuk menentukan sesi waktu operasional pelayanan KB, pembatasan kapasitas kuota akseptor per sesi, serta aktivasi status layanan.</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/jadwal (Role: Administrator / Bidan)<br>Tangkap layar tabel jadwal sesi pelayanan KB, mencakup tanggal, jam mulai-selesai, kuota maksimal, jumlah pendaftar, dan status sesi aktif.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.7</strong> Tampilan Halaman Pengaturan Jadwal Pelayanan</div>
+        <p>Berdasarkan Gambar 4.7, petugas dapat membuka jadwal baru dengan menentukan batas kuota penerimaan akseptor guna mencegah antrean yang membludak di fasilitas kesehatan. Petugas juga dapat memantau akumulasi akseptor yang telah mengambil nomor antrean pada jadwal tersebut.</p>
+
+        <h4>4.4.2.8 Halaman Manajemen Data Peserta KB (Akseptor)</h4>
+        <p>Halaman Data Peserta KB memuat daftar rekam identitas seluruh akseptor yang telah terdaftar, baik melalui pendaftaran mandiri daring maupun pendaftaran langsung di loket faskes.</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/peserta-kb (Role: Bidan / Administrator)<br>Tangkap layar daftar seluruh akseptor KB, kolom status verifikasi (Menunggu / Terverifikasi), filter pencarian, dan tombol aksi detail/verifikasi.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.8</strong> Tampilan Halaman Data Peserta KB</div>
+        <p>Pada Gambar 4.8, tabel menyajikan data NIK, nama akseptor, nama pasangan, wilayah domisili, dan label status verifikasi. Bidan dapat memvalidasi data pendaftar baru yang berstatus 'Menunggu' menjadi 'Terverifikasi' serta melihat riwayat rekam medis akseptor secara terperinci.</p>
+
+        <h4>4.4.2.9 Halaman Manajemen Inventaris Alokon</h4>
+        <p>Halaman Inventaris Alokon dirancang untuk mengontrol ketersediaan fisik alat dan obat kontrasepsi pada instansi faskes guna menjamin kelancaran tindakan pelayanan.</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/alokon (Role: Administrator / Petugas Logistik)<br>Tangkap layar tabel master alat dan obat kontrasepsi (Suntik 1 Bulan, Suntik 3 Bulan, IUD, Implan, Pil, Kondom), saldo stok fisik, dan tombol tambah/edit stok.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.9</strong> Tampilan Halaman Inventaris Alokon</div>
+        <p>Sebagaimana diilustrasikan pada Gambar 4.9, sistem menampilkan saldo stok terkini per komoditas alokon. Apabila persediaan berada di bawah batas ambang aman, sistem memberikan penanda visual agar petugas segera melakukan pengajuan penambahan alokon.</p>
+
+        <h4>4.4.2.10 Halaman Alur Pelayanan KB - Langkah 1 (Skrining Medis)</h4>
+        <p>Modul Pelayanan KB menerapkan konsep multi-step wizard tiga tahap. Tahap pertama adalah Skrining Medis yang diisi oleh bidan untuk mengevaluasi kelayakan klinis calon akseptor sebelum tindakan kontrasepsi dilakukan.</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/pelayanan/create (Role: Bidan)<br>Pilih salah satu peserta KB, lalu masuk ke Form Wizard Langkah 1 (Skrining Medis). Tangkap layar isian tanda vital (tensi, BB), riwayat penyakit, dan daftar rekomendasi alokon yang diizinkan.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.10</strong> Tampilan Wizard Pelayanan KB - Langkah 1: Skrining Medis</div>
+        <p>Gambar 4.10 menunjukkan pemeriksaan tanda vital (tekanan darah, berat badan), status menyusui, serta anamnesis riwayat penyakit kuning, perdarahan abnormal, atau dugaan kehamilan. Berdasarkan input tersebut, sistem secara otomatis merekomendasikan metode kontrasepsi yang aman digunakan oleh akseptor.</p>
+
+        <h4>4.4.2.11 Halaman Alur Pelayanan KB - Langkah 2 (Informed Consent)</h4>
+        <p>Tahap kedua dalam alur pelayanan adalah pengesahan Informed Consent (Lembar Persetujuan Tindakan Medis), khususnya diwajibkan untuk metode kontrasepsi invasif seperti pemasangan IUD atau Implan.</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/pelayanan/create (Langkah 2) (Role: Bidan)<br>Lanjutkan wizard ke Langkah 2. Tangkap layar lembar persetujuan tindakan medis yang memuat jenis tindakan, persetujuan klien, dan persetujuan pasangan.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.11</strong> Tampilan Wizard Pelayanan KB - Langkah 2: Informed Consent</div>
+        <p>Pada Gambar 4.11, sistem menyediakan checklist konfirmasi persetujuan dari akseptor maupun pasangan suami/istri beserta rekaman tanggal persetujuan sebagai perlindungan hukum dan kepatuhan standar operasional prosedur medis.</p>
+
+        <h4>4.4.2.12 Halaman Alur Pelayanan KB - Langkah 3 (Tindakan Pelayanan)</h4>
+        <p>Tahap ketiga merupakan pencatatan final tindakan pelayanan medis yang telah berhasil dilakukan kepada akseptor KB oleh bidan atau dokter penanggung jawab.</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/pelayanan/create (Langkah 3) (Role: Bidan)<br>Lanjutkan wizard ke Langkah 3. Tangkap layar pemilihan alokon yang diberikan, tanggal kontrol ulang/cabut, nama tenaga medis pemeriksa, serta tombol simpan pelayanan.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.12</strong> Tampilan Wizard Pelayanan KB - Langkah 3: Tindakan Pelayanan</div>
+        <p>Berdasarkan Gambar 4.12, bidan memilih komoditas alokon yang disuntikkan/dipasang (yang otomatis memotong saldo stok pada tabel alokon), menentukan tanggal rencana kunjungan ulang/kontrol, serta mencatat NIP dan identitas petugas penanggung jawab pelayanan.</p>
+
+        <h4>4.4.2.13 Halaman Cetak Lembar Rekam Pelayanan KB (Kartu KB)</h4>
+        <p>Sistem menyediakan fasilitas pencetakan kartu rekam medik pelayanan KB yang disesuaikan dengan format standar pencatatan BKKBN (Formulir K/IV/KB).</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/pelayanan/{id}/cetak (Role: Bidan / Administrator)<br>Buka detail pelayanan salah satu peserta lalu klik 'Cetak Kartu'. Tangkap layar format kartu pelayanan KB (K/IV/KB) yang siap dicetak.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.13</strong> Tampilan Cetak Kartu Rekam Pelayanan KB</div>
+        <p>Gambar 4.13 memperlihatkan format lembar rekam medis pelayanan yang menyajikan data identitas akseptor, riwayat skrining kesehatan, jenis alokon yang digunakan, serta tabel rekam kunjungan ulang yang dapat dicetak sebagai arsip medis fisik maupun kartu pegangan pasien.</p>
+
+        <h4>4.4.2.14 Halaman Visualisasi Peta Sebaran Akseptor (GIS)</h4>
+        <p>Halaman Peta Sebaran Akseptor mengimplementasikan teknologi Sistem Informasi Geografis (Geographic Information System / GIS) berbasis pustaka Leaflet.js untuk memetakan persebaran peserta KB pada masing-masing desa/kelurahan.</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/peta-sebaran (Role: Bidan / Admin / Pimpinan)<br>Tangkap layar antarmuka peta interaktif (Leaflet.js) yang menampilkan peta wilayah desa/kelurahan dengan indikator densitas/jumlah akseptor di setiap titik wilayah.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.14</strong> Tampilan Halaman Peta Sebaran Akseptor (GIS)</div>
+        <p>Pada Gambar 4.14, peta menampilkan visualisasi spasial wilayah kerja puskesmas dengan pin marker dan batas poligon desa. Pimpinan faskes dapat dengan mudah mengidentifikasi wilayah dengan capaian akseptor tinggi maupun wilayah yang membutuhkan sosialisasi KB lebih intensif.</p>
+
+        <h4>4.4.2.15 Halaman Laporan dan Rekapitulasi Pelayanan</h4>
+        <p>Halaman Laporan berfungsi untuk menghasilkan rekapitulasi data pelayanan KB secara periodik (bulanan, triwulan, atau tahunan) untuk keperluan pelaporan instansi tingkat kecamatan maupun dinas kesehatan.</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/laporan (Role: Bidan / Pimpinan / Admin)<br>Tangkap layar form filter periode tanggal, rekapitulasi data per metode kontrasepsi / per desa, dan tombol ekspor ke format PDF atau Excel.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.15</strong> Tampilan Halaman Laporan Pelayanan KB</div>
+        <p>Sebagaimana ditunjukkan pada Gambar 4.15, pengguna dapat memfilter rentang tanggal laporan dan memilih kategori rekapitulasi (berdasarkan metode alokon atau wilayah). Tersedia tombol ekspor menuju format PDF dan Excel untuk mempercepat distribusi laporan.</p>
+
+        <h4>4.4.2.16 Halaman Manajemen Pengguna Sistem (Users)</h4>
+        <p>Halaman Manajemen Pengguna merupakan antarmuka khusus Administrator untuk mengatur hak akses akun, mengelola peran staf medis (Bidan), tenaga entri (Admin), serta pihak manajerial (Pimpinan).</p>
+        <div class="placeholder-box">
+            <div class="tag">📷 [ TEMPAT TANGKAPAN LAYAR / SCREENSHOT ]</div>
+            <div class="guide"><strong>Petunjuk Pengambilan Gambar:</strong><br>Akses: http://127.0.0.1:8000/pengguna (Role: Administrator)<br>Tangkap layar tabel data pengguna yang menampilkan nama staf, username, tingkat hak akses (admin, bidan, pimpinan), dan instansi kerja.</div>
+            <div class="hint">(*Setelah screenshot diambil, sisipkan gambar ke dokumen Word pada posisi ini*)</div>
+        </div>
+        <div class="image-caption"><strong>Gambar 4.16</strong> Tampilan Halaman Manajemen Pengguna</div>
+        <p>Gambar 4.16 menyajikan tabel akun pengguna lengkap dengan status hak akses masing-masing. Administrator dapat menambahkan petugas baru, melakukan reset kata sandi, serta menonaktifkan akun staf yang telah selesai bertugas.</p>
+
+        <h3>4.4.3 Implementasi Logika dan Kode Program Kunci</h3>
+        <p>
+            Di samping tampilan visual antarmuka, sistem ini didukung oleh logika backend yang menjamin kelancaran transaksi data medis dan keamanan proses operasional. Beberapa implementasi algoritma dan kode program penting diuraikan sebagai berikut:
+        </p>
+
+        <h4>1. Logika Penomoran Antrean Otomatis dan Validasi Kuota</h4>
+        <p>
+            Untuk memastikan nomor urut antrean akseptor bertambah secara sekuensial tanpa ada nomor yang terlewat atau duplikat pada satu sesi pelayanan yang sama, sistem menggunakan transaksi database atomik yang mengunci sesi jadwal serta memeriksa batas kuota sebelum nomor antrean diterbitkan.
+        </p>
+        <pre><code>// Potongan kode penomoran antrean otomatis pada RegistrasiMandiri.php
+DB::transaction(function () use ($jadwal) {
+    // Kunci record jadwal untuk mencegah race condition
+    $jadwalAktif = JadwalPelayanan::lockForUpdate()->findOrFail($this->jadwal_pelayanan_id);
+
+    // Hitung antrean yang sudah terdaftar
+    $totalPendaftar = AntrianJadwal::where('jadwal_pelayanan_id', $jadwalAktif->id)->count();
+
+    if ($totalPendaftar >= $jadwalAktif->kuota) {
+        throw new \Exception('Mohon maaf, kuota antrean untuk jadwal ini sudah penuh.');
+    }
+
+    $nomorAntrianBaru = $totalPendaftar + 1;
+
+    $antrian = AntrianJadwal::create([
+        'jadwal_pelayanan_id' => $jadwalAktif->id,
+        'peserta_kb_id'       => $this->peserta_kb_id,
+        'nomor_antrian'       => $nomorAntrianBaru,
+        'status'              => 'terdaftar',
+    ]);
+});</code></pre>
+
+        <h4>2. Logika Alur Wizard Pelayanan Tiga Tahap (Livewire Multi-Step Wizard)</h4>
+        <p>
+            Proses pelayanan medis KB membutuhkan runtutan langkah yang terstruktur, dimulai dari skrining klinis, persetujuan medis, hingga input alokon dan kunjungan ulang. Livewire mengelola navigasi langkah (step), validasi bertahap, serta persistensi data antar-langkah.
+        </p>
+        <pre><code>// Potongan kontrol wizard pada Pelayanan/Create.php
+public int $currentStep = 1;
+
+public function nextStep(): void
+{
+    if ($this->currentStep === 1) {
+        $this->validateSkriningMedis();
+    } elseif ($this->currentStep === 2) {
+        $this->validateInformedConsent();
+    }
+    $this->currentStep++;
+}
+
+public function previousStep(): void
+{
+    if ($this->currentStep > 1) {
+        $this->currentStep--;
+    }
+}</code></pre>
+    </div>
+</div>
+
+<script>
+function copyToWord() {
+    const el = document.getElementById('skripsi-content');
+    const range = document.createRange();
+    range.selectNode(el);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    try {
+        document.execCommand('copy');
+        alert('Seluruh isi Bab 4.4 berhasil disalin! Buka Microsoft Word Anda lalu tekan Ctrl+V.');
+    } catch (err) {
+        alert('Silakan pilih teks secara manual (Ctrl+A) lalu Ctrl+C.');
+    }
+    window.getSelection().removeAllRanges();
+}
+</script>
+
+</body>
+</html>

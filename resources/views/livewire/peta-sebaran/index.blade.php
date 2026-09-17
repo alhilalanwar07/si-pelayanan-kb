@@ -83,7 +83,7 @@
             @endif
 
             <div class="inline-flex rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
-                <button type="button" 
+                <button type="button" disabled
                         wire:click="setViewMode('map')"
                         class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all {{ $viewMode === 'map' ? 'bg-white text-blue-600 shadow-xs dark:bg-zinc-700 dark:text-white' : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white' }}">
                     <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

@@ -1,0 +1,368 @@
+<mxfile host="app.diagrams.net" agent="Antigravity" version="26.0.0">
+  <diagram id="use-case-pelayanan-kb" name="Use Case Diagram SI Pelayanan KB">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ========================================= -->
+        <!-- SYSTEM BOUNDARY (Rectangle)               -->
+        <!-- ========================================= -->
+        <mxCell id="sys-boundary" value="Sistem Informasi Pelayanan Keluarga Berencana (KB)&#xa;DPPKB Kecamatan Wundulako" style="shape=rect;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#2D7DD2;strokeWidth=2;dashed=0;verticalAlign=top;fontStyle=1;fontSize=13;fontFamily=Segoe UI;align=center;spacingTop=8;arcSize=6;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="340" y="20" width="920" height="1050" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- AKTOR 1: Masyarakat (kiri atas)           -->
+        <!-- ========================================= -->
+        <mxCell id="actor-masyarakat" value="Masyarakat /&#xa;Calon Akseptor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontFamily=Segoe UI;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="110" y="100" width="40" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- AKTOR 2: Admin / Operator (kiri tengah)   -->
+        <!-- ========================================= -->
+        <mxCell id="actor-admin" value="Admin /&#xa;Operator Kecamatan" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontFamily=Segoe UI;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="110" y="430" width="40" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- AKTOR 3: Bidan (kanan tengah)             -->
+        <!-- ========================================= -->
+        <mxCell id="actor-bidan" value="Bidan /&#xa;Petugas Medis" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontFamily=Segoe UI;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="1440" y="290" width="40" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- AKTOR 4: Pimpinan DPPKB (kanan bawah)    -->
+        <!-- ========================================= -->
+        <mxCell id="actor-pimpinan" value="Pimpinan&#xa;DPPKB" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontFamily=Segoe UI;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="1440" y="750" width="40" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- USE CASE: AREA PUBLIK (TANPA LOGIN)       -->
+        <!-- ========================================= -->
+
+        <!-- UC01: Melihat Informasi Beranda -->
+        <mxCell id="uc01" value="UC01&#xa;Melihat Informasi&#xa;Beranda" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;spacingTop=0;" parent="1" vertex="1">
+          <mxGeometry x="400" y="60" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- UC02: Melakukan Registrasi Mandiri -->
+        <mxCell id="uc02" value="UC02&#xa;Melakukan Registrasi&#xa;Mandiri" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="400" y="160" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- UC03: Memilih Jadwal & Booking Antrian -->
+        <mxCell id="uc03" value="UC03&#xa;Memilih Jadwal &amp;&#xa;Booking Antrian" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="660" y="100" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- UC04: Mengunduh Tiket Antrian -->
+        <mxCell id="uc04" value="UC04&#xa;Mengunduh Tiket&#xa;Antrian (PDF)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="660" y="200" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- USE CASE: AUTENTIKASI                     -->
+        <!-- ========================================= -->
+
+        <!-- UC05: Login Sistem -->
+        <mxCell id="uc05" value="UC05&#xa;Login Sistem" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="400" y="300" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- USE CASE: KELOLA DATA MASTER (ADMIN)      -->
+        <!-- ========================================= -->
+
+        <!-- UC06: Mengelola Data Wilayah -->
+        <mxCell id="uc06" value="UC06&#xa;Mengelola Data&#xa;Wilayah" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="400" y="420" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- UC07: Mengelola Jadwal Pelayanan -->
+        <mxCell id="uc07" value="UC07&#xa;Mengelola Jadwal&#xa;Pelayanan" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="400" y="520" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- UC08: Mengelola Data Peserta KB -->
+        <mxCell id="uc08" value="UC08&#xa;Mengelola Data&#xa;Peserta KB" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="400" y="620" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- UC09: Mengelola Inventaris Alokon -->
+        <mxCell id="uc09" value="UC09&#xa;Mengelola Inventaris&#xa;Alokon" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="400" y="720" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- UC10: Mengelola Akun Pengguna -->
+        <mxCell id="uc10" value="UC10&#xa;Mengelola Akun&#xa;Pengguna" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="400" y="820" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- USE CASE: PELAYANAN MEDIS (BIDAN)         -->
+        <!-- ========================================= -->
+
+        <!-- UC11: Melakukan Pelayanan KB (Wizard) -->
+        <mxCell id="uc11" value="UC11&#xa;Melakukan&#xa;Pelayanan KB" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontFamily=Segoe UI;fontStyle=1;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="900" y="340" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- UC11a: Mengisi Skrining Medis (include dari UC11) -->
+        <mxCell id="uc11a" value="UC11a&#xa;Mengisi Skrining&#xa;Medis" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="700" y="430" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- UC11b: Mengisi Informed Consent (include dari UC11) -->
+        <mxCell id="uc11b" value="UC11b&#xa;Mengisi Informed&#xa;Consent" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="900" y="450" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- UC11c: Mencatat Tindakan & Alokon (include dari UC11) -->
+        <mxCell id="uc11c" value="UC11c&#xa;Mencatat Tindakan&#xa;&amp; Memilih Alokon" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="1100" y="430" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- UC12: Mencetak Kartu KB -->
+        <mxCell id="uc12" value="UC12&#xa;Mencetak Kartu&#xa;Pelayanan KB" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="900" y="550" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- USE CASE: MONITORING & LAPORAN            -->
+        <!-- (Admin, Bidan, Pimpinan)                  -->
+        <!-- ========================================= -->
+
+        <!-- UC13: Melihat Dashboard Statistik -->
+        <mxCell id="uc13" value="UC13&#xa;Melihat Dashboard&#xa;Statistik" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="900" y="700" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- UC14: Melihat Peta Sebaran Akseptor -->
+        <mxCell id="uc14" value="UC14&#xa;Melihat Peta Sebaran&#xa;Akseptor (GIS)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="900" y="810" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- UC15: Mencetak Laporan Pelayanan -->
+        <mxCell id="uc15" value="UC15&#xa;Mencetak Laporan&#xa;Pelayanan" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontFamily=Segoe UI;fontStyle=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="900" y="920" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- RELASI: Masyarakat → Use Cases            -->
+        <!-- ========================================= -->
+        <mxCell id="rel-m-uc01" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#6c8ebf;" parent="1" source="actor-masyarakat" target="uc01" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-m-uc02" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#6c8ebf;" parent="1" source="actor-masyarakat" target="uc02" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- RELASI <<include>>: UC02 → UC03           -->
+        <!-- Registrasi Mandiri selalu include Memilih  -->
+        <!-- Jadwal & Booking Antrian                  -->
+        <!-- ========================================= -->
+        <mxCell id="rel-inc-uc02-uc03" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#999999;endSize=10;" parent="1" source="uc02" target="uc03" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+          <mxCell id="lbl-inc-uc02-uc03" value="&lt;font style=&quot;font-size:9px;&quot;&gt;&amp;laquo;include&amp;raquo;&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Segoe UI;fontSize=9;" parent="rel-inc-uc02-uc03" vertex="1" connectable="0">
+            <mxGeometry x="-0.1" y="-10" relative="1" as="geometry">
+              <mxPoint as="offset" />
+            </mxGeometry>
+          </mxCell>
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- RELASI <<include>>: UC02 → UC04           -->
+        <!-- Registrasi Mandiri selalu include          -->
+        <!-- Mengunduh Tiket Antrian                   -->
+        <!-- ========================================= -->
+        <mxCell id="rel-inc-uc02-uc04" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#999999;endSize=10;" parent="1" source="uc02" target="uc04" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+          <mxCell id="lbl-inc-uc02-uc04" value="&lt;font style=&quot;font-size:9px;&quot;&gt;&amp;laquo;include&amp;raquo;&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Segoe UI;fontSize=9;" parent="rel-inc-uc02-uc04" vertex="1" connectable="0">
+            <mxGeometry x="-0.1" y="10" relative="1" as="geometry">
+              <mxPoint as="offset" />
+            </mxGeometry>
+          </mxCell>
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- RELASI: Admin → Use Cases                 -->
+        <!-- ========================================= -->
+        <mxCell id="rel-a-uc05" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" parent="1" source="actor-admin" target="uc05" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-a-uc06" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" parent="1" source="actor-admin" target="uc06" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-a-uc07" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" parent="1" source="actor-admin" target="uc07" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-a-uc08" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" parent="1" source="actor-admin" target="uc08" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-a-uc09" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" parent="1" source="actor-admin" target="uc09" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-a-uc10" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" parent="1" source="actor-admin" target="uc10" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-a-uc13" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" parent="1" source="actor-admin" target="uc13" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-a-uc14" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" parent="1" source="actor-admin" target="uc14" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-a-uc15" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#82b366;" parent="1" source="actor-admin" target="uc15" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- RELASI: Bidan → Use Cases                 -->
+        <!-- ========================================= -->
+        <mxCell id="rel-b-uc05" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" parent="1" source="actor-bidan" target="uc05" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-b-uc08" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" parent="1" source="actor-bidan" target="uc08" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-b-uc11" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" parent="1" source="actor-bidan" target="uc11" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-b-uc12" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" parent="1" source="actor-bidan" target="uc12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-b-uc13" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" parent="1" source="actor-bidan" target="uc13" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-b-uc14" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" parent="1" source="actor-bidan" target="uc14" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-b-uc15" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#d6b656;" parent="1" source="actor-bidan" target="uc15" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- RELASI <<include>>: UC11 → UC11a, b, c    -->
+        <!-- Pelayanan KB selalu include 3 sub-proses  -->
+        <!-- ========================================= -->
+        <mxCell id="rel-inc-uc11-11a" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#b85450;endSize=10;" parent="1" source="uc11" target="uc11a" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+          <mxCell id="lbl-inc-uc11-11a" value="&lt;font style=&quot;font-size:9px;&quot;&gt;&amp;laquo;include&amp;raquo;&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Segoe UI;" parent="rel-inc-uc11-11a" vertex="1" connectable="0">
+            <mxGeometry x="-0.15" y="-10" relative="1" as="geometry">
+              <mxPoint as="offset" />
+            </mxGeometry>
+          </mxCell>
+        </mxCell>
+        <mxCell id="rel-inc-uc11-11b" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#b85450;endSize=10;" parent="1" source="uc11" target="uc11b" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+          <mxCell id="lbl-inc-uc11-11b" value="&lt;font style=&quot;font-size:9px;&quot;&gt;&amp;laquo;include&amp;raquo;&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Segoe UI;" parent="rel-inc-uc11-11b" vertex="1" connectable="0">
+            <mxGeometry x="-0.15" y="10" relative="1" as="geometry">
+              <mxPoint as="offset" />
+            </mxGeometry>
+          </mxCell>
+        </mxCell>
+        <mxCell id="rel-inc-uc11-11c" style="endArrow=open;html=1;dashed=1;strokeWidth=1.2;strokeColor=#b85450;endSize=10;" parent="1" source="uc11" target="uc11c" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+          <mxCell id="lbl-inc-uc11-11c" value="&lt;font style=&quot;font-size:9px;&quot;&gt;&amp;laquo;include&amp;raquo;&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Segoe UI;" parent="rel-inc-uc11-11c" vertex="1" connectable="0">
+            <mxGeometry x="-0.15" y="-10" relative="1" as="geometry">
+              <mxPoint as="offset" />
+            </mxGeometry>
+          </mxCell>
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- RELASI: Pimpinan → Use Cases              -->
+        <!-- ========================================= -->
+        <mxCell id="rel-p-uc05" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#9673a6;" parent="1" source="actor-pimpinan" target="uc05" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-p-uc13" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#9673a6;" parent="1" source="actor-pimpinan" target="uc13" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-p-uc14" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#9673a6;" parent="1" source="actor-pimpinan" target="uc14" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-p-uc15" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#9673a6;" parent="1" source="actor-pimpinan" target="uc15" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================= -->
+        <!-- LEGENDA (Kanan bawah)                     -->
+        <!-- ========================================= -->
+        <mxCell id="legend-box" value="" style="shape=rect;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=1;rounded=1;arcSize=8;" parent="1" vertex="1">
+          <mxGeometry x="40" y="810" width="260" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-title" value="KETERANGAN (LEGENDA)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;fontFamily=Segoe UI;" parent="1" vertex="1">
+          <mxGeometry x="40" y="815" width="260" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Legend: Aktor Masyarakat -->
+        <mxCell id="leg-color1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="60" y="850" width="20" height="14" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-label1" value="= Masyarakat / Calon Akseptor" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" parent="1" vertex="1">
+          <mxGeometry x="88" y="845" width="200" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- Legend: Admin -->
+        <mxCell id="leg-color2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="60" y="878" width="20" height="14" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-label2" value="= Admin / Operator Kecamatan" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" parent="1" vertex="1">
+          <mxGeometry x="88" y="873" width="200" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- Legend: Bidan -->
+        <mxCell id="leg-color3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="60" y="906" width="20" height="14" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-label3" value="= Bidan / Petugas Medis" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" parent="1" vertex="1">
+          <mxGeometry x="88" y="901" width="200" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- Legend: Pimpinan -->
+        <mxCell id="leg-color4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="60" y="934" width="20" height="14" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-label4" value="= Pimpinan DPPKB" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" parent="1" vertex="1">
+          <mxGeometry x="88" y="929" width="200" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- Legend: include -->
+        <mxCell id="leg-dash" value="" style="endArrow=open;html=1;dashed=1;strokeWidth=1;strokeColor=#999999;endSize=8;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="968" as="sourcePoint" />
+            <mxPoint x="80" y="968" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="leg-label5" value="= Relasi &amp;laquo;include&amp;raquo; (wajib ada)" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" parent="1" vertex="1">
+          <mxGeometry x="88" y="957" width="200" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- Legend: association -->
+        <mxCell id="leg-solid" value="" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#333333;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="995" as="sourcePoint" />
+            <mxPoint x="80" y="995" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="leg-label6" value="= Relasi Asosiasi (aktor ↔ use case)" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" parent="1" vertex="1">
+          <mxGeometry x="88" y="985" width="200" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- Legend: system boundary -->
+        <mxCell id="leg-rect" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#2D7DD2;strokeWidth=1.5;" parent="1" vertex="1">
+          <mxGeometry x="56" y="1018" width="28" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-label7" value="= System Boundary (Batas Sistem)" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Segoe UI;" parent="1" vertex="1">
+          <mxGeometry x="88" y="1013" width="200" height="24" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

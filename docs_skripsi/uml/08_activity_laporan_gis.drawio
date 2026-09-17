@@ -1,0 +1,151 @@
+<?xml version="1.0" ?>
+<mxfile host="Electron" agent="Antigravity">
+  <diagram id="act-laporan-gis" name="Activity Diagram Cetak Laporan dan Monitoring GIS">
+    <mxGraphModel dx="1200" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1050" pageHeight="1450" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="doc_title" value="ACTIVITY DIAGRAM: REKAPITULASI LAPORAN &amp; MONITORING SPASIAL GIS&lt;br&gt;SISTEM INFORMASI PELAYANAN KB DPPKB KECAMATAN WUNDULAKO" style="shape=rect;whiteSpace=wrap;html=1;fillColor=#F8F9FA;strokeColor=#B0BEC5;strokeWidth=1.5;fontStyle=1;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;align=center;verticalAlign=middle;rounded=1;arcSize=8;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="20" width="950" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane_pimpinan" value="&lt;b&gt;Pimpinan DPPKB / Administrator&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;startSize=32;horizontal=1;fillColor=#F3E5F5;strokeColor=#8E24AA;strokeWidth=1.5;fontSize=11;fontFamily=Segoe UI;fontColor=#4A148C;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="50" y="80" width="475" height="1320" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane_sistem" value="&lt;b&gt;Sistem Informasi Pelayanan KB&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;startSize=32;horizontal=1;fillColor=#ECEFF1;strokeColor=#546E7A;strokeWidth=1.5;fontSize=11;fontFamily=Segoe UI;fontColor=#263238;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="525" y="80" width="475" height="1320" as="geometry"/>
+        </mxCell>
+        <mxCell id="start_node" value="" style="ellipse;html=1;shape=startState;fillColor=#2E7D32;strokeColor=#1B5E20;" vertex="1" parent="1">
+          <mxGeometry x="275" y="130" width="26" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_buka_laporan" value="Membuka Menu Laporan /&lt;br&gt;Monitoring GIS (/laporan)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#8E24AA;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="185" y="185" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_render_filter" value="Tampilkan Tab Navigasi Data&lt;br&gt;&amp; Filter Periode / Wilayah" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#546E7A;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="670" y="185" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_pilih_filter" value="Tentukan Kategori (Pelayanan),&lt;br&gt;Rentang Tanggal, &amp; Desa/Alokon" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#8E24AA;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="185" y="265" width="185" height="52" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_query_laporan" value="Eksekusi Query Dinamis &amp;&lt;br&gt;Eager Loading Data Relasi" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#546E7A;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="670" y="265" width="185" height="52" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_tampil_preview" value="Render Tabel Rekapitulasi &amp;&lt;br&gt;Indikator Metrik Statistik (KPI)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#546E7A;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="670" y="350" width="185" height="48" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_pilih_aksi" value="Pilih Aksi Analisis:&lt;br&gt;Cetak PDF atau Pantau GIS" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#8E24AA;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="185" y="430" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="dec_aksi" value="Pilihan&lt;br&gt;Aksi?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="510" width="75" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_klik_cetak" value="Klik Tombol&lt;br&gt;'Cetak Laporan (PDF)'" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#8E24AA;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="110" y="600" width="150" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_compile_pdf" value="Render Template DomPDF (A4)&lt;br&gt;+ Kop Surat Resmi &amp; Pengesahan" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#546E7A;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="670" y="600" width="185" height="52" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_stream_pdf" value="Stream Download File PDF&lt;br&gt;(Laporan_Pelayanan_xxx.pdf)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#546E7A;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="670" y="680" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_terima_laporan" value="Menerima &amp; Mengunduh&lt;br&gt;Berkas Cetak Laporan PDF" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#8E24AA;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="110" y="680" width="150" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_buka_gis" value="Pilih Menu / Tab&lt;br&gt;Peta Sebaran GIS" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#8E24AA;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="310" y="600" width="150" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_render_gis" value="Render Peta Leaflet Interaktif&lt;br&gt;&amp; Layer Choropleth Kepadatan" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#546E7A;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="670" y="760" width="185" height="52" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_klik_wilayah" value="Klik Poligon Desa/Kelurahan&lt;br&gt;untuk Detail Statistik" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#8E24AA;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="310" y="760" width="150" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_tampil_info_desa" value="Tampilkan Popup Data Sebaran&lt;br&gt;&amp; Total Akseptor Wilayah" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#E8F5E9;strokeColor=#43A047;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;fontColor=#1B5E20;" vertex="1" parent="1">
+          <mxGeometry x="670" y="840" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="merge_laporan" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="263" y="915" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_analisis_selesai" value="Menganalisis Hasil Laporan&lt;br&gt;untuk Evaluasi Program KB" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#8E24AA;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="185" y="975" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="end_node" value="" style="ellipse;html=1;shape=endState;fillColor=#C62828;strokeColor=#B71C1C;" vertex="1" parent="1">
+          <mxGeometry x="275" y="1055" width="26" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="start_node" target="act_buka_laporan">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_buka_laporan" target="act_render_filter">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.8;exitDx=0;exitDy=0;entryX=1.0;entryY=0.2;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_render_filter" target="act_pilih_filter">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_pilih_filter" target="act_query_laporan">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_query_laporan" target="act_tampil_preview">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_tampil_preview" target="act_pilih_aksi">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_pilih_aksi" target="dec_aksi">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge8_pdf" value="[Cetak PDF]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dec_aksi" target="act_klik_cetak">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="185" y="537"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rge9_pdf" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_klik_cetak" target="act_compile_pdf">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge10_pdf" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_compile_pdf" target="act_stream_pdf">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge11_pdf" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_stream_pdf" target="act_terima_laporan">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge12_pdf_merge" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_terima_laporan" target="merge_laporan">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="185" y="930"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rge8_gis" value="[Peta GIS]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dec_aksi" target="act_buka_gis">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="385" y="537"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rge9_gis" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_buka_gis" target="act_render_gis">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge10_gis" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_render_gis" target="act_klik_wilayah">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge11_gis" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_klik_wilayah" target="act_tampil_info_desa">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge12_gis_merge" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_tampil_info_desa" target="merge_laporan">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="385" y="862"/>
+              <mxPoint x="385" y="930"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rge13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="merge_laporan" target="act_analisis_selesai">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rge14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_analisis_selesai" target="end_node">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>4.3 Implementasi Basis Data - SI Pelayanan KB</title>
+<style>
+    body {
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 12pt;
+        line-height: 1.5;
+        color: #000;
+        background-color: #f8fafc;
+        padding: 40px 20px;
+        margin: 0;
+    }
+    .container {
+        max-width: 960px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 50px 60px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        border-radius: 8px;
+    }
+    .action-bar {
+        position: sticky;
+        top: 20px;
+        background: #2563eb;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 6px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        z-index: 100;
+    }
+    .action-bar button {
+        background: #fff;
+        color: #2563eb;
+        border: none;
+        padding: 8px 18px;
+        font-weight: bold;
+        font-size: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .action-bar button:hover {
+        background: #eff6ff;
+        transform: translateY(-1px);
+    }
+    h2 {
+        font-size: 14pt;
+        font-weight: bold;
+        margin-bottom: 12px;
+        color: #000;
+    }
+    h3 {
+        font-size: 12pt;
+        font-weight: bold;
+        margin-top: 24px;
+        margin-bottom: 6px;
+        color: #000;
+    }
+    p {
+        text-align: justify;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    .table-caption {
+        font-size: 11pt;
+        margin-top: 14px;
+        margin-bottom: 6px;
+        text-align: left;
+    }
+    .table-caption strong {
+        font-weight: bold;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 24px;
+        font-size: 10pt;
+    }
+    th, td {
+        border: 1px solid #333333;
+        padding: 5px 8px;
+        vertical-align: middle;
+    }
+    th {
+        background-color: #eaeaea;
+        font-weight: bold;
+        text-align: center;
+    }
+    td.center {
+        text-align: center;
+    }
+    td.left {
+        text-align: left;
+    }
+    .note-box {
+        background: #f1f5f9;
+        border-left: 4px solid #3b82f6;
+        padding: 10px 15px;
+        font-size: 11pt;
+        margin-top: 15px;
+        margin-bottom: 25px;
+    }
+    @media print {
+        body {
+            background: none;
+            padding: 0;
+        }
+        .container {
+            box-shadow: none;
+            padding: 0;
+        }
+        .action-bar {
+            display: none;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="action-bar">
+        <span><strong>Tips Copy-Paste:</strong> Anda dapat mengklik tombol di samping untuk menyalin seluruh isi halaman langsung ke Microsoft Word dengan format tabel rapi.</span>
+        <button onclick="copyToWord()">Salin Semua ke Word</button>
+    </div>
+
+    <div id="skripsi-content">
+        <h2>4.3 Implementasi Basis Data</h2>
+        <p>
+            Implementasi basis data merupakan tahap penerjemahan rancangan konseptual (<em>Entity Relationship Diagram</em>) ke dalam bentuk fisik basis data pada <em>Relational Database Management System</em> (RDBMS). Sistem Informasi Pelayanan Keluarga Berencana (KB) ini diimplementasikan menggunakan DBMS <strong>MySQL/MariaDB</strong> dengan <em>storage engine</em> <strong>InnoDB</strong> untuk mendukung integritas referensial data (<em>Foreign Key Constraints</em>) serta <em>character set</em> <strong>utf8mb4</strong>.
+        </p>
+        <p>
+            Tabel-tabel basis data yang terbentuk pada sistem ini terdiri dari 10 (sepuluh) tabel utama yang saling berelasi, yaitu: tabel <code>instansis</code>, <code>wilayahs</code>, <code>users</code>, <code>alokons</code>, <code>peserta_kbs</code>, <code>skrining_medis</code>, <code>informed_consents</code>, <code>pelayanans</code>, <code>jadwal_pelayanans</code>, dan <code>antrian_jadwals</code>. Detail struktur kamus data dari masing-masing tabel dijelaskan pada uraian berikut.
+        </p>
+
+        <h3>4.3.1 Tabel Struktur Tabel Instansi</h3>
+        <p>Tabel instansis digunakan untuk menyimpan data fasilitas kesehatan atau klinik yang menyelenggarakan pelayanan KB.</p>
+        <div class="table-caption"><strong>Tabel 4.1</strong> Struktur Tabel Instansi (instansis)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Kolom (Field)</th>
+                    <th>Tipe Data</th>
+                    <th>Panjang</th>
+                    <th>Null</th>
+                    <th>Kunci</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">1</td>
+                    <td class="left">id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">PK</td>
+                    <td class="left">ID unik instansi (Auto Increment)</td>
+                </tr>
+                <tr>
+                    <td class="center">2</td>
+                    <td class="left">nama_instansi</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">255</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Nama faskes / instansi pelayanan</td>
+                </tr>
+                <tr>
+                    <td class="center">3</td>
+                    <td class="left">kode_faskes</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">50</td>
+                    <td class="center">NO</td>
+                    <td class="center">Unique</td>
+                    <td class="left">Kode unik identitas fasilitas kesehatan</td>
+                </tr>
+                <tr>
+                    <td class="center">4</td>
+                    <td class="left">created_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data dibuat</td>
+                </tr>
+                <tr>
+                    <td class="center">5</td>
+                    <td class="left">updated_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data terakhir diperbarui</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4.3.2 Tabel Struktur Tabel Wilayah</h3>
+        <p>Tabel wilayahs digunakan untuk memetakan cakupan wilayah kerja desa atau kelurahan domisili akseptor KB.</p>
+        <div class="table-caption"><strong>Tabel 4.2</strong> Struktur Tabel Wilayah (wilayahs)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Kolom (Field)</th>
+                    <th>Tipe Data</th>
+                    <th>Panjang</th>
+                    <th>Null</th>
+                    <th>Kunci</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">1</td>
+                    <td class="left">id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">PK</td>
+                    <td class="left">ID unik wilayah (Auto Increment)</td>
+                </tr>
+                <tr>
+                    <td class="center">2</td>
+                    <td class="left">nama_desa_kelurahan</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">255</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Nama desa atau kelurahan</td>
+                </tr>
+                <tr>
+                    <td class="center">3</td>
+                    <td class="left">created_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data dibuat</td>
+                </tr>
+                <tr>
+                    <td class="center">4</td>
+                    <td class="left">updated_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data terakhir diperbarui</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4.3.3 Tabel Struktur Tabel Pengguna</h3>
+        <p>Tabel users menyimpan kredensial dan hak akses pengguna sistem (Admin, Bidan, Pimpinan).</p>
+        <div class="table-caption"><strong>Tabel 4.3</strong> Struktur Tabel Pengguna (users)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Kolom (Field)</th>
+                    <th>Tipe Data</th>
+                    <th>Panjang</th>
+                    <th>Null</th>
+                    <th>Kunci</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">1</td>
+                    <td class="left">id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">PK</td>
+                    <td class="left">ID unik pengguna (Auto Increment)</td>
+                </tr>
+                <tr>
+                    <td class="center">2</td>
+                    <td class="left">instansi_id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">YES</td>
+                    <td class="center">FK</td>
+                    <td class="left">Relasi ke instansis.id (faskes tugas)</td>
+                </tr>
+                <tr>
+                    <td class="center">3</td>
+                    <td class="left">name</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">255</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Nama lengkap petugas / pengguna</td>
+                </tr>
+                <tr>
+                    <td class="center">4</td>
+                    <td class="left">username</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">100</td>
+                    <td class="center">NO</td>
+                    <td class="center">Unique</td>
+                    <td class="left">Username untuk autentikasi login</td>
+                </tr>
+                <tr>
+                    <td class="center">5</td>
+                    <td class="left">password</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">255</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Kata sandi terenkripsi (bcrypt hash)</td>
+                </tr>
+                <tr>
+                    <td class="center">6</td>
+                    <td class="left">level_akses</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">50</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Hak akses (admin, bidan, pimpinan)</td>
+                </tr>
+                <tr>
+                    <td class="center">7</td>
+                    <td class="left">remember_token</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">100</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Token sesi login persisten</td>
+                </tr>
+                <tr>
+                    <td class="center">8</td>
+                    <td class="left">created_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data dibuat</td>
+                </tr>
+                <tr>
+                    <td class="center">9</td>
+                    <td class="left">updated_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data terakhir diperbarui</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4.3.4 Tabel Struktur Tabel Alokon</h3>
+        <p>Tabel alokons mencatat data komoditas alat dan obat kontrasepsi beserta saldo stok pada faskes terkait.</p>
+        <div class="table-caption"><strong>Tabel 4.4</strong> Struktur Tabel Alokon (alokons)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Kolom (Field)</th>
+                    <th>Tipe Data</th>
+                    <th>Panjang</th>
+                    <th>Null</th>
+                    <th>Kunci</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">1</td>
+                    <td class="left">id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">PK</td>
+                    <td class="left">ID unik alokon (Auto Increment)</td>
+                </tr>
+                <tr>
+                    <td class="center">2</td>
+                    <td class="left">instansi_id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">FK</td>
+                    <td class="left">Relasi ke instansis.id</td>
+                </tr>
+                <tr>
+                    <td class="center">3</td>
+                    <td class="left">nama_alokon</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">255</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Nama metode/alat kontrasepsi (Suntik, IUD, dll)</td>
+                </tr>
+                <tr>
+                    <td class="center">4</td>
+                    <td class="left">stok</td>
+                    <td class="center">INT</td>
+                    <td class="center">11</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Jumlah saldo stok fisik (Default: 0)</td>
+                </tr>
+                <tr>
+                    <td class="center">5</td>
+                    <td class="left">created_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data dibuat</td>
+                </tr>
+                <tr>
+                    <td class="center">6</td>
+                    <td class="left">updated_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data terakhir diperbarui</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4.3.5 Tabel Struktur Tabel Peserta KB</h3>
+        <p>Tabel peserta_kbs memuat master data kependudukan dan sosiodemografi akseptor / Pasangan Usia Subur (PUS).</p>
+        <div class="table-caption"><strong>Tabel 4.5</strong> Struktur Tabel Peserta KB (peserta_kbs)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Kolom (Field)</th>
+                    <th>Tipe Data</th>
+                    <th>Panjang</th>
+                    <th>Null</th>
+                    <th>Kunci</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">1</td>
+                    <td class="left">id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">PK</td>
+                    <td class="left">ID unik peserta KB (Auto Increment)</td>
+                </tr>
+                <tr>
+                    <td class="center">2</td>
+                    <td class="left">user_id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">YES</td>
+                    <td class="center">FK</td>
+                    <td class="left">Relasi ke users.id (petugas pendaftar)</td>
+                </tr>
+                <tr>
+                    <td class="center">3</td>
+                    <td class="left">wilayah_id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">FK</td>
+                    <td class="left">Relasi ke wilayahs.id (desa/kelurahan)</td>
+                </tr>
+                <tr>
+                    <td class="center">4</td>
+                    <td class="left">nik</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">16</td>
+                    <td class="center">NO</td>
+                    <td class="center">Unique</td>
+                    <td class="left">Nomor Induk Kependudukan (NIK) istri</td>
+                </tr>
+                <tr>
+                    <td class="center">5</td>
+                    <td class="left">nomor_hp</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">20</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Nomor telepon / WhatsApp aktif</td>
+                </tr>
+                <tr>
+                    <td class="center">6</td>
+                    <td class="left">nama_lengkap</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">255</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Nama lengkap istri / peserta</td>
+                </tr>
+                <tr>
+                    <td class="center">7</td>
+                    <td class="left">nama_suami_istri</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">255</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Nama lengkap suami</td>
+                </tr>
+                <tr>
+                    <td class="center">8</td>
+                    <td class="left">tanggal_lahir_istri</td>
+                    <td class="center">DATE</td>
+                    <td class="center">-</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Tanggal lahir istri</td>
+                </tr>
+                <tr>
+                    <td class="center">9</td>
+                    <td class="left">alamat_lengkap</td>
+                    <td class="center">TEXT</td>
+                    <td class="center">-</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Alamat tempat tinggal lengkap</td>
+                </tr>
+                <tr>
+                    <td class="center">10</td>
+                    <td class="left">penggunaan_asuransi</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">50</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Jaminan kesehatan (BPJS/Umum/dll)</td>
+                </tr>
+                <tr>
+                    <td class="center">11</td>
+                    <td class="left">pendidikan_istri</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">50</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Tingkat pendidikan terakhir istri</td>
+                </tr>
+                <tr>
+                    <td class="center">12</td>
+                    <td class="left">pendidikan_suami</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">50</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Tingkat pendidikan terakhir suami</td>
+                </tr>
+                <tr>
+                    <td class="center">13</td>
+                    <td class="left">pekerjaan_istri</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">50</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Profesi / pekerjaan istri</td>
+                </tr>
+                <tr>
+                    <td class="center">14</td>
+                    <td class="left">pekerjaan_suami</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">50</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Profesi / pekerjaan suami</td>
+                </tr>
+                <tr>
+                    <td class="center">15</td>
+                    <td class="left">jumlah_anak_hidup</td>
+                    <td class="center">INT</td>
+                    <td class="center">11</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Total anak hidup (Default: 0)</td>
+                </tr>
+                <tr>
+                    <td class="center">16</td>
+                    <td class="left">jumlah_anak_laki</td>
+                    <td class="center">INT</td>
+                    <td class="center">11</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Jumlah anak kandung laki-laki</td>
+                </tr>
+                <tr>
+                    <td class="center">17</td>
+                    <td class="left">jumlah_anak_perempuan</td>
+                    <td class="center">INT</td>
+                    <td class="center">11</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Jumlah anak kandung perempuan</td>
+                </tr>
+                <tr>
+                    <td class="center">18</td>
+                    <td class="left">umur_anak_terakhir</td>
+                    <td class="center">INT</td>
+                    <td class="center">11</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Usia anak terkecil / termuda</td>
+                </tr>
+                <tr>
+                    <td class="center">19</td>
+                    <td class="left">status_kepesertaan</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">50</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Status akseptor (baru, ganti_cara, ulangan)</td>
+                </tr>
+                <tr>
+                    <td class="center">20</td>
+                    <td class="left">kb_terakhir</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">100</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Metode kontrasepsi yang dipakai sebelumnya</td>
+                </tr>
+                <tr>
+                    <td class="center">21</td>
+                    <td class="left">status</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Status verifikasi (menunggu, terverifikasi)</td>
+                </tr>
+                <tr>
+                    <td class="center">22</td>
+                    <td class="left">created_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data dibuat</td>
+                </tr>
+                <tr>
+                    <td class="center">23</td>
+                    <td class="left">updated_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data terakhir diperbarui</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4.3.6 Tabel Struktur Tabel Skrining Medis</h3>
+        <p>Tabel skrining_medis mencatat data anamnesis, riwayat penyakit, dan pemeriksaan fisik klinis akseptor.</p>
+        <div class="table-caption"><strong>Tabel 4.6</strong> Struktur Tabel Skrining Medis (skrining_medis)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Kolom (Field)</th>
+                    <th>Tipe Data</th>
+                    <th>Panjang</th>
+                    <th>Null</th>
+                    <th>Kunci</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">1</td>
+                    <td class="left">id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">PK</td>
+                    <td class="left">ID unik skrining medis (Auto Increment)</td>
+                </tr>
+                <tr>
+                    <td class="center">2</td>
+                    <td class="left">peserta_kb_id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">FK</td>
+                    <td class="left">Relasi ke peserta_kbs.id</td>
+                </tr>
+                <tr>
+                    <td class="center">3</td>
+                    <td class="left">tanggal_skrining</td>
+                    <td class="center">DATE</td>
+                    <td class="center">-</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Tanggal pelaksanaan pemeriksaan</td>
+                </tr>
+                <tr>
+                    <td class="center">4</td>
+                    <td class="left">haid_terakhir</td>
+                    <td class="center">DATE</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Hari Pertama Haid Terakhir (HPHT)</td>
+                </tr>
+                <tr>
+                    <td class="center">5</td>
+                    <td class="left">gravida_partus_abortus</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">20</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Riwayat GPA (Kehamilan, Lahir, Aborsi)</td>
+                </tr>
+                <tr>
+                    <td class="center">6</td>
+                    <td class="left">status_menyusui</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Status menyusui anak (1: Ya, 0: Tidak)</td>
+                </tr>
+                <tr>
+                    <td class="center">7</td>
+                    <td class="left">rwyt_sakit_kuning</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Riwayat penyakit kuning / hepatitis (1/0)</td>
+                </tr>
+                <tr>
+                    <td class="center">8</td>
+                    <td class="left">rwyt_pendarahan</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Riwayat perdarahan pervaginam (1/0)</td>
+                </tr>
+                <tr>
+                    <td class="center">9</td>
+                    <td class="left">rwyt_keputihan</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Riwayat keputihan abnormal (1/0)</td>
+                </tr>
+                <tr>
+                    <td class="center">10</td>
+                    <td class="left">rwyt_tumor</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Riwayat benjolan / tumor payudara/rahim (1/0)</td>
+                </tr>
+                <tr>
+                    <td class="center">11</td>
+                    <td class="left">fisik_keadaan_umum</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">20</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Kondisi fisik umum (Baik, Sedang, Kurang)</td>
+                </tr>
+                <tr>
+                    <td class="center">12</td>
+                    <td class="left">fisik_berat_badan</td>
+                    <td class="center">DECIMAL</td>
+                    <td class="center">5,2</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Berat badan dalam kilogram (Kg)</td>
+                </tr>
+                <tr>
+                    <td class="center">13</td>
+                    <td class="left">fisik_tekanan_darah</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">10</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Tekanan darah (contoh: 120/80 mmHg)</td>
+                </tr>
+                <tr>
+                    <td class="center">14</td>
+                    <td class="left">posisi_rahim</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">30</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Posisi rahim (Antefleksi / Retrofleksi)</td>
+                </tr>
+                <tr>
+                    <td class="center">15</td>
+                    <td class="left">hamil_diduga_hamil</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Indikasi sedang hamil (1/0)</td>
+                </tr>
+                <tr>
+                    <td class="center">16</td>
+                    <td class="left">pemeriksaan_dalam_radang</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Tanda radang panggul (1/0)</td>
+                </tr>
+                <tr>
+                    <td class="center">17</td>
+                    <td class="left">pemeriksaan_dalam_tumor</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Tanda tumor organ dalam (1/0)</td>
+                </tr>
+                <tr>
+                    <td class="center">18</td>
+                    <td class="left">pemeriksaan_tambahan_diabetes</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Riwayat / tanda diabetes melitus (1/0)</td>
+                </tr>
+                <tr>
+                    <td class="center">19</td>
+                    <td class="left">pemeriksaan_tambahan_pembekuan_darah</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Riwayat gangguan pembekuan darah (1/0)</td>
+                </tr>
+                <tr>
+                    <td class="center">20</td>
+                    <td class="left">pemeriksaan_tambahan_orchitis</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Tanda orchitis pada pria (1/0)</td>
+                </tr>
+                <tr>
+                    <td class="center">21</td>
+                    <td class="left">pemeriksaan_tambahan_tumor</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Pemeriksaan tambahan tumor (1/0)</td>
+                </tr>
+                <tr>
+                    <td class="center">22</td>
+                    <td class="left">alat_kontrasepsi_boleh_digunakan</td>
+                    <td class="center">TEXT</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Daftar alokon yang diizinkan / aman</td>
+                </tr>
+                <tr>
+                    <td class="center">23</td>
+                    <td class="left">created_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data dibuat</td>
+                </tr>
+                <tr>
+                    <td class="center">24</td>
+                    <td class="left">updated_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data terakhir diperbarui</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4.3.7 Tabel Struktur Tabel Persetujuan Tindakan Medis</h3>
+        <p>Tabel informed_consents menyimpan bukti persetujuan tindakan medis dari calon akseptor dan pasangan.</p>
+        <div class="table-caption"><strong>Tabel 4.7</strong> Struktur Tabel Persetujuan Tindakan Medis (informed_consents)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Kolom (Field)</th>
+                    <th>Tipe Data</th>
+                    <th>Panjang</th>
+                    <th>Null</th>
+                    <th>Kunci</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">1</td>
+                    <td class="left">id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">PK</td>
+                    <td class="left">ID unik persetujuan (Auto Increment)</td>
+                </tr>
+                <tr>
+                    <td class="center">2</td>
+                    <td class="left">skrining_medis_id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">FK</td>
+                    <td class="left">Relasi ke skrining_medis.id</td>
+                </tr>
+                <tr>
+                    <td class="center">3</td>
+                    <td class="left">persetujuan_klien</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Pernyataan setuju istri/klien (1/0)</td>
+                </tr>
+                <tr>
+                    <td class="center">4</td>
+                    <td class="left">persetujuan_pasangan</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Pernyataan setuju suami/pasangan (1/0)</td>
+                </tr>
+                <tr>
+                    <td class="center">5</td>
+                    <td class="left">jenis_tindakan_medis</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">50</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Tindakan medis yang disetujui</td>
+                </tr>
+                <tr>
+                    <td class="center">6</td>
+                    <td class="left">tanggal_persetujuan</td>
+                    <td class="center">DATE</td>
+                    <td class="center">-</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Tanggal persetujuan ditandatangani</td>
+                </tr>
+                <tr>
+                    <td class="center">7</td>
+                    <td class="left">created_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data dibuat</td>
+                </tr>
+                <tr>
+                    <td class="center">8</td>
+                    <td class="left">updated_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data terakhir diperbarui</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4.3.8 Tabel Struktur Tabel Pelayanan KB</h3>
+        <p>Tabel pelayanans mencatat riwayat tindakan pelayanan KB, alokon yang diberikan, jadwal kontrol ulang, dan tenaga medis.</p>
+        <div class="table-caption"><strong>Tabel 4.8</strong> Struktur Tabel Pelayanan KB (pelayanans)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Kolom (Field)</th>
+                    <th>Tipe Data</th>
+                    <th>Panjang</th>
+                    <th>Null</th>
+                    <th>Kunci</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">1</td>
+                    <td class="left">id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">PK</td>
+                    <td class="left">ID unik pelayanan (Auto Increment)</td>
+                </tr>
+                <tr>
+                    <td class="center">2</td>
+                    <td class="left">peserta_kb_id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">FK</td>
+                    <td class="left">Relasi ke peserta_kbs.id</td>
+                </tr>
+                <tr>
+                    <td class="center">3</td>
+                    <td class="left">alokon_id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">FK</td>
+                    <td class="left">Relasi ke alokons.id</td>
+                </tr>
+                <tr>
+                    <td class="center">4</td>
+                    <td class="left">skrining_medis_id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">YES</td>
+                    <td class="center">FK</td>
+                    <td class="left">Relasi ke skrining_medis.id</td>
+                </tr>
+                <tr>
+                    <td class="center">5</td>
+                    <td class="left">tanggal_pelayanan</td>
+                    <td class="center">DATE</td>
+                    <td class="center">-</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Tanggal pelayanan diberikan</td>
+                </tr>
+                <tr>
+                    <td class="center">6</td>
+                    <td class="left">keterangan</td>
+                    <td class="center">TEXT</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Catatan tambahan pelaksanaan tindakan</td>
+                </tr>
+                <tr>
+                    <td class="center">7</td>
+                    <td class="left">tanggal_kunjungan_ulang</td>
+                    <td class="center">DATE</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Jadwal kunjungan / kontrol berikutnya</td>
+                </tr>
+                <tr>
+                    <td class="center">8</td>
+                    <td class="left">tanggal_dicabut</td>
+                    <td class="center">DATE</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Tanggal pencabutan alat (IUD / Implan)</td>
+                </tr>
+                <tr>
+                    <td class="center">9</td>
+                    <td class="left">penanggung_jawab_nama</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">255</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Nama tenaga kesehatan yang melayani</td>
+                </tr>
+                <tr>
+                    <td class="center">10</td>
+                    <td class="left">penanggung_jawab_nip</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">50</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">NIP tenaga medis penanggung jawab</td>
+                </tr>
+                <tr>
+                    <td class="center">11</td>
+                    <td class="left">penanggung_jawab_jabatan</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">50</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Jabatan penanggung jawab (bidan, dokter)</td>
+                </tr>
+                <tr>
+                    <td class="center">12</td>
+                    <td class="left">created_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data dibuat</td>
+                </tr>
+                <tr>
+                    <td class="center">13</td>
+                    <td class="left">updated_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data terakhir diperbarui</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4.3.9 Tabel Struktur Tabel Jadwal Pelayanan</h3>
+        <p>Tabel jadwal_pelayanans digunakan untuk mengatur sesi waktu dan kuota harian pelayanan KB.</p>
+        <div class="table-caption"><strong>Tabel 4.9</strong> Struktur Tabel Jadwal Pelayanan (jadwal_pelayanans)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Kolom (Field)</th>
+                    <th>Tipe Data</th>
+                    <th>Panjang</th>
+                    <th>Null</th>
+                    <th>Kunci</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">1</td>
+                    <td class="left">id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">PK</td>
+                    <td class="left">ID unik jadwal (Auto Increment)</td>
+                </tr>
+                <tr>
+                    <td class="center">2</td>
+                    <td class="left">instansi_id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">FK</td>
+                    <td class="left">Relasi ke instansis.id</td>
+                </tr>
+                <tr>
+                    <td class="center">3</td>
+                    <td class="left">tanggal</td>
+                    <td class="center">DATE</td>
+                    <td class="center">-</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Tanggal sesi pelayanan KB</td>
+                </tr>
+                <tr>
+                    <td class="center">4</td>
+                    <td class="left">waktu_mulai</td>
+                    <td class="center">TIME</td>
+                    <td class="center">-</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu mulai sesi layanan</td>
+                </tr>
+                <tr>
+                    <td class="center">5</td>
+                    <td class="left">waktu_selesai</td>
+                    <td class="center">TIME</td>
+                    <td class="center">-</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu selesai sesi layanan</td>
+                </tr>
+                <tr>
+                    <td class="center">6</td>
+                    <td class="left">keterangan</td>
+                    <td class="center">VARCHAR</td>
+                    <td class="center">255</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Keterangan sesi / lokasi pelayanan</td>
+                </tr>
+                <tr>
+                    <td class="center">7</td>
+                    <td class="left">kuota</td>
+                    <td class="center">INT UNSIGNED</td>
+                    <td class="center">10</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Batas maksimal antrean peserta (Default: 20)</td>
+                </tr>
+                <tr>
+                    <td class="center">8</td>
+                    <td class="left">is_aktif</td>
+                    <td class="center">TINYINT</td>
+                    <td class="center">1</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Status keaktifan jadwal (1: Aktif, 0: Nonaktif)</td>
+                </tr>
+                <tr>
+                    <td class="center">9</td>
+                    <td class="left">created_by</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">FK</td>
+                    <td class="left">Relasi ke users.id (petugas pembuat)</td>
+                </tr>
+                <tr>
+                    <td class="center">10</td>
+                    <td class="left">created_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data dibuat</td>
+                </tr>
+                <tr>
+                    <td class="center">11</td>
+                    <td class="left">updated_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data terakhir diperbarui</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4.3.10 Tabel Struktur Tabel Antrian Jadwal</h3>
+        <p>Tabel antrian_jadwals digunakan untuk mengelola nomor urut registrasi akseptor serta status kehadiran.</p>
+        <div class="table-caption"><strong>Tabel 4.10</strong> Struktur Tabel Antrian Jadwal (antrian_jadwals)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Kolom (Field)</th>
+                    <th>Tipe Data</th>
+                    <th>Panjang</th>
+                    <th>Null</th>
+                    <th>Kunci</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">1</td>
+                    <td class="left">id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">PK</td>
+                    <td class="left">ID unik antrean (Auto Increment)</td>
+                </tr>
+                <tr>
+                    <td class="center">2</td>
+                    <td class="left">jadwal_pelayanan_id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">FK</td>
+                    <td class="left">Relasi ke jadwal_pelayanans.id</td>
+                </tr>
+                <tr>
+                    <td class="center">3</td>
+                    <td class="left">peserta_kb_id</td>
+                    <td class="center">BIGINT</td>
+                    <td class="center">20</td>
+                    <td class="center">NO</td>
+                    <td class="center">FK</td>
+                    <td class="left">Relasi ke peserta_kbs.id</td>
+                </tr>
+                <tr>
+                    <td class="center">4</td>
+                    <td class="left">nomor_antrian</td>
+                    <td class="center">INT UNSIGNED</td>
+                    <td class="center">10</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Nomor urut antrean akseptor</td>
+                </tr>
+                <tr>
+                    <td class="center">5</td>
+                    <td class="left">status</td>
+                    <td class="center">ENUM</td>
+                    <td class="center">-</td>
+                    <td class="center">NO</td>
+                    <td class="center">-</td>
+                    <td class="left">Status kehadiran (terdaftar, hadir, tidak_hadir)</td>
+                </tr>
+                <tr>
+                    <td class="center">6</td>
+                    <td class="left">created_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu data registrasi dibuat</td>
+                </tr>
+                <tr>
+                    <td class="center">7</td>
+                    <td class="left">updated_at</td>
+                    <td class="center">TIMESTAMP</td>
+                    <td class="center">-</td>
+                    <td class="center">YES</td>
+                    <td class="center">-</td>
+                    <td class="left">Waktu status antrean diperbarui</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note-box">
+            <strong>Catatan Relasi & Batasan (<em>Unique Constraint</em>):</strong><br>
+            Pada tabel <code>antrian_jadwals</code>, diterapkan <em>composite unique key</em> pada kombinasi <code>(jadwal_pelayanan_id, peserta_kb_id)</code> untuk menjamin integritas data bahwa satu orang akseptor hanya dapat terdaftar pada satu nomor antrean dalam sesi jadwal pelayanan yang sama.
+        </div>
+    </div>
+</div>
+
+<script>
+function copyToWord() {
+    const el = document.getElementById('skripsi-content');
+    const range = document.createRange();
+    range.selectNode(el);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    try {
+        document.execCommand('copy');
+        alert('Isi Bab 4.3 berhasil disalin! Buka Microsoft Word Anda lalu tekan Ctrl+V untuk menempelkan teks dan tabel.');
+    } catch (err) {
+        alert('Silakan pilih teks secara manual (Ctrl+A) lalu Ctrl+C.');
+    }
+    window.getSelection().removeAllRanges();
+}
+</script>
+
+</body>
+</html>
