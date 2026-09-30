@@ -50,22 +50,31 @@
                         </p>
                     </div>
 
-                    <!-- Glassmorphism Highlight Cards -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
-                        <div class="p-3.5 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 space-y-1.5 hover:bg-white/10 transition-colors">
-                            <div class="size-8 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-sm">
-                                <flux:icon name="clipboard-document-check" class="size-4" />
-                            </div>
-                            <div class="font-bold text-xs text-white">Skrining & Informed Consent</div>
-                            <p class="text-3xs text-slate-400 leading-normal">Pemeriksaan medis terstandar BKKBN dan persetujuan tindakan medis digital.</p>
-                        </div>
+                    <!-- Live Digital Queue Display Board Showcase -->
+                    <div class="space-y-4 pt-1">
+                        <livewire:antrian-login-panel />
 
-                        <div class="p-3.5 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 space-y-1.5 hover:bg-white/10 transition-colors">
-                            <div class="size-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
-                                <flux:icon name="queue-list" class="size-4" />
+                        <!-- Compact Trust & Feature Pills -->
+                        <div class="grid grid-cols-2 gap-3 pt-1">
+                            <div class="p-3 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 flex items-center gap-2.5 hover:bg-white/10 transition-colors">
+                                <div class="size-8 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
+                                    <flux:icon name="clipboard-document-check" class="size-4" />
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="font-bold text-2xs text-white">Standar BKKBN</div>
+                                    <div class="text-3xs text-slate-400 truncate">Skrining & informed consent</div>
+                                </div>
                             </div>
-                            <div class="font-bold text-xs text-white">Antrian Terhubung Langsung</div>
-                            <p class="text-3xs text-slate-400 leading-normal">Pendaftaran mandiri pasien terhubung langsung ke meja pelayanan bidan.</p>
+
+                            <div class="p-3 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 flex items-center gap-2.5 hover:bg-white/10 transition-colors">
+                                <div class="size-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                                    <flux:icon name="shield-check" class="size-4" />
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="font-bold text-2xs text-white">Rekam Medis Aman</div>
+                                    <div class="text-3xs text-slate-400 truncate">Tervalidasi & terenkripsi</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

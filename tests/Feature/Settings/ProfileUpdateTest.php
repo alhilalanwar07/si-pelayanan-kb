@@ -16,6 +16,7 @@ test('profile information can be updated', function () {
 
     $response = Livewire::test('pages::settings.profile')
         ->set('name', 'Test User')
+        ->set('nip', '199001012015011001')
         ->set('username', 'newusername')
         ->call('updateProfileInformation');
 
@@ -24,6 +25,7 @@ test('profile information can be updated', function () {
     $user->refresh();
 
     expect($user->name)->toEqual('Test User');
+    expect($user->nip)->toEqual('199001012015011001');
     expect($user->username)->toEqual('newusername');
 });
 

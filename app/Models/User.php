@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
  * @property int $id
  * @property int|null $instansi_id
  * @property string $name
+ * @property string|null $nip
  * @property string $username
  * @property string $password
  * @property string $level_akses
@@ -30,6 +31,7 @@ class User extends Authenticatable
     protected $fillable = [
         'instansi_id',
         'name',
+        'nip',
         'username',
         'password',
         'level_akses',

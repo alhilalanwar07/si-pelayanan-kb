@@ -19,6 +19,13 @@ class Create extends Component
     public $jumlah_anak_hidup = 0;
     public $umur_anak_terakhir = '';
 
+    public function mount()
+    {
+        if (request()->has('nik')) {
+            $this->nik = (string) request()->query('nik');
+        }
+    }
+
     protected function rules()
     {
         return [

@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
         $admin = User::create([
             'instansi_id' => $instansi->id,
             'name' => 'Admin Instansi',
+            'nip' => '198801122011011002',
             'username' => 'admin',
             'password' => 'password',
             'level_akses' => 'admin',
@@ -47,6 +48,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'instansi_id' => $instansi->id,
             'name' => 'Bidan Pelaksana',
+            'nip' => '199205162015032004',
             'username' => 'bidan',
             'password' => 'password',
             'level_akses' => 'bidan',
@@ -55,6 +57,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'instansi_id' => $instansi->id,
             'name' => 'Pimpinan DPPKB',
+            'nip' => '197508201998031001',
             'username' => 'pimpinan',
             'password' => 'password',
             'level_akses' => 'pimpinan',

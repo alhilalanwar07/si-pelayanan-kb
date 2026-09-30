@@ -108,7 +108,7 @@
                     <div class="grid gap-4 sm:grid-cols-2">
                         <!-- Pilih Peserta -->
                         <flux:field>
-                            <flux:label>Pilih Peserta KB</flux:label>
+                            <flux:label>Pilih Peserta KB <span class="text-rose-500 font-bold">*</span></flux:label>
                             <div x-data="{
                                 open: false,
                                 search: '',
@@ -194,10 +194,16 @@
                             <flux:error name="peserta_kb_id" />
                         </flux:field>
 
-                        <!-- NIK (Readonly) -->
+                        <!-- NIK (Readonly & Otomatis) -->
                         <flux:field>
-                            <flux:label>NIK Peserta</flux:label>
-                            <flux:input type="text" wire:model="nik" readonly class="bg-zinc-50 dark:bg-zinc-800" />
+                            <div class="flex items-center justify-between">
+                                <flux:label>NIK Peserta</flux:label>
+                                <span class="inline-flex items-center gap-1 text-3xs text-emerald-600 dark:text-emerald-400 font-medium">
+                                    <flux:icon name="lock-closed" class="size-3" />
+                                    Terisi otomatis & terkunci
+                                </span>
+                            </div>
+                            <flux:input type="text" wire:model="nik" readonly class="bg-zinc-50 dark:bg-zinc-800 cursor-not-allowed font-mono" placeholder="Otomatis terisi saat peserta dipilih" />
                         </flux:field>
                     </div>
                 </div>
@@ -211,7 +217,7 @@
                         
                         <div class="grid gap-4 sm:grid-cols-2">
                             <flux:field>
-                                <flux:label>Pendidikan Terakhir Istri</flux:label>
+                                <flux:label>Pendidikan Terakhir Istri <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="pendidikan_istri">
                                     <option value="">Pilih Pendidikan</option>
                                     <option value="Tidak Sekolah">Tidak Sekolah</option>
@@ -225,7 +231,7 @@
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>Pendidikan Terakhir Suami</flux:label>
+                                <flux:label>Pendidikan Terakhir Suami <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="pendidikan_suami">
                                     <option value="">Pilih Pendidikan</option>
                                     <option value="Tidak Sekolah">Tidak Sekolah</option>
@@ -241,7 +247,7 @@
 
                         <div class="grid gap-4 sm:grid-cols-2">
                             <flux:field>
-                                <flux:label>Pekerjaan Istri</flux:label>
+                                <flux:label>Pekerjaan Istri <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="pekerjaan_istri">
                                     <option value="">Pilih Pekerjaan</option>
                                     <option value="Tidak Bekerja">Tidak Bekerja</option>
@@ -259,7 +265,7 @@
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>Pekerjaan Suami</flux:label>
+                                <flux:label>Pekerjaan Suami <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="pekerjaan_suami">
                                     <option value="">Pilih Pekerjaan</option>
                                     <option value="Tidak Bekerja">Tidak Bekerja</option>
@@ -279,13 +285,13 @@
 
                         <div class="grid gap-4 sm:grid-cols-2">
                             <flux:field>
-                                <flux:label>Jumlah Anak Hidup (Laki-laki)</flux:label>
+                                <flux:label>Jumlah Anak Hidup (Laki-laki) <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:input type="number" min="0" wire:model="jumlah_anak_laki" />
                                 <flux:error name="jumlah_anak_laki" />
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>Jumlah Anak Hidup (Perempuan)</flux:label>
+                                <flux:label>Jumlah Anak Hidup (Perempuan) <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:input type="number" min="0" wire:model="jumlah_anak_perempuan" />
                                 <flux:error name="jumlah_anak_perempuan" />
                             </flux:field>
@@ -293,7 +299,7 @@
 
                         <div class="grid gap-4 sm:grid-cols-2">
                             <flux:field>
-                                <flux:label>Status Kepesertaan KB</flux:label>
+                                <flux:label>Status Kepesertaan KB <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="status_kepesertaan">
                                     <option value="baru">Peserta KB Baru</option>
                                     <option value="ganti_cara">Peserta KB Ganti Cara</option>
@@ -331,7 +337,7 @@
                         
                         <div class="grid gap-4 sm:grid-cols-3">
                             <flux:field>
-                                <flux:label>Tanggal Skrining</flux:label>
+                                <flux:label>Tanggal Skrining <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:input type="date" wire:model="tanggal_skrining" />
                                 <flux:error name="tanggal_skrining" />
                             </flux:field>
@@ -343,7 +349,7 @@
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>GPA (Gravida/Partus/Abortus)</flux:label>
+                                <flux:label>GPA (Gravida/Partus/Abortus) <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:input type="text" placeholder="Contoh: G2P1A0" wire:model="gravida_partus_abortus" />
                                 <flux:error name="gravida_partus_abortus" />
                             </flux:field>
@@ -351,7 +357,7 @@
 
                         <div class="grid gap-4 sm:grid-cols-2">
                             <flux:field>
-                                <flux:label>Hamil / Diduga Hamil</flux:label>
+                                <flux:label>Hamil / Diduga Hamil <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="hamil_diduga_hamil">
                                     <option value="0">Tidak</option>
                                     <option value="1">Ya</option>
@@ -360,7 +366,7 @@
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>Sedang Menyusui</flux:label>
+                                <flux:label>Sedang Menyusui <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="status_menyusui">
                                     <option value="0">Tidak</option>
                                     <option value="1">Ya</option>
@@ -389,7 +395,7 @@
                         
                         <div class="grid gap-4 sm:grid-cols-3">
                             <flux:field>
-                                <flux:label>Keadaan Umum</flux:label>
+                                <flux:label>Keadaan Umum <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model.live="fisik_keadaan_umum">
                                     <option value="baik">Baik</option>
                                     <option value="sedang">Sedang</option>
@@ -400,15 +406,28 @@
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>Berat Badan (Kg)</flux:label>
-                                <flux:input type="number" step="0.1" placeholder="0.0" wire:model="fisik_berat_badan" />
+                                <flux:label>Berat Badan (Kg) <span class="text-rose-500 font-bold">*</span></flux:label>
+                                <flux:input type="number" step="0.1" placeholder="Contoh: 55.5" wire:model="fisik_berat_badan" />
                                 <flux:error name="fisik_berat_badan" />
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>Tekanan Darah (mmHg)</flux:label>
-                                <flux:input type="text" placeholder="Contoh: 120/80" wire:model="fisik_tekanan_darah" />
+                                <flux:label>Tekanan Darah (mmHg) <span class="text-rose-500 font-bold">*</span></flux:label>
+                                <flux:input type="text" placeholder="Contoh: 120/80" wire:model.live.debounce.300ms="fisik_tekanan_darah"
+                                    class="{{ $tekananDarahTinggi ? '!border-rose-500 !ring-2 !ring-rose-500/20' : '' }}" />
                                 <flux:error name="fisik_tekanan_darah" />
+
+                                @if($tekananDarahTinggi)
+                                    <div class="mt-1.5 p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800 text-xs text-rose-700 dark:text-rose-300 flex items-start gap-2 shadow-xs">
+                                        <flux:icon name="exclamation-circle" class="size-4 shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
+                                        <div>
+                                            <span class="font-bold block">Peringatan: Tekanan Darah Terlalu Tinggi ({{ $sistolik }}/{{ $diastolik }} mmHg)!</span>
+                                            <span class="text-3xs text-rose-600/90 dark:text-rose-300/90 leading-relaxed block mt-0.5">
+                                                Pasien terindikasi Hipertensi (&ge; 140/90 mmHg). Sesuai standar BKKBN/Kemenkes, tindakan pelayanan KB tidak dapat dilanjutkan sampai tekanan darah stabil.
+                                            </span>
+                                        </div>
+                                    </div>
+                                @endif
                             </flux:field>
                         </div>
                     </div>
@@ -421,7 +440,7 @@
                         
                         <div class="grid gap-4 sm:grid-cols-3">
                             <flux:field>
-                                <flux:label>Tanda-tanda Radang</flux:label>
+                                <flux:label>Tanda-tanda Radang <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="pemeriksaan_dalam_radang">
                                     <option value="0">Tidak</option>
                                     <option value="1">Ya</option>
@@ -430,7 +449,7 @@
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>Tumor / Keganasan Ginekologi</flux:label>
+                                <flux:label>Tumor / Keganasan Ginekologi <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="pemeriksaan_dalam_tumor">
                                     <option value="0">Tidak</option>
                                     <option value="1">Ya</option>
@@ -439,7 +458,7 @@
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>Posisi Rahim</flux:label>
+                                <flux:label>Posisi Rahim <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="posisi_rahim">
                                     <option value="normal">Normal</option>
                                     <option value="antaflexi">Antefleksi</option>
@@ -457,7 +476,7 @@
                         <flux:heading size="md" class="text-blue-600 dark:text-blue-400 font-bold">F. Pemeriksaan Tambahan</flux:heading>
                         <div class="grid gap-4 sm:grid-cols-2">
                             <flux:field>
-                                <flux:label>Tanda-tanda Diabetes</flux:label>
+                                <flux:label>Tanda-tanda Diabetes <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="pemeriksaan_tambahan_diabetes">
                                     <option value="0">Tidak</option>
                                     <option value="1">Ya</option>
@@ -466,7 +485,7 @@
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>Kelainan Pembekuan Darah</flux:label>
+                                <flux:label>Kelainan Pembekuan Darah <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="pemeriksaan_tambahan_pembekuan_darah">
                                     <option value="0">Tidak</option>
                                     <option value="1">Ya</option>
@@ -475,7 +494,7 @@
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>Radang Orchitis / Epididymitis</flux:label>
+                                <flux:label>Radang Orchitis / Epididymitis <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="pemeriksaan_tambahan_orchitis">
                                     <option value="0">Tidak</option>
                                     <option value="1">Ya</option>
@@ -484,7 +503,7 @@
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>Tumor Ginekologi Tambahan</flux:label>
+                                <flux:label>Tumor Ginekologi Tambahan <span class="text-rose-500 font-bold">*</span></flux:label>
                                 <flux:select wire:model="pemeriksaan_tambahan_tumor">
                                     <option value="0">Tidak</option>
                                     <option value="1">Ya</option>
@@ -498,7 +517,7 @@
 
                     <!-- G. Alat Kontrasepsi yang Boleh Dipergunakan -->
                     <div class="space-y-3">
-                        <flux:label class="font-bold block text-blue-600 dark:text-blue-400">G. Alat Kontrasepsi yang Boleh Dipergunakan</flux:label>
+                        <flux:label class="font-bold block text-blue-600 dark:text-blue-400">G. Alat Kontrasepsi yang Boleh Dipergunakan <span class="text-rose-500 font-bold">*</span></flux:label>
                         <div class="grid gap-4 sm:grid-cols-3 bg-zinc-50 border border-zinc-150 p-4 rounded-xl dark:bg-zinc-800/30 dark:border-zinc-800">
                             <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Suntikan 1 Bulan" label="Suntikan 1 Bulan" />
                             <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Suntikan 3 Bulan Kombinasi" label="Suntikan 3 Bulan Kombinasi" />
@@ -512,14 +531,27 @@
                             <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Tubektomi" label="Tubektomi" />
                             <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Vasektomi" label="Vasektomi" />
                         </div>
+                        <flux:error name="alat_kontrasepsi_boleh_digunakan" />
                     </div>
                 @endif
 
                 <!-- Navigation -->
-                <div class="flex justify-end pt-4 border-t border-zinc-100 dark:border-zinc-850">
-                    <flux:button variant="primary" wire:click="nextStep" :disabled="!$isLayak || !$peserta_kb_id">
-                        Lanjut ke Informed Consent
-                    </flux:button>
+                <div class="space-y-3 pt-4 border-t border-zinc-100 dark:border-zinc-850">
+                    @if(!$isLayak)
+                        <div class="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800 text-xs text-rose-700 dark:text-rose-300 flex items-start gap-2.5 shadow-xs">
+                            <flux:icon name="no-symbol" class="size-4 shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
+                            <div>
+                                <span class="font-bold block">Tidak Dapat Melanjutkan ke Langkah Berikutnya:</span>
+                                <span class="text-3xs text-rose-600/90 dark:text-rose-300/90 leading-relaxed block mt-0.5">{{ $medicalWarningMessage }}</span>
+                            </div>
+                        </div>
+                    @endif
+
+                    <div class="flex justify-end">
+                        <flux:button variant="primary" wire:click="nextStep" :disabled="!$isLayak">
+                            Lanjut ke Informed Consent
+                        </flux:button>
+                    </div>
                 </div>
             </div>
         @endif
@@ -534,14 +566,20 @@
 
                 <!-- Persetujuan Checkboxes -->
                 <div class="rounded-xl bg-zinc-50 border border-zinc-200 p-6 space-y-4 dark:bg-zinc-800/30 dark:border-zinc-700">
-                    <flux:checkbox wire:model="persetujuan_klien" :label="__('Saya menyatakan bahwa klien telah mendapatkan penjelasan lengkap mengenai efek samping, risiko, serta alternatif KB dan menyetujui tindakan ini secara sukarela.')" />
-                    <flux:checkbox wire:model="persetujuan_pasangan" :label="__('Saya menyatakan bahwa suami / istri klien telah menyetujui tindakan KB yang akan dilaksanakan.')" />
+                    <div>
+                        <flux:checkbox wire:model="persetujuan_klien" :label="__('Saya menyatakan bahwa klien telah mendapatkan penjelasan lengkap mengenai efek samping, risiko, serta alternatif KB dan menyetujui tindakan ini secara sukarela.')" />
+                        <flux:error name="persetujuan_klien" />
+                    </div>
+                    <div>
+                        <flux:checkbox wire:model="persetujuan_pasangan" :label="__('Saya menyatakan bahwa suami / istri klien telah menyetujui tindakan KB yang akan dilaksanakan.')" />
+                        <flux:error name="persetujuan_pasangan" />
+                    </div>
                 </div>
 
                 <div class="grid gap-4 sm:grid-cols-2">
                     <!-- Jenis Tindakan -->
                     <flux:field>
-                        <flux:label>Jenis Tindakan Medis</flux:label>
+                        <flux:label>Jenis Tindakan Medis <span class="text-rose-500 font-bold">*</span></flux:label>
                         <flux:select wire:model="jenis_tindakan_medis">
                             <option value="pemasangan">Pemasangan Alat Kontrasepsi</option>
                             <option value="pencabutan">Pencabutan Alat Kontrasepsi</option>
@@ -553,7 +591,7 @@
 
                     <!-- Tanggal Persetujuan -->
                     <flux:field>
-                        <flux:label>Tanggal Persetujuan</flux:label>
+                        <flux:label>Tanggal Persetujuan <span class="text-rose-500 font-bold">*</span></flux:label>
                         <flux:input type="date" wire:model="tanggal_persetujuan" />
                         <flux:error name="tanggal_persetujuan" />
                     </flux:field>
@@ -564,7 +602,7 @@
                     <flux:button variant="outline" wire:click="prevStep">
                         Kembali
                     </flux:button>
-                    <flux:button variant="primary" wire:click="nextStep" :disabled="!$persetujuan_klien || !$persetujuan_pasangan">
+                    <flux:button variant="primary" wire:click="nextStep">
                         Lanjut ke Pemberian Alokon
                     </flux:button>
                 </div>
@@ -582,7 +620,7 @@
                 <div class="grid gap-4 sm:grid-cols-2">
                     <!-- Alokon -->
                     <flux:field>
-                        <flux:label>Pilih Alokon (Alat/Obat Kontrasepsi)</flux:label>
+                        <flux:label>Pilih Alokon (Alat/Obat Kontrasepsi) <span class="text-rose-500 font-bold">*</span></flux:label>
                         <flux:select wire:model="alokon_id">
                             <option value="">Pilih Alokon</option>
                             @foreach($alokons as $alokon)
@@ -594,7 +632,7 @@
 
                     <!-- Tanggal Pelayanan -->
                     <flux:field>
-                        <flux:label>Tanggal Pelayanan</flux:label>
+                        <flux:label>Tanggal Pelayanan <span class="text-rose-500 font-bold">*</span></flux:label>
                         <flux:input type="date" wire:model="tanggal_pelayanan" />
                         <flux:error name="tanggal_pelayanan" />
                     </flux:field>
@@ -603,7 +641,7 @@
                 <div class="grid gap-4 sm:grid-cols-2">
                     <!-- Tanggal Kunjungan Ulang -->
                     <flux:field>
-                        <flux:label>Tanggal Kunjungan Ulang (Kembali)</flux:label>
+                        <flux:label>Tanggal Kunjungan Ulang (Kembali) <span class="text-rose-500 font-bold">*</span></flux:label>
                         <flux:input type="date" wire:model="tanggal_kunjungan_ulang" />
                         <flux:error name="tanggal_kunjungan_ulang" />
                     </flux:field>
@@ -618,10 +656,16 @@
 
                 <!-- Penanggung Jawab Pelayanan -->
                 <div class="space-y-4">
-                    <flux:heading size="md" class="text-blue-600 dark:text-blue-400 font-bold border-b border-zinc-100 dark:border-zinc-800 pb-2">Penanggung Jawab Pelayanan</flux:heading>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-zinc-100 dark:border-zinc-800 pb-2">
+                        <flux:heading size="md" class="text-blue-600 dark:text-blue-400 font-bold">Penanggung Jawab Pelayanan</flux:heading>
+                        <span class="inline-flex items-center gap-1.5 text-xs text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 rounded-full font-medium">
+                            <flux:icon name="check-circle" class="size-3.5 text-emerald-600 dark:text-emerald-400" />
+                            Nama & NIP terisi otomatis dari akun yang login
+                        </span>
+                    </div>
                     <div class="grid gap-4 sm:grid-cols-3">
                         <flux:field>
-                            <flux:label>Nama Petugas</flux:label>
+                            <flux:label>Nama Petugas <span class="text-rose-500 font-bold">*</span></flux:label>
                             <flux:input type="text" placeholder="Nama Bidan/Dokter" wire:model="penanggung_jawab_nama" />
                             <flux:error name="penanggung_jawab_nama" />
                         </flux:field>
@@ -633,7 +677,7 @@
                         </flux:field>
 
                         <flux:field>
-                            <flux:label>Jabatan</flux:label>
+                            <flux:label>Jabatan <span class="text-rose-500 font-bold">*</span></flux:label>
                             <flux:select wire:model="penanggung_jawab_jabatan">
                                 <option value="bidan">Bidan</option>
                                 <option value="dokter">Dokter</option>

@@ -12,6 +12,7 @@ new #[Title('Profile settings')] class extends Component {
     use ProfileValidationRules;
 
     public string $name = '';
+    public string $nip = '';
     public string $username = '';
 
     /**
@@ -20,6 +21,7 @@ new #[Title('Profile settings')] class extends Component {
     public function mount(): void
     {
         $this->name = Auth::user()->name;
+        $this->nip = Auth::user()->nip ?? '';
         $this->username = Auth::user()->username;
     }
 
@@ -49,6 +51,10 @@ new #[Title('Profile settings')] class extends Component {
     <x-pages::settings.layout :heading="__('Profile')" :subheading="__('Update your name and username')">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
             <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
+
+            <div>
+                <flux:input wire:model="nip" label="NIP (Nomor Induk Pegawai)" type="text" placeholder="Contoh: 199205162015032004" autocomplete="off" />
+            </div>
 
             <div>
                 <flux:input wire:model="username" :label="__('Username')" type="text" required autocomplete="username" />

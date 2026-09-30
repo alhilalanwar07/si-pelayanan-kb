@@ -1,0 +1,160 @@
+<?xml version="1.0" ?>
+<mxfile host="Electron" agent="Antigravity">
+  <diagram id="act-login-sistem" name="Activity Diagram Login Sistem">
+    <mxGraphModel dx="1200" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1050" pageHeight="1450" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="doc_title" value="ACTIVITY DIAGRAM: AUTENTIKASI LOGIN &amp; HAK AKSES PENGGUNA&lt;br&gt;SISTEM INFORMASI PELAYANAN KB DPPKB KECAMATAN WUNDULAKO" style="shape=rect;whiteSpace=wrap;html=1;fillColor=#F8F9FA;strokeColor=#B0BEC5;strokeWidth=1.5;fontStyle=1;fontSize=13;fontFamily=Segoe UI;fontColor=#263238;align=center;verticalAlign=middle;rounded=1;arcSize=8;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="20" width="950" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane_pengguna" value="&lt;b&gt;Pengguna / Petugas (Admin, Bidan, Pimpinan)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;startSize=32;horizontal=1;fillColor=#E8EAF6;strokeColor=#3F51B5;strokeWidth=1.5;fontSize=11;fontFamily=Segoe UI;fontColor=#1A237E;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="50" y="80" width="475" height="1320" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane_sistem" value="&lt;b&gt;Sistem Informasi Pelayanan KB&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;startSize=32;horizontal=1;fillColor=#ECEFF1;strokeColor=#455A64;strokeWidth=1.5;fontSize=11;fontFamily=Segoe UI;fontColor=#263238;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="525" y="80" width="475" height="1320" as="geometry"/>
+        </mxCell>
+        <mxCell id="start_node" value="" style="ellipse;html=1;shape=startState;fillColor=#2E7D32;strokeColor=#1B5E20;" vertex="1" parent="1">
+          <mxGeometry x="275" y="130" width="26" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_buka_login" value="Mengakses Halaman Login&lt;br&gt;(/login)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#3F51B5;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="185" y="185" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_tampil_form" value="Menampilkan Formulir Login&lt;br&gt;(Username, Password, Ingat Saya)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="670" y="185" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_input_kredensial" value="Memasukkan Username &amp;&lt;br&gt;Password, Klik Tombol 'Masuk'" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#3F51B5;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="185" y="265" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_validasi_input" value="Validasi Format Input &amp;&lt;br&gt;Cek Rate Limiting (Throttle)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="670" y="265" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_verif_db" value="Cari User di Tabel users &amp;&lt;br&gt;Cocokkan Hash Password (bcrypt)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="670" y="345" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="dec_valid" value="Kredensial&lt;br&gt;Valid?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="725" y="425" width="75" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_notif_gagal" value="Catat Failed Attempt &amp;&lt;br&gt;Tampilkan Error 'Login Gagal'" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFEBEE;strokeColor=#E53935;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;fontColor=#B71C1C;" vertex="1" parent="1">
+          <mxGeometry x="830" y="430" width="155" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_regen_session" value="Clear Throttle &amp; Regenerasi&lt;br&gt;Session ID (Cegah Fixation)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="670" y="520" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_cek_role" value="Periksa level_akses Pengguna&lt;br&gt;(isAdmin, isBidan, isPimpinan)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="670" y="600" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="dec_role" value="Role /&lt;br&gt;Level?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="725" y="680" width="75" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_role_admin" value="&lt;b&gt;[admin]&lt;/b&gt;&lt;br&gt;Buka Akses Penuh&lt;br&gt;(Master, User, Jadwal)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#E8F5E9;strokeColor=#43A047;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;fontColor=#1B5E20;" vertex="1" parent="1">
+          <mxGeometry x="550" y="780" width="130" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_role_bidan" value="&lt;b&gt;[bidan]&lt;/b&gt;&lt;br&gt;Buka Akses Medis&lt;br&gt;(Wizard KB, Kartu KB)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFF8E1;strokeColor=#FFA000;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;fontColor=#E65100;" vertex="1" parent="1">
+          <mxGeometry x="700" y="780" width="130" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_role_pimpinan" value="&lt;b&gt;[pimpinan]&lt;/b&gt;&lt;br&gt;Buka Akses Eksekutif&lt;br&gt;(Dashboard, GIS, Laporan)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#F3E5F5;strokeColor=#8E24AA;strokeWidth=1.5;fontSize=10;fontFamily=Segoe UI;fontColor=#4A148C;" vertex="1" parent="1">
+          <mxGeometry x="850" y="780" width="130" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="merge_roles" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="748" y="880" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_redirect_dash" value="Redirect ke Dashboard &amp;&lt;br&gt;Kirim Session Flash" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="670" y="945" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_render_dash" value="Merender Tampilan Dashboard&lt;br&gt;Sesuai Hak Akses Menu" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#455A64;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="670" y="1025" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_lihat_dash" value="Melihat Antarmuka Dashboard &amp;&lt;br&gt;Memulai Aktivitas Kerja" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#FFFFFF;strokeColor=#3F51B5;strokeWidth=1.5;fontSize=10.5;fontFamily=Segoe UI;" vertex="1" parent="1">
+          <mxGeometry x="185" y="1025" width="185" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="end_node" value="" style="ellipse;html=1;shape=endState;fillColor=#C62828;strokeColor=#B71C1C;" vertex="1" parent="1">
+          <mxGeometry x="275" y="1110" width="26" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="le1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="start_node" target="act_buka_login">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_buka_login" target="act_tampil_form">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.8;exitDx=0;exitDy=0;entryX=1.0;entryY=0.2;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_tampil_form" target="act_input_kredensial">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_input_kredensial" target="act_validasi_input">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_validasi_input" target="act_verif_db">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_verif_db" target="dec_valid">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le7_gagal" value="[Gagal]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="dec_valid" target="act_notif_gagal">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le7_loop" value="ulangi login" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=0.0;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_notif_gagal" target="act_input_kredensial">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="907" y="287"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="le7_sukses" value="[Berhasil]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dec_valid" target="act_regen_session">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_regen_session" target="act_cek_role">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_cek_role" target="dec_role">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le10_admin" value="[admin]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dec_role" target="act_role_admin">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="615" y="707"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="le10_bidan" value="[bidan]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dec_role" target="act_role_bidan">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le10_pimpinan" value="[pimpinan]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dec_role" target="act_role_pimpinan">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="915" y="707"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="le11_admin" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_role_admin" target="merge_roles">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="615" y="895"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="le11_bidan" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_role_bidan" target="merge_roles">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le11_pimpinan" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_role_pimpinan" target="merge_roles">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="915" y="895"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="le12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="merge_roles" target="act_redirect_dash">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_redirect_dash" target="act_render_dash">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_render_dash" target="act_lihat_dash">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="le15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#37474F;strokeWidth=1.5;endArrow=open;endFill=0;fontSize=9.5;fontFamily=Segoe UI;fontColor=#263238;labelBackgroundColor=#FFFFFF;labelBorderColor=#CFD8DC;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" parent="1" source="act_lihat_dash" target="end_node">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

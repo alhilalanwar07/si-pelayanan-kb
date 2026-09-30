@@ -17,6 +17,7 @@ trait ProfileValidationRules
     {
         return [
             'name' => $this->nameRules(),
+            'nip' => ['nullable', 'string', 'max:50'],
             'username' => $this->usernameRules($userId),
         ];
     }

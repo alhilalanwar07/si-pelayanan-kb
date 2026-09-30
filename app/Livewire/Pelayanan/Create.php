@@ -15,6 +15,9 @@ class Create extends Component
     public $currentStep = 1;
     public $isLayak = true;
     public $medicalWarningMessage = '';
+    public bool $tekananDarahTinggi = false;
+    public ?int $sistolik = null;
+    public ?int $diastolik = null;
 
     // Step 1: Skrining Medis & Profil Peserta
     public $peserta_kb_id = '';
@@ -89,27 +92,44 @@ class Create extends Component
         $this->tanggal_persetujuan = now()->toDateString();
         $this->tanggal_pelayanan = now()->toDateString();
 
-        // Default penanggung jawab
+        // Default penanggung jawab otomatis dari user yang login
         if (auth()->check()) {
-            $this->penanggung_jawab_nama = auth()->user()->name ?? '';
-            $this->penanggung_jawab_jabatan = auth()->user()->isBidan() ? 'bidan' : 'perawat';
+            $user = auth()->user();
+            $this->penanggung_jawab_nama = $user->name ?? '';
+            $this->penanggung_jawab_nip = $user->nip ?? '';
+            $this->penanggung_jawab_jabatan = $user->isBidan() ? 'bidan' : ($user->isAdmin() ? 'bidan' : 'perawat');
         }
 
-        // Auto-select patient from query string (e.g. from queue action)
+        // Auto-select patient from query string (e.g. from queue action or URL)
         if (request()->has('peserta_id')) {
             $this->peserta_kb_id = (int) request()->query('peserta_id');
             $this->updatedPesertaKbId($this->peserta_kb_id);
         }
 
+        if (request()->has('nik')) {
+            $peserta = PesertaKb::where('nik', request()->query('nik'))->first();
+            if ($peserta) {
+                $this->peserta_kb_id = $peserta->id;
+                $this->updatedPesertaKbId($this->peserta_kb_id);
+            }
+        }
+
         if (request()->has('antrian_id')) {
             $this->antrian_id = (int) request()->query('antrian_id');
             $this->antrian = \App\Models\AntrianJadwal::with('jadwalPelayanan')->find($this->antrian_id);
+            if ($this->antrian && !$this->peserta_kb_id && $this->antrian->peserta_kb_id) {
+                $this->peserta_kb_id = $this->antrian->peserta_kb_id;
+                $this->updatedPesertaKbId($this->peserta_kb_id);
+            }
         }
     }
 
     public function updatedPesertaKbId($value)
     {
-        $peserta = PesertaKb::find($value);
+        $peserta = PesertaKb::with(['skriningMedis' => function ($q) {
+            $q->latest('tanggal_skrining');
+        }])->find($value);
+
         $this->nik = $peserta ? $peserta->nik : '';
         
         if ($peserta) {
@@ -121,6 +141,22 @@ class Create extends Component
             $this->jumlah_anak_perempuan = $peserta->jumlah_anak_perempuan ?? 0;
             $this->status_kepesertaan = $peserta->status_kepesertaan ?? 'baru';
             $this->kb_terakhir = $peserta->kb_terakhir ?? '';
+
+            // Otomatis tarik data rekam medis terakhir jika peserta ulangan / pernah periksa
+            $lastSkrining = $peserta->skriningMedis->first();
+            if ($lastSkrining) {
+                if (empty($this->gravida_partus_abortus) && $lastSkrining->gravida_partus_abortus) {
+                    $this->gravida_partus_abortus = $lastSkrining->gravida_partus_abortus;
+                }
+                $this->posisi_rahim = $lastSkrining->posisi_rahim ?? 'normal';
+                $this->rwyt_sakit_kuning = (bool) $lastSkrining->rwyt_sakit_kuning;
+                $this->rwyt_pendarahan = (bool) $lastSkrining->rwyt_pendarahan;
+                $this->rwyt_keputihan = (bool) $lastSkrining->rwyt_keputihan;
+                $this->rwyt_tumor = (bool) $lastSkrining->rwyt_tumor;
+                if (!empty($lastSkrining->alat_kontrasepsi_boleh_digunakan) && empty($this->alat_kontrasepsi_boleh_digunakan)) {
+                    $this->alat_kontrasepsi_boleh_digunakan = $lastSkrining->alat_kontrasepsi_boleh_digunakan;
+                }
+            }
         }
     }
 
@@ -131,6 +167,37 @@ class Create extends Component
     {
         $warnings = [];
 
+        // 1. Cek Tekanan Darah (Hipertensi: Sistolik >= 140 atau Diastolik >= 90)
+        $this->tekananDarahTinggi = false;
+        $this->sistolik = null;
+        $this->diastolik = null;
+
+        if (!empty($this->fisik_tekanan_darah)) {
+            if (preg_match('/^(\d{2,3})\s*[\/\-]\s*(\d{2,3})$/', trim($this->fisik_tekanan_darah), $matches)) {
+                $this->sistolik = (int) $matches[1];
+                $this->diastolik = (int) $matches[2];
+
+                // Standar Medis BKKBN / Kemenkes / WHO:
+                if ($this->sistolik >= 140 || $this->diastolik >= 90) {
+                    $this->tekananDarahTinggi = true;
+                    $warnings[] = "Tekanan darah pasien terlalu tinggi ({$this->sistolik}/{$this->diastolik} mmHg - Hipertensi). Pelayanan KB tidak dapat dilanjutkan.";
+                    $this->addError('fisik_tekanan_darah', "Tekanan darah terlalu tinggi ({$this->sistolik}/{$this->diastolik} mmHg). Pasien tidak dapat melanjutkan tindakan pelayanan KB.");
+                } else {
+                    $errors = $this->getErrorBag();
+                    if ($errors->has('fisik_tekanan_darah')) {
+                        $msg = $errors->first('fisik_tekanan_darah');
+                        if (str_contains($msg, 'terlalu tinggi')) {
+                            $this->resetErrorBag('fisik_tekanan_darah');
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Kontraindikasi Medis Lainnya
+        if ($this->hamil_diduga_hamil) {
+            $warnings[] = 'Pasien terindikasi hamil atau diduga hamil.';
+        }
         if ($this->rwyt_tumor) {
             $warnings[] = 'Adanya indikasi riwayat tumor/benjolan.';
         }
@@ -141,12 +208,12 @@ class Create extends Component
             $warnings[] = 'Adanya indikasi penyakit kuning (hepatitis/gangguan hati).';
         }
         if ($this->fisik_keadaan_umum === 'lemah') {
-            $warnings[] = 'Kondisi fisik keadaan umum pasien lemah.';
+            $warnings[] = 'Kondisi fisik keadaan umum pasien lemah / sakit.';
         }
 
         if (count($warnings) > 0) {
             $this->isLayak = false;
-            $this->medicalWarningMessage = 'Pasien dinyatakan TIDAK LAYAK untuk menerima tindakan kontrasepsi karena: ' . implode(' ', $warnings);
+            $this->medicalWarningMessage = implode(' ', $warnings);
         } else {
             $this->isLayak = true;
             $this->medicalWarningMessage = '';
@@ -156,7 +223,7 @@ class Create extends Component
     public function updated($propertyName)
     {
         // Re-evaluate eligibility if any relevant field changes in Step 1
-        if (in_array($propertyName, ['rwyt_tumor', 'rwyt_pendarahan', 'rwyt_sakit_kuning', 'fisik_keadaan_umum'])) {
+        if (in_array($propertyName, ['rwyt_tumor', 'rwyt_pendarahan', 'rwyt_sakit_kuning', 'fisik_keadaan_umum', 'fisik_tekanan_darah', 'hamil_diduga_hamil'])) {
             $this->checkKelayakanMedis();
         }
     }
@@ -177,11 +244,11 @@ class Create extends Component
                 'kb_terakhir' => ['nullable', 'string'],
                 'haid_terakhir' => ['nullable', 'date'],
                 'hamil_diduga_hamil' => ['required', 'boolean'],
-                'gravida_partus_abortus' => ['nullable', 'string', 'max:20'],
+                'gravida_partus_abortus' => ['required', 'string', 'max:20'],
                 'status_menyusui' => ['required', 'boolean'],
                 'fisik_keadaan_umum' => ['required', 'string', 'in:baik,sedang,kurang,lemah'],
-                'fisik_berat_badan' => ['nullable', 'numeric', 'min:0'],
-                'fisik_tekanan_darah' => ['nullable', 'string', 'max:15'],
+                'fisik_berat_badan' => ['required', 'numeric', 'min:20', 'max:250'],
+                'fisik_tekanan_darah' => ['required', 'string', 'regex:/^\d{2,3}\s*[\/\-]\s*\d{2,3}$/'],
                 'pemeriksaan_dalam_radang' => ['required', 'boolean'],
                 'pemeriksaan_dalam_tumor' => ['required', 'boolean'],
                 'posisi_rahim' => ['required', 'string', 'in:retroflexi,antaflexi,normal'],
@@ -189,7 +256,27 @@ class Create extends Component
                 'pemeriksaan_tambahan_pembekuan_darah' => ['required', 'boolean'],
                 'pemeriksaan_tambahan_orchitis' => ['required', 'boolean'],
                 'pemeriksaan_tambahan_tumor' => ['required', 'boolean'],
-            ], [], [
+                'alat_kontrasepsi_boleh_digunakan' => ['required', 'array', 'min:1'],
+            ], [
+                'peserta_kb_id.required' => 'Pilih peserta KB terlebih dahulu.',
+                'tanggal_skrining.required' => 'Tanggal skrining wajib diisi.',
+                'pendidikan_istri.required' => 'Pendidikan terakhir istri wajib dipilih.',
+                'pendidikan_suami.required' => 'Pendidikan terakhir suami wajib dipilih.',
+                'pekerjaan_istri.required' => 'Pekerjaan istri wajib dipilih.',
+                'pekerjaan_suami.required' => 'Pekerjaan suami wajib dipilih.',
+                'jumlah_anak_laki.required' => 'Jumlah anak laki-laki wajib diisi.',
+                'jumlah_anak_perempuan.required' => 'Jumlah anak perempuan wajib diisi.',
+                'status_kepesertaan.required' => 'Status kepesertaan KB wajib dipilih.',
+                'gravida_partus_abortus.required' => 'Data GPA (Gravida/Partus/Abortus) wajib diisi (contoh: G2P1A0).',
+                'fisik_keadaan_umum.required' => 'Keadaan umum fisik pasien wajib dipilih.',
+                'fisik_berat_badan.required' => 'Berat badan pasien wajib diisi dalam satuan kg.',
+                'fisik_berat_badan.numeric' => 'Berat badan harus berupa angka.',
+                'fisik_tekanan_darah.required' => 'Tekanan darah pasien wajib diisi (contoh: 120/80).',
+                'fisik_tekanan_darah.regex' => 'Format tekanan darah tidak valid. Gunakan format sistolik/diastolik (contoh: 120/80).',
+                'posisi_rahim.required' => 'Posisi rahim wajib dipilih.',
+                'alat_kontrasepsi_boleh_digunakan.required' => 'Centang minimal satu alat kontrasepsi yang boleh dipergunakan oleh pasien.',
+                'alat_kontrasepsi_boleh_digunakan.min' => 'Centang minimal satu alat kontrasepsi yang boleh dipergunakan oleh pasien.',
+            ], [
                 'peserta_kb_id' => 'Peserta KB',
                 'tanggal_skrining' => 'Tanggal Skrining',
                 'pendidikan_istri' => 'Pendidikan Istri',
@@ -202,6 +289,7 @@ class Create extends Component
                 'kb_terakhir' => 'KB Terakhir',
                 'haid_terakhir' => 'Tanggal Haid Terakhir',
                 'hamil_diduga_hamil' => 'Hamil / Diduga Hamil',
+                'gravida_partus_abortus' => 'GPA (Gravida/Partus/Abortus)',
                 'status_menyusui' => 'Status Menyusui',
                 'fisik_keadaan_umum' => 'Keadaan Umum',
                 'fisik_berat_badan' => 'Berat Badan',
@@ -213,12 +301,16 @@ class Create extends Component
                 'pemeriksaan_tambahan_pembekuan_darah' => 'Kelainan Pembekuan Darah',
                 'pemeriksaan_tambahan_orchitis' => 'Radang Orchitis/Epididymitis',
                 'pemeriksaan_tambahan_tumor' => 'Tumor Tambahan',
+                'alat_kontrasepsi_boleh_digunakan' => 'Alat Kontrasepsi yang Boleh Dipergunakan',
             ]);
 
             $this->checkKelayakanMedis();
 
             if (!$this->isLayak) {
-                $this->dispatch('toast-show', slots: ['text' => 'Skrining medis tidak lolos. Langkah berikutnya dikunci.'], dataset: ['variant' => 'danger']);
+                if ($this->tekananDarahTinggi) {
+                    $this->addError('fisik_tekanan_darah', "Tekanan darah terlalu tinggi ({$this->sistolik}/{$this->diastolik} mmHg). Pasien tidak dapat melanjutkan tindakan pelayanan KB.");
+                }
+                $this->dispatch('toast-show', slots: ['text' => 'Pasien tidak lolos skrining medis. Tindakan tidak dapat dilanjutkan.'], dataset: ['variant' => 'danger']);
                 return;
             }
 
@@ -229,7 +321,12 @@ class Create extends Component
                 'persetujuan_pasangan' => ['accepted'],
                 'jenis_tindakan_medis' => ['required', 'string', 'in:pemasangan,pencabutan,penggantian,penyuntikan'],
                 'tanggal_persetujuan' => ['required', 'date'],
-            ], [], [
+            ], [
+                'persetujuan_klien.accepted' => 'Persetujuan klien wajib dicentang untuk dapat melanjutkan tindakan medis.',
+                'persetujuan_pasangan.accepted' => 'Persetujuan suami / pasangan wajib dicentang untuk dapat melanjutkan tindakan medis.',
+                'jenis_tindakan_medis.required' => 'Jenis tindakan medis wajib dipilih.',
+                'tanggal_persetujuan.required' => 'Tanggal persetujuan tindakan wajib diisi.',
+            ], [
                 'persetujuan_klien' => 'Persetujuan Klien',
                 'persetujuan_pasangan' => 'Persetujuan Pasangan/Suami',
                 'jenis_tindakan_medis' => 'Jenis Tindakan Medis',
@@ -253,20 +350,26 @@ class Create extends Component
             'alokon_id' => ['required', 'exists:alokons,id'],
             'tanggal_pelayanan' => ['required', 'date'],
             'keterangan' => ['nullable', 'string'],
-            'tanggal_kunjungan_ulang' => ['nullable', 'date'],
+            'tanggal_kunjungan_ulang' => ['required', 'date', 'after_or_equal:tanggal_pelayanan'],
             'tanggal_dicabut' => ['nullable', 'date'],
             'penanggung_jawab_nama' => ['required', 'string', 'max:255'],
             'penanggung_jawab_nip' => ['nullable', 'string', 'max:50'],
             'penanggung_jawab_jabatan' => ['required', 'string', 'in:dokter,bidan,perawat'],
-        ], [], [
-            'alokon_id' => 'Alat Kontrasepsi (Alokon)',
+        ], [
+            'alokon_id.required' => 'Alat atau obat kontrasepsi (Alokon) wajib dipilih.',
+            'tanggal_pelayanan.required' => 'Tanggal pelayanan wajib diisi.',
+            'tanggal_kunjungan_ulang.required' => 'Tanggal kontrol / kunjungan ulang wajib diisi.',
+            'tanggal_kunjungan_ulang.after_or_equal' => 'Tanggal kunjungan ulang tidak boleh mendahului tanggal pelayanan.',
+            'penanggung_jawab_nama.required' => 'Nama petugas penanggung jawab wajib diisi.',
+            'penanggung_jawab_jabatan.required' => 'Jabatan petugas penanggung jawab wajib dipilih.',
+        ], [
+            'alokon_id' => 'Alokon',
             'tanggal_pelayanan' => 'Tanggal Pelayanan',
-            'keterangan' => 'Keterangan',
             'tanggal_kunjungan_ulang' => 'Tanggal Kunjungan Ulang',
             'tanggal_dicabut' => 'Tanggal Dicabut',
-            'penanggung_jawab_nama' => 'Nama Penanggung Jawab',
-            'penanggung_jawab_nip' => 'NIP Penanggung Jawab',
-            'penanggung_jawab_jabatan' => 'Jabatan Penanggung Jawab',
+            'penanggung_jawab_nama' => 'Nama Petugas',
+            'penanggung_jawab_nip' => 'NIP Petugas',
+            'penanggung_jawab_jabatan' => 'Jabatan Petugas',
         ]);
 
         $alokon = Alokon::find($this->alokon_id);

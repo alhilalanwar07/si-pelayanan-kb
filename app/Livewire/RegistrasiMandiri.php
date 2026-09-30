@@ -327,7 +327,7 @@ class RegistrasiMandiri extends Component
         // Riwayat pelayanan medis yang sudah dijalani oleh pasien
         $riwayatPelayanan = $this->foundPeserta
             ? $this->foundPeserta->pelayanans()
-                ->with(['alokon', 'user'])
+                ->with(['alokon', 'skriningMedis'])
                 ->latest('tanggal_pelayanan')
                 ->get()
             : collect();

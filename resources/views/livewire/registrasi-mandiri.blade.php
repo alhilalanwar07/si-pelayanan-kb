@@ -177,8 +177,15 @@
 
                             <div class="grid gap-3.5 sm:gap-4 grid-cols-1 sm:grid-cols-2">
                                 <flux:field>
-                                    <flux:label>Nomor Induk Kependudukan (NIK)</flux:label>
-                                    <flux:input type="text" maxlength="16" placeholder="16 digit NIK" wire:model="nik" class="rounded-xl font-mono text-sm w-full" />
+                                    <div class="flex items-center justify-between">
+                                        <flux:label>Nomor Induk Kependudukan (NIK) <span class="text-rose-500 font-bold">*</span></flux:label>
+                                        <span class="inline-flex items-center gap-1 text-3xs text-emerald-600 dark:text-emerald-400 font-medium">
+                                            <flux:icon name="lock-closed" class="size-3" />
+                                            Terisi otomatis
+                                        </span>
+                                    </div>
+                                    <flux:input type="text" maxlength="16" placeholder="16 digit NIK" wire:model="nik" readonly
+                                        class="rounded-xl font-mono text-sm w-full bg-slate-50 dark:bg-zinc-800 cursor-not-allowed border-slate-200" />
                                     <flux:error name="nik" />
                                 </flux:field>
 
@@ -605,24 +612,29 @@
 
                                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-2xs text-slate-600 dark:text-zinc-400">
                                                 <div>
-                                                    <span class="text-slate-400 font-medium">Bidan Pemeriksa:</span>
-                                                    <div class="font-bold text-slate-800 dark:text-zinc-200">{{ $pelayanan->user->name ?? 'Bidan Puskesmas' }}</div>
+                                                    <span class="text-slate-400 font-medium">Petugas Pemeriksa:</span>
+                                                    <div class="font-bold text-slate-800 dark:text-zinc-200">
+                                                        {{ $pelayanan->penanggung_jawab_nama ?: 'Bidan Puskesmas' }}
+                                                        @if($pelayanan->penanggung_jawab_nip)
+                                                            <span class="text-3xs text-slate-400 font-normal block font-mono">NIP. {{ $pelayanan->penanggung_jawab_nip }}</span>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                                 <div>
-                                                    <span class="text-slate-400 font-medium">Jenis Akseptor:</span>
-                                                    <div class="font-bold text-slate-800 dark:text-zinc-200">{{ ucfirst($pelayanan->jenis_peserta ?? 'Peserta Aktif') }}</div>
+                                                    <span class="text-slate-400 font-medium">Jabatan Petugas:</span>
+                                                    <div class="font-bold text-slate-800 dark:text-zinc-200">{{ ucfirst($pelayanan->penanggung_jawab_jabatan ?: 'Bidan') }}</div>
                                                 </div>
                                                 <div>
                                                     <span class="text-slate-400 font-medium">Jadwal Kontrol Ulang:</span>
                                                     <div class="font-bold text-blue-600 dark:text-blue-400">
-                                                        {{ $pelayanan->tanggal_kembali_peserta ? $pelayanan->tanggal_kembali_peserta->translatedFormat('d F Y') : 'Sesuai Kebutuhan' }}
+                                                        {{ $pelayanan->tanggal_kunjungan_ulang ? $pelayanan->tanggal_kunjungan_ulang->translatedFormat('d F Y') : 'Sesuai Kebutuhan' }}
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            @if($pelayanan->keluhan_efek_samping || $pelayanan->tindakan_diberikan)
+                                            @if($pelayanan->keterangan)
                                                 <div class="text-3xs sm:text-2xs text-slate-500 dark:text-zinc-400 pt-1.5 border-t border-slate-200/50 dark:border-zinc-700/50">
-                                                    Catatan / Tindakan: {{ $pelayanan->tindakan_diberikan ?? $pelayanan->keluhan_efek_samping ?? '-' }}
+                                                    Catatan Pelayanan: {{ $pelayanan->keterangan }}
                                                 </div>
                                             @endif
                                         </div>
@@ -655,19 +667,26 @@
                                                 </span>
                                             </div>
 
-                                            @if($antrian->status === 'hadir')
-                                                <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                                                    Selesai Hadir
-                                                </span>
-                                            @elseif($antrian->status === 'tidak_hadir')
-                                                <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-400">
-                                                    Tidak Hadir / Lewat Jadwal
-                                                </span>
-                                            @elseif($antrian->status === 'batal')
-                                                <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-slate-100 text-slate-700 dark:bg-zinc-800 dark:text-zinc-400">
-                                                    Dibatalkan
-                                                </span>
-                                            @endif
+                                            <div class="flex items-center gap-2 shrink-0">
+                                                @if($antrian->status === 'hadir')
+                                                    <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                                                        Selesai Hadir
+                                                    </span>
+                                                @elseif($antrian->status === 'tidak_hadir')
+                                                    <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-400">
+                                                        Tidak Hadir
+                                                    </span>
+                                                @elseif($antrian->status === 'batal')
+                                                    <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-slate-100 text-slate-700 dark:bg-zinc-800 dark:text-zinc-400">
+                                                        Dibatalkan
+                                                    </span>
+                                                @endif
+
+                                                <button type="button" wire:click="lihatTiket({{ $antrian->id }})" title="Lihat Kartu Tiket"
+                                                    class="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-500 hover:text-slate-800 dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer">
+                                                    <flux:icon name="eye" class="size-3.5" />
+                                                </button>
+                                            </div>
                                         </div>
                                     @endforeach
                                 </div>

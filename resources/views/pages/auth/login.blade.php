@@ -67,8 +67,8 @@
             </div>
         </form>
 
-        <!-- Divider & Quick Link for Patients -->
-        <div class="pt-4 border-t border-slate-800/80">
+        <!-- Divider & Quick Link for Patients (Desktop helper, mobile uses antrian panel) -->
+        <div class="hidden lg:block pt-4 border-t border-slate-800/80">
             <div class="p-3.5 rounded-2xl bg-blue-950/40 border border-blue-900/50 flex items-center justify-between gap-3">
                 <div class="space-y-0.5">
                     <div class="text-2xs font-bold text-slate-200">Pasien / Akseptor KB?</div>
@@ -78,6 +78,11 @@
                     Daftar Antrian
                 </a>
             </div>
+        </div>
+
+        <!-- Mobile: Antrian Info (hidden on desktop, shown on mobile since left panel isn't visible) -->
+        <div class="lg:hidden pt-3 border-t border-slate-800/80">
+            <livewire:antrian-login-panel />
         </div>
 
     </div>

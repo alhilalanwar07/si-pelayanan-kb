@@ -14,6 +14,12 @@
                     Verifikasi Peserta
                 </flux:button>
             @endif
+
+            @if($pesertaKb->isTerverifikasi())
+                <flux:button variant="primary" icon="plus" href="{{ route('pelayanan.create', ['peserta_id' => $pesertaKb->id]) }}" wire:navigate>
+                    Catat Pelayanan KB
+                </flux:button>
+            @endif
         </div>
     </div>
 

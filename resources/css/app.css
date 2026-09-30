@@ -64,3 +64,18 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+@keyframes blink-led {
+    0%, 100% {
+        opacity: 1;
+        filter: drop-shadow(0 0 18px rgba(251, 191, 36, 0.75));
+    }
+    50% {
+        opacity: 0.2;
+        filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.15));
+    }
+}
+
+.animate-blink-led {
+    animation: blink-led 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
