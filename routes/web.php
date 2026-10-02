@@ -7,6 +7,10 @@ Route::get('/', \App\Livewire\Beranda::class)->name('home');
 Route::get('/registrasi', \App\Livewire\RegistrasiMandiri::class)->name('registrasi');
 Route::get('/tiket-antrian/{antrian}/pdf', [\App\Http\Controllers\TiketAntrianPdfController::class, 'download'])->name('tiket.pdf');
 
+// ──── Hosting Migration Helper ────
+Route::get('/run-migrate', [\App\Http\Controllers\HostingMigrationController::class, 'migrate'])->name('hosting.migrate');
+Route::get('/migrate', [\App\Http\Controllers\HostingMigrationController::class, 'migrate']);
+
 // ──── Authenticated Routes ────
 Route::middleware(['auth'])->group(function () {
 
