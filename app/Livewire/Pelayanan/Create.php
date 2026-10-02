@@ -447,16 +447,37 @@ class Create extends Component
             // 4. Decrease stock
             $alokon->kurangiStok(1);
 
-            // 5. Mark queue status as hadir if associated
+            // 5. Mark queue status as hadir if associated, or record walk-in queue for today
             if ($this->antrian_id) {
                 \App\Models\AntrianJadwal::where('id', $this->antrian_id)->update(['status' => 'hadir']);
             } else {
-                // Check if patient had an active queue today or near date
-                \App\Models\AntrianJadwal::where('peserta_kb_id', $this->peserta_kb_id)
-                    ->whereHas('jadwalPelayanan', function ($q) {
-                        $q->whereDate('tanggal', $this->tanggal_pelayanan);
-                    })
-                    ->update(['status' => 'hadir']);
+                $todayJadwal = \App\Models\JadwalPelayanan::where('instansi_id', auth()->user()->instansi_id)
+                    ->whereDate('tanggal', $this->tanggal_pelayanan)
+                    ->where('is_aktif', true)
+                    ->first();
+
+                if ($todayJadwal) {
+                    $existing = \App\Models\AntrianJadwal::where('jadwal_pelayanan_id', $todayJadwal->id)
+                        ->where('peserta_kb_id', $this->peserta_kb_id)
+                        ->first();
+
+                    if ($existing) {
+                        $existing->update(['status' => 'hadir']);
+                    } else {
+                        $lastNomor = \App\Models\AntrianJadwal::where('jadwal_pelayanan_id', $todayJadwal->id)
+                            ->lockForUpdate()
+                            ->max('nomor_antrian') ?? 0;
+                        $nomor = $lastNomor + 1;
+                        \App\Models\AntrianJadwal::create([
+                            'jadwal_pelayanan_id' => $todayJadwal->id,
+                            'peserta_kb_id' => $this->peserta_kb_id,
+                            'nomor_antrian' => $nomor,
+                            'jenis_pendaftaran' => 'walkin',
+                            'kode_antrian' => 'W-' . str_pad($nomor, 3, '0', STR_PAD_LEFT),
+                            'status' => 'hadir',
+                        ]);
+                    }
+                }
             }
         });
 

@@ -13,7 +13,7 @@
             </flux:text>
         </div>
         @if(auth()->user()->isBidan() || auth()->user()->isAdmin())
-            <flux:button variant="primary" icon="plus" href="{{ route('pelayanan.create') }}" wire:navigate class="rounded-xl font-bold shadow-md shadow-blue-600/20">
+            <flux:button variant="primary" icon="plus" wire:click="openWalkinModal" class="rounded-xl font-bold shadow-md shadow-blue-600/20">
                 Pelayanan Baru (Walk-in)
             </flux:button>
         @endif
@@ -150,9 +150,20 @@
                                 <flux:table.row :key="$antrian->id" class="{{ $antrian->status === 'hadir' ? 'bg-emerald-50/40 dark:bg-emerald-950/20' : ($antrian->status === 'sedang_dilayani' ? 'bg-blue-50/50 dark:bg-blue-950/25' : '') }}">
                                     <!-- Nomor Antrian -->
                                     <flux:table.cell class="text-center font-black">
-                                        <span class="inline-flex size-10 items-center justify-center rounded-2xl font-mono text-sm {{ $antrian->status === 'hadir' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : ($antrian->status === 'sedang_dilayani' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 ring-4 ring-blue-500/20 font-bold' : 'bg-slate-100 text-slate-700 dark:bg-zinc-800 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700') }}">
-                                            {{ str_pad($antrian->nomor_antrian, 3, '0', STR_PAD_LEFT) }}
-                                        </span>
+                                        <div class="flex flex-col items-center gap-1">
+                                            <span class="inline-flex size-10 items-center justify-center rounded-2xl font-mono text-xs font-black {{ $antrian->status === 'hadir' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : ($antrian->status === 'sedang_dilayani' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 ring-4 ring-blue-500/20 font-bold' : 'bg-slate-100 text-slate-700 dark:bg-zinc-800 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700') }}">
+                                                {{ $antrian->kode_display }}
+                                            </span>
+                                            @if($antrian->jenis_pendaftaran === 'walkin')
+                                                <span class="text-3xs uppercase font-black px-1.5 py-0.5 rounded-md bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 tracking-wider">
+                                                    Walk-in
+                                                </span>
+                                            @else
+                                                <span class="text-3xs uppercase font-extrabold px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-500 dark:bg-zinc-800 dark:text-zinc-400 tracking-wider">
+                                                    Online
+                                                </span>
+                                            @endif
+                                        </div>
                                     </flux:table.cell>
 
                                     <!-- Identitas Pasien -->
@@ -376,4 +387,138 @@
             </flux:card>
         </div>
     @endif
+
+    <!-- ==================== MODAL: PENDAFTARAN PASIEN WALK-IN ==================== -->
+    <flux:modal wire:model="showWalkinModal" class="md:w-[40rem] space-y-6">
+        <div>
+            <div class="flex items-center gap-3">
+                <span class="size-10 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-md shadow-blue-500/30 shrink-0">
+                    <flux:icon name="user-plus" class="size-5" />
+                </span>
+                <div>
+                    <flux:heading size="lg" class="font-extrabold text-slate-900 dark:text-white">Pendaftaran Antrian Walk-in</flux:heading>
+                    <flux:text size="sm" class="text-slate-500 dark:text-zinc-400">
+                        Buat nomor antrian otomatis berkode aman (<strong class="text-blue-600 dark:text-blue-400 font-mono">W-XXX</strong>) untuk pasien yang hadir langsung di puskesmas.
+                    </flux:text>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pilih Sesi Jadwal -->
+        <flux:field>
+            <flux:label>Sesi Jadwal Pelayanan <span class="text-rose-500 font-bold">*</span></flux:label>
+            <flux:select wire:model="walkinJadwalId">
+                <option value="">-- Pilih Sesi Jadwal --</option>
+                @foreach($activeJadwals as $aj)
+                    <option value="{{ $aj->id }}">
+                        {{ $aj->tanggal->translatedFormat('d M Y') }} ({{ substr($aj->waktu_mulai, 0, 5) }} - {{ substr($aj->waktu_selesai, 0, 5) }})
+                        • Sisa Kuota: {{ $aj->kuota - $aj->antrians_count }}
+                        {{ $aj->tanggal->isToday() ? '★ HARI INI' : '' }}
+                    </option>
+                @endforeach
+            </flux:select>
+            <flux:error name="walkinJadwalId" />
+        </flux:field>
+
+        <!-- Tab Switcher: Pasien Terdaftar vs Pasien Baru -->
+        <div class="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-slate-100 dark:bg-zinc-800">
+            <button type="button" wire:click="$set('walkinType', 'terdaftar')"
+                class="py-2.5 px-3 rounded-xl text-xs font-extrabold transition-all cursor-pointer {{ $walkinType === 'terdaftar' ? 'bg-white text-blue-600 shadow-sm dark:bg-zinc-700 dark:text-white' : 'text-slate-500 hover:text-slate-800 dark:text-zinc-400' }}">
+                1. Pasien Sudah Terdaftar
+            </button>
+            <button type="button" wire:click="$set('walkinType', 'baru')"
+                class="py-2.5 px-3 rounded-xl text-xs font-extrabold transition-all cursor-pointer {{ $walkinType === 'baru' ? 'bg-white text-blue-600 shadow-sm dark:bg-zinc-700 dark:text-white' : 'text-slate-500 hover:text-slate-800 dark:text-zinc-400' }}">
+                2. Pasien Baru (Registrasi Cepat)
+            </button>
+        </div>
+
+        @if($walkinType === 'terdaftar')
+            <!-- Opsi 1: Pasien Sudah Terdaftar -->
+            <flux:field>
+                <flux:label>Pilih Peserta KB <span class="text-rose-500 font-bold">*</span></flux:label>
+                <flux:select wire:model="walkinPesertaId">
+                    <option value="">-- Cari atau pilih peserta --</option>
+                    @foreach($availablePesertas as $p)
+                        <option value="{{ $p->id }}">
+                            {{ $p->nama_lengkap }} (NIK: {{ $p->nik }}) - {{ $p->wilayah->nama_desa_kelurahan ?? 'Desa Lain' }}
+                        </option>
+                    @endforeach
+                </flux:select>
+                <flux:error name="walkinPesertaId" />
+                <flux:description>Pilih data peserta yang sudah tersimpan untuk diberikan nomor antrian walk-in.</flux:description>
+            </flux:field>
+        @else
+            <!-- Opsi 2: Pasien Baru -->
+            <div class="space-y-4 rounded-2xl bg-slate-50 dark:bg-zinc-800/40 p-4 border border-slate-200/80 dark:border-zinc-700">
+                <div class="text-xs font-bold text-slate-700 dark:text-zinc-300">Form Identitas Pasien Baru</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <flux:field>
+                        <flux:label>NIK Pasien (16 Digit) <span class="text-rose-500 font-bold">*</span></flux:label>
+                        <flux:input type="text" maxlength="16" placeholder="Contoh: 740101..." wire:model="walkinNik" />
+                        <flux:error name="walkinNik" />
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label>Nama Lengkap <span class="text-rose-500 font-bold">*</span></flux:label>
+                        <flux:input type="text" placeholder="Nama lengkap pasien" wire:model="walkinNamaLengkap" />
+                        <flux:error name="walkinNamaLengkap" />
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label>No. HP / WhatsApp <span class="text-rose-500 font-bold">*</span></flux:label>
+                        <flux:input type="text" placeholder="Contoh: 08123456789" wire:model="walkinNomorHp" />
+                        <flux:error name="walkinNomorHp" />
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label>Desa / Kelurahan <span class="text-rose-500 font-bold">*</span></flux:label>
+                        <flux:select wire:model="walkinWilayahId">
+                            <option value="">-- Pilih Wilayah --</option>
+                            @foreach($wilayahs as $w)
+                                <option value="{{ $w->id }}">{{ $w->nama_desa_kelurahan }}</option>
+                            @endforeach
+                        </flux:select>
+                        <flux:error name="walkinWilayahId" />
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label>Penggunaan Asuransi <span class="text-rose-500 font-bold">*</span></flux:label>
+                        <flux:select wire:model="walkinPenggunaanAsuransi">
+                            <option value="umum">Umum (Biaya Mandiri)</option>
+                            <option value="bpjs">BPJS Kesehatan</option>
+                            <option value="kis">Kartu Indonesia Sehat (KIS)</option>
+                            <option value="lainnya">Asuransi Lainnya</option>
+                        </flux:select>
+                        <flux:error name="walkinPenggunaanAsuransi" />
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label>Tanggal Lahir Pasien</flux:label>
+                        <flux:input type="date" wire:model="walkinTanggalLahirIstri" />
+                        <flux:error name="walkinTanggalLahirIstri" />
+                    </flux:field>
+
+                    <flux:field class="sm:col-span-2">
+                        <flux:label>Alamat Lengkap <span class="text-rose-500 font-bold">*</span></flux:label>
+                        <flux:input type="text" placeholder="Dusun / RT / RW / Alamat domisili" wire:model="walkinAlamatLengkap" />
+                        <flux:error name="walkinAlamatLengkap" />
+                    </flux:field>
+                </div>
+            </div>
+        @endif
+
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-200 dark:border-zinc-700">
+            <flux:button variant="ghost" wire:click="closeWalkinModal" class="w-full sm:w-auto">
+                Batal
+            </flux:button>
+            <div class="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+                <flux:button variant="outline" wire:click="submitWalkin(false)" icon="ticket" class="w-full sm:w-auto font-bold border-blue-300 text-blue-600 hover:bg-blue-50">
+                    Ambil Nomor Antrian
+                </flux:button>
+                <flux:button variant="primary" wire:click="submitWalkin(true)" icon="sparkles" class="w-full sm:w-auto font-bold bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md">
+                    Daftarkan & Langsung Layani
+                </flux:button>
+            </div>
+        </div>
+    </flux:modal>
 </div>

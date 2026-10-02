@@ -79,7 +79,7 @@
                 <div class="py-1">
                     @if($antrianBerjalan)
                         <div class="text-4xl sm:text-5xl lg:text-6xl font-black font-mono tracking-tight text-white drop-shadow-[0_2px_20px_rgba(59,130,246,0.6)]">
-                            #{{ str_pad($antrianBerjalan, 3, '0', STR_PAD_LEFT) }}
+                            {{ $antrianBerjalanDisplay ?? ('#' . str_pad($antrianBerjalan, 3, '0', STR_PAD_LEFT)) }}
                         </div>
                     @elseif($statusLoket === 'selesai')
                         <div class="text-3xl sm:text-4xl lg:text-5xl font-black font-mono tracking-tight text-emerald-400 drop-shadow-[0_2px_15px_rgba(16,185,129,0.4)]">
@@ -88,7 +88,7 @@
                         <div class="text-2xs text-emerald-300/80 mt-1">Total {{ $totalSelesai }} peserta telah selesai</div>
                     @elseif($antrianBerikutnya)
                         <div class="text-4xl sm:text-5xl lg:text-6xl font-black font-mono tracking-tight text-amber-300 drop-shadow-[0_2px_15px_rgba(251,191,36,0.4)]">
-                            #{{ str_pad($antrianBerikutnya, 3, '0', STR_PAD_LEFT) }}
+                            {{ $antrianBerikutnyaDisplay ?? ('#' . str_pad($antrianBerikutnya, 3, '0', STR_PAD_LEFT)) }}
                         </div>
                         <div class="text-2xs text-amber-300/80 mt-1">Siap dipanggil oleh petugas</div>
                     @else
@@ -104,14 +104,14 @@
                     @if($antrianBerjalan && $antrianBerikutnya)
                         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-700/70 text-2xs text-slate-300">
                             <span class="text-slate-400">Panggilan Berikutnya:</span>
-                            <strong class="text-amber-300 font-mono font-bold">#{{ str_pad($antrianBerikutnya, 3, '0', STR_PAD_LEFT) }}</strong>
+                            <strong class="text-amber-300 font-mono font-bold">{{ $antrianBerikutnyaDisplay ?? ('#' . str_pad($antrianBerikutnya, 3, '0', STR_PAD_LEFT)) }}</strong>
                         </div>
                     @endif
 
                     @if($nomorTerakhirSelesai)
                         <div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-800/40 text-3xs text-emerald-300 font-mono">
                             <flux:icon name="check" class="size-3 text-emerald-400" />
-                            <span>Terakhir Selesai: <strong>#{{ str_pad($nomorTerakhirSelesai, 3, '0', STR_PAD_LEFT) }}</strong></span>
+                            <span>Terakhir Selesai: <strong>{{ $nomorTerakhirSelesaiDisplay ?? ('#' . str_pad($nomorTerakhirSelesai, 3, '0', STR_PAD_LEFT)) }}</strong></span>
                         </div>
                     @endif
                 </div>

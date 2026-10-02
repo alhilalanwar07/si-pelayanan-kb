@@ -21,6 +21,9 @@ class AntrianLoginPanel extends Component
         $antrianBerjalan = null;
         $antrianBerikutnya = null;
         $nomorTerakhirSelesai = null;
+        $antrianBerjalanDisplay = null;
+        $antrianBerikutnyaDisplay = null;
+        $nomorTerakhirSelesaiDisplay = null;
         $totalAntrianHariIni = 0;
         $totalSelesai = 0;
         $sisaAntrian = 0;
@@ -42,10 +45,12 @@ class AntrianLoginPanel extends Component
             // Nomor antrian yang terakhir selesai dilayani
             $terakhirSelesai = $sudahDilayani->sortByDesc('nomor_antrian')->first();
             $nomorTerakhirSelesai = $terakhirSelesai ? $terakhirSelesai->nomor_antrian : null;
+            $nomorTerakhirSelesaiDisplay = $terakhirSelesai ? $terakhirSelesai->kode_display : null;
 
             // Antrian yang AKTIF sedang dilayani saat ini (status: sedang_dilayani)
             $sedangDilayani = $antrians->where('status', 'sedang_dilayani')->sortBy('nomor_antrian')->first();
             $antrianBerjalan = $sedangDilayani ? $sedangDilayani->nomor_antrian : null;
+            $antrianBerjalanDisplay = $sedangDilayani ? $sedangDilayani->kode_display : null;
 
             // Antrian yang masih menunggu giliran (terdaftar)
             $sedangMenunggu = $antrians->where('status', 'terdaftar');
@@ -54,6 +59,7 @@ class AntrianLoginPanel extends Component
 
             $berikutnya = $sedangMenunggu->sortBy('nomor_antrian')->first();
             $antrianBerikutnya = $berikutnya ? $berikutnya->nomor_antrian : null;
+            $antrianBerikutnyaDisplay = $berikutnya ? $berikutnya->kode_display : null;
 
             // Tentukan status loket pelayanan
             if ($totalAntrianHariIni === 0) {
@@ -79,6 +85,9 @@ class AntrianLoginPanel extends Component
             'antrianBerjalan' => $antrianBerjalan,
             'antrianBerikutnya' => $antrianBerikutnya,
             'nomorTerakhirSelesai' => $nomorTerakhirSelesai,
+            'antrianBerjalanDisplay' => $antrianBerjalanDisplay,
+            'antrianBerikutnyaDisplay' => $antrianBerikutnyaDisplay,
+            'nomorTerakhirSelesaiDisplay' => $nomorTerakhirSelesaiDisplay,
             'totalAntrianHariIni' => $totalAntrianHariIni,
             'totalSelesai' => $totalSelesai,
             'sisaAntrian' => $sisaAntrian,

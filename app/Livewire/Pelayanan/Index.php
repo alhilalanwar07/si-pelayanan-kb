@@ -6,7 +6,10 @@ use App\Models\Alokon;
 use App\Models\AntrianJadwal;
 use App\Models\JadwalPelayanan;
 use App\Models\Pelayanan;
+use App\Models\PesertaKb;
+use App\Models\Wilayah;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -26,6 +29,22 @@ class Index extends Component
     // Filter for Antrian
     public $searchAntrian = '';
     public ?int $selectedJadwalId = null;
+
+    // Modal Walk-in State
+    public bool $showWalkinModal = false;
+    public string $walkinType = 'terdaftar'; // 'terdaftar' | 'baru'
+    public ?int $walkinPesertaId = null;
+    public ?int $walkinJadwalId = null;
+
+    // Form Pasien Baru Walk-in
+    public string $walkinNik = '';
+    public string $walkinNamaLengkap = '';
+    public string $walkinNomorHp = '';
+    public ?int $walkinWilayahId = null;
+    public string $walkinAlamatLengkap = '';
+    public string $walkinPenggunaanAsuransi = 'umum';
+    public string $walkinNamaSuamiIstri = '';
+    public string $walkinTanggalLahirIstri = '';
 
     protected $queryString = [
         'tab' => ['except' => 'antrian'],
@@ -110,6 +129,139 @@ class Index extends Component
         $antrian->update(['status' => 'terdaftar']);
 
         $this->dispatch('toast-show', slots: ['text' => "Nomor antrian #{$antrian->nomor_antrian} dikembalikan ke antrian menunggu."], dataset: ['variant' => 'info']);
+    }
+
+    public function openWalkinModal()
+    {
+        $this->walkinJadwalId = $this->selectedJadwalId;
+        $this->walkinType = 'terdaftar';
+        $this->walkinPesertaId = null;
+        $this->resetWalkinForm();
+        $this->showWalkinModal = true;
+    }
+
+    public function closeWalkinModal()
+    {
+        $this->showWalkinModal = false;
+        $this->resetWalkinForm();
+    }
+
+    public function resetWalkinForm()
+    {
+        $this->walkinNik = '';
+        $this->walkinNamaLengkap = '';
+        $this->walkinNomorHp = '';
+        $this->walkinWilayahId = null;
+        $this->walkinAlamatLengkap = '';
+        $this->walkinPenggunaanAsuransi = 'umum';
+        $this->walkinNamaSuamiIstri = '';
+        $this->walkinTanggalLahirIstri = '';
+        $this->resetErrorBag();
+    }
+
+    public function submitWalkin(bool $langsungLayani = false)
+    {
+        if (!$this->walkinJadwalId) {
+            $this->addError('walkinJadwalId', 'Pilih sesi jadwal pelayanan.');
+            return;
+        }
+
+        $jadwal = JadwalPelayanan::findOrFail($this->walkinJadwalId);
+
+        $peserta = null;
+        if ($this->walkinType === 'terdaftar') {
+            $this->validate([
+                'walkinPesertaId' => 'required|exists:peserta_kbs,id',
+            ], [
+                'walkinPesertaId.required' => 'Silakan pilih peserta yang sudah terdaftar.',
+            ]);
+
+            $peserta = PesertaKb::findOrFail($this->walkinPesertaId);
+
+            // Cek apakah sudah terdaftar di jadwal ini
+            $existing = AntrianJadwal::where('jadwal_pelayanan_id', $jadwal->id)
+                ->where('peserta_kb_id', $peserta->id)
+                ->first();
+
+            if ($existing) {
+                if ($langsungLayani) {
+                    $this->closeWalkinModal();
+                    return $this->layaniPeserta($peserta->id, $existing->id);
+                }
+                $this->addError('walkinPesertaId', "Peserta ini sudah memiliki nomor antrian ({$existing->kode_display}) pada sesi jadwal ini.");
+                return;
+            }
+        } else {
+            // Form Peserta Baru Walk-in
+            $this->validate([
+                'walkinNik' => ['required', 'string', 'size:16', 'unique:peserta_kbs,nik'],
+                'walkinNamaLengkap' => ['required', 'string', 'max:255'],
+                'walkinNomorHp' => ['required', 'string', 'min:10', 'max:15'],
+                'walkinWilayahId' => ['required', 'exists:wilayahs,id'],
+                'walkinAlamatLengkap' => ['required', 'string'],
+                'walkinPenggunaanAsuransi' => ['required', 'string', 'in:bpjs,kis,umum,lainnya'],
+                'walkinTanggalLahirIstri' => ['nullable', 'date', 'before:today'],
+            ], [], [
+                'walkinNik' => 'NIK',
+                'walkinNamaLengkap' => 'Nama Lengkap',
+                'walkinNomorHp' => 'Nomor HP/WA',
+                'walkinWilayahId' => 'Desa/Kelurahan',
+                'walkinAlamatLengkap' => 'Alamat Lengkap',
+                'walkinPenggunaanAsuransi' => 'Penggunaan Asuransi',
+                'walkinTanggalLahirIstri' => 'Tanggal Lahir',
+            ]);
+
+            $peserta = PesertaKb::create([
+                'user_id' => null,
+                'wilayah_id' => $this->walkinWilayahId,
+                'nik' => $this->walkinNik,
+                'nomor_hp' => $this->walkinNomorHp,
+                'nama_lengkap' => $this->walkinNamaLengkap,
+                'nama_suami_istri' => $this->walkinNamaSuamiIstri ?: '-',
+                'tanggal_lahir_istri' => $this->walkinTanggalLahirIstri ?: '1995-01-01',
+                'alamat_lengkap' => $this->walkinAlamatLengkap,
+                'penggunaan_asuransi' => $this->walkinPenggunaanAsuransi,
+                'jumlah_anak_hidup' => 0,
+                'status' => 'terverifikasi',
+            ]);
+        }
+
+        // Generate antrian dengan DB Transaction & Lock
+        $antrian = DB::transaction(function () use ($jadwal, $peserta, $langsungLayani) {
+            $lastNomor = AntrianJadwal::where('jadwal_pelayanan_id', $jadwal->id)
+                ->lockForUpdate()
+                ->max('nomor_antrian') ?? 0;
+
+            $nomorAntrian = $lastNomor + 1;
+            $kodeAntrian = 'W-' . str_pad($nomorAntrian, 3, '0', STR_PAD_LEFT);
+            $status = $langsungLayani ? 'sedang_dilayani' : 'terdaftar';
+
+            if ($langsungLayani) {
+                AntrianJadwal::where('jadwal_pelayanan_id', $jadwal->id)
+                    ->where('status', 'sedang_dilayani')
+                    ->update(['status' => 'terdaftar']);
+            }
+
+            return AntrianJadwal::create([
+                'jadwal_pelayanan_id' => $jadwal->id,
+                'peserta_kb_id' => $peserta->id,
+                'nomor_antrian' => $nomorAntrian,
+                'jenis_pendaftaran' => 'walkin',
+                'kode_antrian' => $kodeAntrian,
+                'status' => $status,
+            ]);
+        });
+
+        $this->closeWalkinModal();
+
+        if ($langsungLayani) {
+            return $this->redirectRoute('pelayanan.create', [
+                'peserta_id' => $peserta->id,
+                'antrian_id' => $antrian->id,
+            ], navigate: true);
+        }
+
+        $this->dispatch('toast-show', slots: ['text' => "Antrian Walk-in berhasil dibuat: {$antrian->kode_display} ({$peserta->nama_lengkap}). Pasien menunggu panggilan."], dataset: ['variant' => 'success']);
     }
 
     public function layaniPeserta(int $pesertaId, int $antrianId)
@@ -202,6 +354,8 @@ class Index extends Component
         $pelayanans = $query->latest('tanggal_pelayanan')->paginate(10);
         $alokons = Alokon::orderBy('nama_alokon')->get();
         $tahunList = range(Carbon::now()->year, Carbon::now()->year - 5);
+        $availablePesertas = PesertaKb::terverifikasi()->orderBy('nama_lengkap')->get();
+        $wilayahs = Wilayah::orderBy('nama_desa_kelurahan')->get();
 
         return view('livewire.pelayanan.index', [
             'tab' => $this->tab,
@@ -216,6 +370,8 @@ class Index extends Component
             'pelayanans' => $pelayanans,
             'alokons' => $alokons,
             'tahunList' => $tahunList,
+            'availablePesertas' => $availablePesertas,
+            'wilayahs' => $wilayahs,
         ])->layout('layouts.app', ['title' => 'Pusat Pelayanan & Antrian KB']);
     }
 }

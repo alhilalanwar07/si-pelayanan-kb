@@ -20,8 +20,19 @@ class AntrianJadwal extends Model
         'jadwal_pelayanan_id',
         'peserta_kb_id',
         'nomor_antrian',
+        'jenis_pendaftaran',
+        'kode_antrian',
         'status',
     ];
+
+    public function getKodeDisplayAttribute(): string
+    {
+        if (!empty($this->kode_antrian)) {
+            return $this->kode_antrian;
+        }
+
+        return ($this->jenis_pendaftaran === 'walkin' ? 'W-' : '#') . str_pad($this->nomor_antrian, 3, '0', STR_PAD_LEFT);
+    }
 
     protected function casts(): array
     {
