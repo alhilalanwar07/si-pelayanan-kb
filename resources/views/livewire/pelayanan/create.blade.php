@@ -566,14 +566,8 @@
 
                 <!-- Persetujuan Checkboxes -->
                 <div class="rounded-xl bg-zinc-50 border border-zinc-200 p-6 space-y-4 dark:bg-zinc-800/30 dark:border-zinc-700">
-                    <div>
-                        <flux:checkbox wire:model="persetujuan_klien" :label="__('Saya menyatakan bahwa klien telah mendapatkan penjelasan lengkap mengenai efek samping, risiko, serta alternatif KB dan menyetujui tindakan ini secara sukarela.')" />
-                        <flux:error name="persetujuan_klien" />
-                    </div>
-                    <div>
-                        <flux:checkbox wire:model="persetujuan_pasangan" :label="__('Saya menyatakan bahwa suami / istri klien telah menyetujui tindakan KB yang akan dilaksanakan.')" />
-                        <flux:error name="persetujuan_pasangan" />
-                    </div>
+                    <flux:checkbox wire:model="persetujuan_klien" :label="__('Saya menyatakan bahwa klien telah mendapatkan penjelasan lengkap mengenai efek samping, risiko, serta alternatif KB dan menyetujui tindakan ini secara sukarela.')" />
+                    <flux:checkbox wire:model="persetujuan_pasangan" :label="__('Saya menyatakan bahwa suami / istri klien telah menyetujui tindakan KB yang akan dilaksanakan.')" />
                 </div>
 
                 <div class="grid gap-4 sm:grid-cols-2">

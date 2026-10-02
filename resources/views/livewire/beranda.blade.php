@@ -117,65 +117,28 @@
                     </div>
                 </div>
 
-                <!-- Right Hero Card: Quick Widget -->
-                <div class="lg:col-span-5">
-                    <div class="relative rounded-3xl bg-white/10 dark:bg-zinc-900/60 p-6 sm:p-8 backdrop-blur-xl border border-white/20 shadow-2xl shadow-black/40 space-y-6">
-                        <!-- Card Header -->
-                        <div class="flex items-center justify-between border-b border-white/10 pb-4">
-                            <div>
-                                <div class="text-2xs uppercase tracking-wider font-bold text-blue-300">Akses Cepat Masyarakat</div>
-                                <h3 class="text-lg font-bold text-white">Cek Antrian & Jadwal Hari Ini</h3>
-                            </div>
-                            <div class="size-10 rounded-2xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-300">
-                                <flux:icon name="ticket" class="size-5" />
-                            </div>
-                        </div>
+                <!-- Right Hero Column: Live Queue Information Board -->
+                <div class="lg:col-span-5 flex flex-col justify-center">
+                    <div class="space-y-3.5">
+                        <!-- Live Digital Queue Display Component -->
+                        <livewire:antrian-login-panel />
 
-                        <!-- Info Card Body -->
-                        <div class="space-y-3">
-                            <div class="rounded-2xl bg-slate-900/60 p-4 border border-white/10 space-y-2">
-                                <div class="flex items-center justify-between text-xs text-slate-300">
-                                    <span class="font-medium">Jadwal Aktif Terdekat:</span>
-                                    @if($jadwalMendatang->first())
-                                        <span class="font-bold text-emerald-400 flex items-center gap-1">
-                                            <span class="size-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                            Tersedia
-                                        </span>
-                                    @else
-                                        <span class="text-amber-400">Belum Ada</span>
-                                    @endif
+                        <!-- Quick Register Action Banner -->
+                        <div class="rounded-2xl bg-white/10 dark:bg-zinc-900/60 p-4 border border-white/15 backdrop-blur-xl shadow-lg flex items-center justify-between gap-3 text-xs text-slate-200">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <div class="size-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-blue-500/30">
+                                    <flux:icon name="identification" class="size-5" />
                                 </div>
-                                @if($jadwalMendatang->first())
-                                    @php $nextJadwal = $jadwalMendatang->first(); @endphp
-                                    <div class="font-bold text-white text-base">
-                                        {{ $nextJadwal->tanggal->translatedFormat('l, d F Y') }}
-                                    </div>
-                                    <div class="flex items-center justify-between text-xs text-slate-300 pt-1 border-t border-white/5">
-                                        <span>⏰ {{ substr($nextJadwal->waktu_mulai, 0, 5) }} - {{ substr($nextJadwal->waktu_selesai, 0, 5) }} WITA</span>
-                                        <span class="text-blue-300 font-semibold">Sisa Kuota: {{ $nextJadwal->kuota - $nextJadwal->antrians_count }}</span>
-                                    </div>
-                                @else
-                                    <div class="text-xs text-slate-400">Belum ada jadwal pelayanan aktif dalam waktu dekat.</div>
-                                @endif
-                            </div>
-
-                            <!-- Steps Preview -->
-                            <div class="rounded-2xl bg-white/5 p-4 border border-white/5 space-y-2.5 text-xs text-slate-300">
-                                <div class="font-semibold text-white flex items-center gap-1.5">
-                                    <flux:icon name="information-circle" class="size-4 text-blue-400" />
-                                    Sudah pernah mendaftar?
+                                <div class="min-w-0">
+                                    <div class="font-bold text-white text-xs sm:text-sm truncate">Belum punya antrian?</div>
+                                    <div class="text-3xs sm:text-2xs text-slate-300 truncate">Gunakan NIK KTP untuk ambil antrian online</div>
                                 </div>
-                                <p class="text-2xs text-slate-300 leading-relaxed">
-                                    Cukup masukkan NIK Anda pada menu Registrasi untuk langsung memilih jadwal dan mendapatkan tiket antrian.
-                                </p>
                             </div>
+                            <flux:button size="sm" variant="primary" href="{{ route('registrasi') }}" wire:navigate
+                                class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3.5 sm:px-4 py-2 rounded-xl text-xs shrink-0 shadow-md shadow-blue-600/30">
+                                Ambil Antrian
+                            </flux:button>
                         </div>
-
-                        <!-- Widget Button -->
-                        <flux:button variant="primary" href="{{ route('registrasi') }}" wire:navigate
-                            class="w-full bg-blue-600 hover:bg-blue-500 font-bold py-3 rounded-xl shadow-lg shadow-blue-600/30 text-sm">
-                            Mulai Sekarang
-                        </flux:button>
                     </div>
                 </div>
             </div>
