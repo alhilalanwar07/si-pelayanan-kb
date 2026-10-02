@@ -117,6 +117,9 @@ class Create extends Component
         if (request()->has('antrian_id')) {
             $this->antrian_id = (int) request()->query('antrian_id');
             $this->antrian = \App\Models\AntrianJadwal::with('jadwalPelayanan')->find($this->antrian_id);
+            if ($this->antrian && in_array($this->antrian->status, ['terdaftar', 'sedang_dilayani'])) {
+                $this->antrian->update(['status' => 'sedang_dilayani']);
+            }
             if ($this->antrian && !$this->peserta_kb_id && $this->antrian->peserta_kb_id) {
                 $this->peserta_kb_id = $this->antrian->peserta_kb_id;
                 $this->updatedPesertaKbId($this->peserta_kb_id);

@@ -89,8 +89,41 @@ class Index extends Component
         $this->dispatch('toast-show', slots: ['text' => 'Status antrian diubah menjadi Tidak Hadir.'], dataset: ['variant' => 'info']);
     }
 
+    public function panggilPeserta(int $antrianId)
+    {
+        $antrian = AntrianJadwal::findOrFail($antrianId);
+
+        // Reset antrian lain yang sedang dilayani pada jadwal ini jika ada
+        AntrianJadwal::where('jadwal_pelayanan_id', $antrian->jadwal_pelayanan_id)
+            ->where('status', 'sedang_dilayani')
+            ->where('id', '!=', $antrianId)
+            ->update(['status' => 'terdaftar']);
+
+        $antrian->update(['status' => 'sedang_dilayani']);
+
+        $this->dispatch('toast-show', slots: ['text' => "Nomor antrian #{$antrian->nomor_antrian} sekarang berstatus sedang dilayani."], dataset: ['variant' => 'success']);
+    }
+
+    public function batalPanggil(int $antrianId)
+    {
+        $antrian = AntrianJadwal::findOrFail($antrianId);
+        $antrian->update(['status' => 'terdaftar']);
+
+        $this->dispatch('toast-show', slots: ['text' => "Nomor antrian #{$antrian->nomor_antrian} dikembalikan ke antrian menunggu."], dataset: ['variant' => 'info']);
+    }
+
     public function layaniPeserta(int $pesertaId, int $antrianId)
     {
+        $antrian = AntrianJadwal::find($antrianId);
+        if ($antrian && in_array($antrian->status, ['terdaftar', 'sedang_dilayani'])) {
+            AntrianJadwal::where('jadwal_pelayanan_id', $antrian->jadwal_pelayanan_id)
+                ->where('status', 'sedang_dilayani')
+                ->where('id', '!=', $antrianId)
+                ->update(['status' => 'terdaftar']);
+
+            $antrian->update(['status' => 'sedang_dilayani']);
+        }
+
         return $this->redirectRoute('pelayanan.create', [
             'peserta_id' => $pesertaId,
             'antrian_id' => $antrianId,
@@ -122,7 +155,7 @@ class Index extends Component
         if ($currentJadwal) {
             $totalAntrianHariIni = $currentJadwal->antrians()->count();
             $antrianHadir = $currentJadwal->antrians()->where('status', 'hadir')->count();
-            $antrianMenunggu = $currentJadwal->antrians()->where('status', 'terdaftar')->count();
+            $antrianMenunggu = $currentJadwal->antrians()->whereIn('status', ['terdaftar', 'sedang_dilayani'])->count();
         }
 
         $totalPelayananBulanIni = Pelayanan::whereMonth('tanggal_pelayanan', now()->month)

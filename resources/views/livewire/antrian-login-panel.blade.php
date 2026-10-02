@@ -17,16 +17,23 @@
                         <span class="text-2xs font-extrabold uppercase tracking-wider text-emerald-400">
                             Loket Aktif Melayani
                         </span>
-                    @elseif($statusLoket === 'persiapan')
+                    @elseif($statusLoket === 'menunggu_panggilan')
                         <span class="relative flex size-2.5">
                             <span class="relative inline-flex rounded-full size-2.5 bg-amber-400 animate-pulse"></span>
                         </span>
                         <span class="text-2xs font-extrabold uppercase tracking-wider text-amber-300">
+                            Loket Siap • Menunggu Panggilan
+                        </span>
+                    @elseif($statusLoket === 'persiapan')
+                        <span class="relative flex size-2.5">
+                            <span class="relative inline-flex rounded-full size-2.5 bg-blue-400 animate-pulse"></span>
+                        </span>
+                        <span class="text-2xs font-extrabold uppercase tracking-wider text-blue-300">
                             Persiapan Pelayanan
                         </span>
                     @elseif($statusLoket === 'selesai')
-                        <span class="size-2.5 rounded-full bg-blue-400"></span>
-                        <span class="text-2xs font-extrabold uppercase tracking-wider text-blue-300">
+                        <span class="size-2.5 rounded-full bg-emerald-400"></span>
+                        <span class="text-2xs font-extrabold uppercase tracking-wider text-emerald-300">
                             Pelayanan Hari Ini Selesai
                         </span>
                     @else
@@ -56,13 +63,15 @@
             <div class="relative z-10 my-3 rounded-2xl bg-slate-950/90 border border-slate-800/80 p-4 sm:p-5 text-center shadow-inner overflow-hidden">
                 <div class="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-blue-500/60 to-transparent"></div>
 
-                <div class="text-3xs uppercase tracking-widest font-extrabold text-blue-400/90 mb-1">
+                <div class="text-3xs uppercase tracking-widest font-extrabold mb-1">
                     @if($antrianBerjalan)
-                        Nomor Antrian Sedang Dilayani
+                        <span class="text-blue-400">Nomor Antrian Sedang Dilayani</span>
+                    @elseif($statusLoket === 'selesai')
+                        <span class="text-emerald-400">Semua Antrian Selesai</span>
                     @elseif($antrianBerikutnya)
-                        Antrian Siap Dipanggil
+                        <span class="text-amber-400">Antrian Siap Dipanggil</span>
                     @else
-                        Status Antrian Berjalan
+                        <span class="text-slate-400">Status Antrian Berjalan</span>
                     @endif
                 </div>
 
@@ -72,11 +81,16 @@
                         <div class="text-4xl sm:text-5xl lg:text-6xl font-black font-mono tracking-tight text-white drop-shadow-[0_2px_20px_rgba(59,130,246,0.6)]">
                             #{{ str_pad($antrianBerjalan, 3, '0', STR_PAD_LEFT) }}
                         </div>
+                    @elseif($statusLoket === 'selesai')
+                        <div class="text-3xl sm:text-4xl lg:text-5xl font-black font-mono tracking-tight text-emerald-400 drop-shadow-[0_2px_15px_rgba(16,185,129,0.4)]">
+                            SELESAI
+                        </div>
+                        <div class="text-2xs text-emerald-300/80 mt-1">Total {{ $totalSelesai }} peserta telah selesai</div>
                     @elseif($antrianBerikutnya)
-                        <div class="text-3xl sm:text-4xl lg:text-5xl font-black font-mono tracking-tight text-amber-300 drop-shadow-[0_2px_15px_rgba(251,191,36,0.4)]">
+                        <div class="text-4xl sm:text-5xl lg:text-6xl font-black font-mono tracking-tight text-amber-300 drop-shadow-[0_2px_15px_rgba(251,191,36,0.4)]">
                             #{{ str_pad($antrianBerikutnya, 3, '0', STR_PAD_LEFT) }}
                         </div>
-                        <div class="text-2xs text-amber-300/80 mt-1">Siap dipanggil pertama</div>
+                        <div class="text-2xs text-amber-300/80 mt-1">Siap dipanggil oleh petugas</div>
                     @else
                         <div class="text-3xl sm:text-4xl font-black font-mono text-slate-500">
                             000
@@ -85,12 +99,22 @@
                     @endif
                 </div>
 
-                @if($antrianBerjalan && $antrianBerikutnya)
-                    <div class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-700/70 text-2xs text-slate-300">
-                        <span class="text-slate-400">Panggilan Berikutnya:</span>
-                        <strong class="text-amber-300 font-mono font-bold">#{{ str_pad($antrianBerikutnya, 3, '0', STR_PAD_LEFT) }}</strong>
-                    </div>
-                @endif
+                <!-- Sub-info: Panggilan Berikutnya & Terakhir Selesai -->
+                <div class="mt-2 flex flex-wrap items-center justify-center gap-2">
+                    @if($antrianBerjalan && $antrianBerikutnya)
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-700/70 text-2xs text-slate-300">
+                            <span class="text-slate-400">Panggilan Berikutnya:</span>
+                            <strong class="text-amber-300 font-mono font-bold">#{{ str_pad($antrianBerikutnya, 3, '0', STR_PAD_LEFT) }}</strong>
+                        </div>
+                    @endif
+
+                    @if($nomorTerakhirSelesai)
+                        <div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-800/40 text-3xs text-emerald-300 font-mono">
+                            <flux:icon name="check" class="size-3 text-emerald-400" />
+                            <span>Terakhir Selesai: <strong>#{{ str_pad($nomorTerakhirSelesai, 3, '0', STR_PAD_LEFT) }}</strong></span>
+                        </div>
+                    @endif
+                </div>
             </div>
 
             <!-- Mini Stats 3-Grid -->

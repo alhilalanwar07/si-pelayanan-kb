@@ -147,10 +147,10 @@
 
                         <flux:table.rows>
                             @forelse($antrians as $antrian)
-                                <flux:table.row :key="$antrian->id" class="{{ $antrian->status === 'hadir' ? 'bg-emerald-50/40 dark:bg-emerald-950/20' : '' }}">
+                                <flux:table.row :key="$antrian->id" class="{{ $antrian->status === 'hadir' ? 'bg-emerald-50/40 dark:bg-emerald-950/20' : ($antrian->status === 'sedang_dilayani' ? 'bg-blue-50/50 dark:bg-blue-950/25' : '') }}">
                                     <!-- Nomor Antrian -->
                                     <flux:table.cell class="text-center font-black">
-                                        <span class="inline-flex size-10 items-center justify-center rounded-2xl {{ $antrian->status === 'hadir' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-blue-600 text-white shadow-md shadow-blue-500/20' }} text-sm">
+                                        <span class="inline-flex size-10 items-center justify-center rounded-2xl font-mono text-sm {{ $antrian->status === 'hadir' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : ($antrian->status === 'sedang_dilayani' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 ring-4 ring-blue-500/20 font-bold' : 'bg-slate-100 text-slate-700 dark:bg-zinc-800 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700') }}">
                                             {{ str_pad($antrian->nomor_antrian, 3, '0', STR_PAD_LEFT) }}
                                         </span>
                                     </flux:table.cell>
@@ -158,8 +158,13 @@
                                     <!-- Identitas Pasien -->
                                     <flux:table.cell>
                                         <div class="space-y-0.5">
-                                            <div class="font-bold text-slate-900 dark:text-white text-sm">
-                                                {{ $antrian->pesertaKb->nama_lengkap }}
+                                            <div class="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+                                                <span>{{ $antrian->pesertaKb->nama_lengkap }}</span>
+                                                @if($antrian->status === 'sedang_dilayani')
+                                                    <span class="text-2xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 font-extrabold animate-pulse">
+                                                        Di Ruang Pelayanan
+                                                    </span>
+                                                @endif
                                             </div>
                                             <div class="text-xs text-slate-500 dark:text-zinc-400 font-mono">
                                                 NIK: {{ $antrian->pesertaKb->nik }} • HP: {{ $antrian->pesertaKb->nomor_hp ?? '-' }}
@@ -186,6 +191,11 @@
                                                 <flux:icon name="check-circle" class="size-3.5 text-emerald-600" />
                                                 Selesai / Hadir
                                             </span>
+                                        @elseif($antrian->status === 'sedang_dilayani')
+                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300 border border-blue-300">
+                                                <span class="size-2 rounded-full bg-blue-600 animate-ping"></span>
+                                                Sedang Dilayani
+                                            </span>
                                         @elseif($antrian->status === 'tidak_hadir')
                                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-400 border border-rose-200">
                                                 <flux:icon name="x-circle" class="size-3.5 text-rose-600" />
@@ -201,18 +211,35 @@
 
                                     <!-- Action Buttons -->
                                     <flux:table.cell class="text-right">
-                                        <div class="flex items-center justify-end gap-2">
-                                            @if($antrian->status !== 'hadir')
+                                        <div class="flex items-center justify-end gap-1.5 sm:gap-2">
+                                            @if($antrian->status === 'sedang_dilayani')
+                                                <flux:button size="sm" variant="primary" wire:click="layaniPeserta({{ $antrian->pesertaKb->id }}, {{ $antrian->id }})" icon="sparkles"
+                                                    class="rounded-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-xs shadow-md shadow-blue-600/20">
+                                                    Lanjutkan Layani
+                                                </flux:button>
+                                                <flux:button size="sm" variant="outline" wire:click="batalPanggil({{ $antrian->id }})" title="Kembalikan status ke antrian menunggu"
+                                                    class="rounded-xl text-xs text-slate-600 hover:bg-slate-100">
+                                                    Batal
+                                                </flux:button>
+                                            @elseif($antrian->status === 'terdaftar')
                                                 <flux:button size="sm" variant="primary" wire:click="layaniPeserta({{ $antrian->pesertaKb->id }}, {{ $antrian->id }})" icon="sparkles"
                                                     class="rounded-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-xs shadow-md">
                                                     Layani Pasien
                                                 </flux:button>
-                                                <flux:button size="sm" variant="outline" wire:click="tandaiTidakHadir({{ $antrian->id }})" class="rounded-xl text-xs text-rose-600 hover:bg-rose-50">
+                                                <flux:button size="sm" variant="outline" wire:click="panggilPeserta({{ $antrian->id }})" icon="megaphone" title="Panggil nomor ini ke monitor antrian"
+                                                    class="rounded-xl text-xs text-blue-600 hover:bg-blue-50 border-blue-200">
+                                                    Panggil
+                                                </flux:button>
+                                                <flux:button size="sm" variant="outline" wire:click="tandaiTidakHadir({{ $antrian->id }})" class="rounded-xl text-xs text-rose-600 hover:bg-rose-50 border-rose-200">
                                                     Absen
                                                 </flux:button>
-                                            @else
+                                            @elseif($antrian->status === 'hadir')
                                                 <flux:button size="sm" variant="outline" href="{{ route('peserta-kb.show', $antrian->pesertaKb->id) }}" wire:navigate class="rounded-xl text-xs">
                                                     Profil
+                                                </flux:button>
+                                            @else
+                                                <flux:button size="sm" variant="outline" wire:click="batalPanggil({{ $antrian->id }})" class="rounded-xl text-xs text-slate-600">
+                                                    Pulihkan
                                                 </flux:button>
                                             @endif
                                         </div>

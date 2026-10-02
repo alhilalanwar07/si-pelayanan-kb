@@ -20,6 +20,7 @@ class AntrianLoginPanel extends Component
 
         $antrianBerjalan = null;
         $antrianBerikutnya = null;
+        $nomorTerakhirSelesai = null;
         $totalAntrianHariIni = 0;
         $totalSelesai = 0;
         $sisaAntrian = 0;
@@ -34,17 +35,23 @@ class AntrianLoginPanel extends Component
 
             $totalAntrianHariIni = $antrians->count();
 
-            // Antrian yang sudah hadir / dilayani
+            // Antrian yang SUDAH SELESAI dilayani (hadir)
             $sudahDilayani = $antrians->where('status', 'hadir');
             $totalSelesai = $sudahDilayani->count();
 
-            // Nomor antrian yang sedang atau terakhir dilayani
-            $terakhirDilayani = $sudahDilayani->sortByDesc('nomor_antrian')->first();
-            $antrianBerjalan = $terakhirDilayani ? $terakhirDilayani->nomor_antrian : null;
+            // Nomor antrian yang terakhir selesai dilayani
+            $terakhirSelesai = $sudahDilayani->sortByDesc('nomor_antrian')->first();
+            $nomorTerakhirSelesai = $terakhirSelesai ? $terakhirSelesai->nomor_antrian : null;
 
-            // Antrian yang masih menunggu giliran
+            // Antrian yang AKTIF sedang dilayani saat ini (status: sedang_dilayani)
+            $sedangDilayani = $antrians->where('status', 'sedang_dilayani')->sortBy('nomor_antrian')->first();
+            $antrianBerjalan = $sedangDilayani ? $sedangDilayani->nomor_antrian : null;
+
+            // Antrian yang masih menunggu giliran (terdaftar)
             $sedangMenunggu = $antrians->where('status', 'terdaftar');
-            $sisaAntrian = $sedangMenunggu->count();
+            $sisaMenunggu = $sedangMenunggu->count();
+            $sisaAntrian = $sisaMenunggu + ($sedangDilayani ? 1 : 0);
+
             $berikutnya = $sedangMenunggu->sortBy('nomor_antrian')->first();
             $antrianBerikutnya = $berikutnya ? $berikutnya->nomor_antrian : null;
 
@@ -53,7 +60,7 @@ class AntrianLoginPanel extends Component
                 $statusLoket = 'persiapan';
             } elseif ($sisaAntrian === 0 && $totalSelesai > 0) {
                 $statusLoket = 'selesai';
-            } elseif ($totalSelesai > 0 || $antrianBerikutnya !== null) {
+            } elseif ($sisaAntrian > 0 || $totalSelesai > 0) {
                 $statusLoket = 'melayani';
             } else {
                 $statusLoket = 'persiapan';
@@ -71,6 +78,7 @@ class AntrianLoginPanel extends Component
             'jadwalHariIni' => $jadwalHariIni,
             'antrianBerjalan' => $antrianBerjalan,
             'antrianBerikutnya' => $antrianBerikutnya,
+            'nomorTerakhirSelesai' => $nomorTerakhirSelesai,
             'totalAntrianHariIni' => $totalAntrianHariIni,
             'totalSelesai' => $totalSelesai,
             'sisaAntrian' => $sisaAntrian,
