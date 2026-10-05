@@ -36,7 +36,7 @@
             <img src="{{ asset('img-logo-login.webp') }}" alt="Logo SI Pelayanan KB" class="size-8 sm:size-10 object-contain group-hover:scale-105 transition-transform shrink-0" />
             <div class="min-w-0">
                 <div class="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white leading-tight truncate">SI Pelayanan KB</div>
-                <div class="text-3xs sm:text-2xs text-slate-500 dark:text-zinc-400 font-medium truncate">Puskesmas Wundulako</div>
+                <div class="text-3xs sm:text-2xs text-slate-500 dark:text-zinc-400 font-medium truncate">DPPKB Kecamatan Wundulako</div>
             </div>
         </a>
         <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
@@ -469,7 +469,7 @@
                                         </div>
 
                                         <div class="text-2xs text-slate-500 dark:text-zinc-400 bg-white dark:bg-zinc-800/60 p-2.5 rounded-xl border border-slate-200/70 dark:border-zinc-800">
-                                            📍 Lokasi: Loket Pelayanan KB UPTD Puskesmas Wundulako. Harap hadir 15 menit sebelum sesi dimulai.
+                                            📍 Lokasi: Loket Pelayanan KB DPPKB Kecamatan Wundulako. Harap hadir 15 menit sebelum sesi dimulai.
                                         </div>
                                     </div>
                                 </div>
@@ -578,7 +578,7 @@
                                     <div class="text-center py-10 px-6 rounded-3xl bg-slate-50 dark:bg-zinc-800/40 border border-dashed border-slate-300 dark:border-zinc-700 space-y-2">
                                         <flux:icon name="calendar" class="size-8 text-slate-400 mx-auto" />
                                         <h4 class="font-bold text-sm text-slate-800 dark:text-zinc-200">Belum Ada Jadwal Pelayanan Aktif</h4>
-                                        <p class="text-xs text-slate-500 dark:text-zinc-400">Silakan cek kembali dalam waktu dekat atau hubungi petugas puskesmas.</p>
+                                        <p class="text-xs text-slate-500 dark:text-zinc-400">Silakan cek kembali dalam waktu dekat atau hubungi petugas DPPKB Kecamatan Wundulako.</p>
                                     </div>
                                 @endif
                             </div>
@@ -614,7 +614,7 @@
                                                 <div>
                                                     <span class="text-slate-400 font-medium">Petugas Pemeriksa:</span>
                                                     <div class="font-bold text-slate-800 dark:text-zinc-200">
-                                                        {{ $pelayanan->penanggung_jawab_nama ?: 'Bidan Puskesmas' }}
+                                                        {{ $pelayanan->penanggung_jawab_nama ?: 'Bidan / Petugas Medis' }}
                                                         @if($pelayanan->penanggung_jawab_nip)
                                                             <span class="text-3xs text-slate-400 font-normal block font-mono">NIP. {{ $pelayanan->penanggung_jawab_nip }}</span>
                                                         @endif
@@ -642,7 +642,7 @@
                                 </div>
                             @else
                                 <div class="text-center py-6 px-4 rounded-2xl bg-slate-50/60 dark:bg-zinc-800/30 border border-slate-200/60 dark:border-zinc-800 text-slate-500 dark:text-zinc-400 text-2xs sm:text-xs">
-                                    Belum ada catatan rekam pelayanan medis sebelumnya di Puskesmas Wundulako.
+                                    Belum ada catatan rekam pelayanan medis sebelumnya di DPPKB Kecamatan Wundulako.
                                 </div>
                             @endif
                         </div>
@@ -707,7 +707,7 @@
                                 <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                                     <div class="size-10 sm:size-11 rounded-xl bg-blue-600 text-white font-black text-sm flex items-center justify-center shadow-md shrink-0">KB</div>
                                     <div class="min-w-0">
-                                        <h3 class="font-black text-sm sm:text-base text-slate-900 dark:text-white leading-tight truncate">Puskesmas Wundulako</h3>
+                                        <h3 class="font-black text-sm sm:text-base text-slate-900 dark:text-white leading-tight truncate">DPPKB Kecamatan Wundulako</h3>
                                         <p class="text-3xs sm:text-2xs text-slate-500 dark:text-zinc-400 truncate">Tiket Antrian Resmi Pelayanan KB</p>
                                     </div>
                                 </div>
@@ -754,7 +754,7 @@
                             <div class="space-y-2 text-2xs sm:text-xs text-slate-500 dark:text-zinc-400 bg-slate-50 dark:bg-zinc-800/30 p-3.5 sm:p-4 rounded-xl">
                                 <div class="font-bold text-slate-700 dark:text-zinc-300 flex items-center gap-1.5">
                                     <flux:icon name="information-circle" class="size-3.5 sm:size-4 text-blue-500 shrink-0" />
-                                    Petunjuk Kehadiran di Puskesmas:
+                                    Petunjuk Kehadiran di Loket Pelayanan KB:
                                 </div>
                                 <ul class="list-disc list-inside space-y-1 pl-1">
                                     <li>Bawa KTP Asli dan Kartu BPJS/KIS (jika ada).</li>
@@ -830,6 +830,6 @@
 
     <!-- ============ FOOTER ============ -->
     <footer class="py-5 sm:py-6 text-center text-3xs sm:text-xs text-slate-400 dark:text-zinc-600 border-t border-slate-200/80 dark:border-zinc-900 px-4 no-print">
-        &copy; {{ now()->year }} SI Pelayanan KB Puskesmas Wundulako, Kab. Kolaka. All rights reserved.
+        &copy; {{ now()->year }} SI Pelayanan KB DPPKB Kecamatan Wundulako, Kab. Kolaka. All rights reserved.
     </footer>
 </div>

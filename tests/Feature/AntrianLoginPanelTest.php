@@ -24,8 +24,8 @@ test('antrian panel shows no service when there is no schedule today', function 
 
 test('antrian panel shows running queue number when schedule exists today', function () {
     $instansi = Instansi::create([
-        'nama_instansi' => 'Puskesmas Wundulako',
-        'kode_faskes' => 'PKM-01',
+        'nama_instansi' => 'DPPKB Kecamatan Wundulako',
+        'kode_faskes' => 'KB-01',
     ]);
 
     $admin = User::create([

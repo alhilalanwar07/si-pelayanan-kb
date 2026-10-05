@@ -13,8 +13,8 @@ use Livewire\Livewire;
 
 test('peserta yang sudah daftar dan sudah dilayani tidak error saat cek nik ulang', function () {
     $instansi = Instansi::create([
-        'nama_instansi' => 'Puskesmas Wundulako',
-        'kode_faskes' => 'PKM-01',
+        'nama_instansi' => 'DPPKB Kecamatan Wundulako',
+        'kode_faskes' => 'KB-01',
     ]);
 
     $bidan = User::create([

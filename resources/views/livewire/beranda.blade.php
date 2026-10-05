@@ -11,7 +11,7 @@
                             Wundulako
                         </span>
                     </div>
-                    <div class="text-3xs sm:text-xs text-slate-500 dark:text-zinc-400 font-medium truncate">Puskesmas Wundulako, Kolaka</div>
+                    <div class="text-3xs sm:text-xs text-slate-500 dark:text-zinc-400 font-medium truncate">DPPKB Kecamatan Wundulako, Kolaka</div>
                 </div>
             </a>
 
@@ -61,7 +61,7 @@
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full size-2 bg-emerald-400"></span>
                         </span>
-                        Pelayanan KB Resmi Puskesmas Wundulako
+                        Pelayanan KB Resmi DPPKB Kecamatan Wundulako
                     </div>
 
                     <!-- Main Headline -->
@@ -74,7 +74,7 @@
 
                     <!-- Subtitle -->
                     <p class="text-sm sm:text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-normal">
-                        Daftar peserta KB baru atau ambil nomor antrian pelayanan secara online tanpa perlu berdesakan di puskesmas. Pantau jadwal aktif faskes secara real-time.
+                        Daftar peserta KB baru atau ambil nomor antrian pelayanan secara online tanpa perlu berdesakan di lokasi pelayanan. Pantau jadwal aktif faskes secara real-time.
                     </p>
 
                     <!-- CTA Buttons -->
@@ -194,7 +194,7 @@
                 Jadwal Pelayanan KB Aktif
             </h2>
             <p class="text-sm sm:text-base text-slate-600 dark:text-zinc-400">
-                Pilih waktu yang tepat untuk datang ke puskesmas. Kuota dibatasi demi kenyamanan dan ketepatan waktu pelayanan Anda.
+                Pilih waktu yang tepat untuk datang ke balai pelayanan. Kuota dibatasi demi kenyamanan dan ketepatan waktu pelayanan Anda.
             </p>
         </div>
 
@@ -295,7 +295,7 @@
                     5 Langkah Pelayanan KB
                 </h2>
                 <p class="text-sm sm:text-base text-slate-600 dark:text-zinc-400">
-                    Panduan praktis mulai dari pendaftaran daring hingga Anda menerima pelayanan di Puskesmas.
+                    Panduan praktis mulai dari pendaftaran daring hingga Anda menerima pelayanan di DPPKB Kecamatan Wundulako.
                 </p>
             </div>
 
@@ -481,10 +481,10 @@
                     $faqItems = [
                         [
                             'q' => 'Apakah pendaftaran pelayanan KB ini dipungut biaya?',
-                            'a' => 'Tidak. Pendaftaran daring ini 100% gratis. Untuk tindakan pelayanan di puskesmas gratis bagi pemegang kartu BPJS Kesehatan / KIS aktif yang faskes tingkat 1 nya terdaftar di Puskesmas Wundulako.'
+                            'a' => 'Tidak. Pendaftaran daring ini 100% gratis. Untuk tindakan pelayanan kontrasepsi difasilitasi oleh DPPKB Kecamatan Wundulako.'
                         ],
                         [
-                            'q' => 'Saya sudah pernah KB di puskesmas, apakah perlu mendaftar baru?',
+                            'q' => 'Saya sudah pernah mendapatkan pelayanan KB di DPPKB Kecamatan Wundulako, apakah perlu mendaftar baru?',
                             'a' => 'Cukup masukkan NIK Anda pada menu Registrasi. Sistem akan langsung mengenali identitas Anda dan Anda bisa langsung memilih jadwal kunjungan ulangan tanpa mengisi form dari awal.'
                         ],
                         [
@@ -568,7 +568,7 @@
                 <ul class="space-y-2">
                     <li class="flex items-start gap-2">
                         <flux:icon name="map-pin" class="size-4 text-blue-400 shrink-0 mt-0.5" />
-                        <span>Puskesmas Wundulako, Jl. Poros Kolaka-Pomalaa, Kec. Wundulako</span>
+                        <span>DPPKB Kecamatan Wundulako, Jl. Poros Kolaka-Pomalaa, Kec. Wundulako</span>
                     </li>
                     <li class="flex items-center gap-2">
                         <flux:icon name="phone" class="size-4 text-blue-400 shrink-0" />
@@ -581,7 +581,7 @@
             <div class="space-y-3">
                 <h4 class="font-bold text-white text-xs uppercase tracking-wider">Hak Cipta</h4>
                 <p class="text-slate-500 leading-relaxed">
-                    &copy; {{ now()->year }} DPPKB & Puskesmas Wundulako. Hak cipta dilindungi undang-undang.
+                    &copy; {{ now()->year }} DPPKB Kecamatan Wundulako. Hak cipta dilindungi undang-undang.
                 </p>
             </div>
         </div>

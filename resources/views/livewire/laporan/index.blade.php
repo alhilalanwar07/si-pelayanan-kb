@@ -43,10 +43,10 @@
         <div class="text-center pb-2 border-b-4 border-double border-black">
             <h3 class="text-xs font-bold uppercase tracking-wider text-black">PEMERINTAH KABUPATEN KOLAKA</h3>
             <h2 class="text-sm font-extrabold uppercase tracking-wide text-black mt-0.5">DINAS PENGENDALIAN PENDUDUK DAN KELUARGA BERENCANA</h2>
-            <h1 class="text-base font-black uppercase text-black mt-0.5">UPTD PUSKESMAS KECAMATAN WUNDULAKO</h1>
+            <h1 class="text-base font-black uppercase text-black mt-0.5">DPPKB KECAMATAN WUNDULAKO</h1>
             <p class="text-[10px] text-zinc-700 mt-1 leading-tight">
                 Jl. Poros Kolaka - Pomalaa, Kec. Wundulako, Kab. Kolaka, Sulawesi Tenggara 93561<br>
-                Email: pkm.wundulako@kolakakab.go.id | Aplikasi: Sistem Informasi Pelayanan KB
+                Email: dppkb.wundulako@kolakakab.go.id | Aplikasi: Sistem Informasi Pelayanan KB
             </p>
         </div>
 
@@ -540,7 +540,7 @@
             <!-- Kolom Tanda Tangan Kiri: Kepala UPTD / Pimpinan -->
             <div class="text-center w-64">
                 <div>Mengetahui,</div>
-                <div class="font-bold">Kepala UPTD Puskesmas Wundulako</div>
+                <div class="font-bold">Kepala DPPKB Kecamatan Wundulako</div>
                 <div class="h-20"></div>
                 <div class="font-bold underline uppercase">( .................................................... )</div>
                 <div>NIP. ....................................................</div>

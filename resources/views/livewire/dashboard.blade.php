@@ -86,7 +86,9 @@
             <div class="flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-700">
                 <flux:heading size="lg">📋 Registrasi Peserta Terbaru</flux:heading>
                 <div class="flex items-center gap-2">
-                    <flux:button size="sm" variant="outline" href="{{ route('peserta-kb.index') }}" wire:navigate>Lihat Semua</flux:button>
+                    @if(auth()->user()->isAdmin() || auth()->user()->isBidan())
+                        <flux:button size="sm" variant="outline" href="{{ route('peserta-kb.index') }}" wire:navigate>Lihat Semua</flux:button>
+                    @endif
                 </div>
             </div>
 

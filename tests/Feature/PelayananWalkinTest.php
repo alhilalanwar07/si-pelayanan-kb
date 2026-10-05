@@ -11,8 +11,8 @@ use Livewire\Livewire;
 
 beforeEach(function () {
     $this->instansi = Instansi::create([
-        'nama_instansi' => 'Puskesmas Wundulako',
-        'kode_faskes' => 'PKM-WUN-01',
+        'nama_instansi' => 'DPPKB Kecamatan Wundulako',
+        'kode_faskes' => 'KB-WUN-01',
     ]);
 
     $this->bidan = User::create([

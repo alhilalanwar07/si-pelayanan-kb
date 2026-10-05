@@ -75,7 +75,7 @@ class Index extends Component
                 'lng' => 121.6178,
                 'code' => 'WND',
                 'type' => 'Kelurahan',
-                'faskes' => 'UPTD Puskesmas Wundulako (Pusat)',
+                'faskes' => 'DPPKB Kecamatan Wundulako (Pusat)',
                 'is_puskesmas' => true,
                 'polygon' => [
                     [-4.130, 121.610],

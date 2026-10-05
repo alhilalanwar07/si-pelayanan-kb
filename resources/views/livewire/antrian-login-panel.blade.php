@@ -185,7 +185,7 @@
                     Tidak ada pelayanan hari ini
                 </div>
                 <p class="text-3xs text-slate-400 mt-0.5">
-                    Pelayanan KB tatap muka di puskesmas dibuka sesuai jadwal berkala.
+                    Pelayanan KB tatap muka di DPPKB Kecamatan Wundulako dibuka sesuai jadwal berkala.
                 </p>
             </div>
 

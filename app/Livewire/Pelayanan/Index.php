@@ -161,6 +161,10 @@ class Index extends Component
 
     public function submitWalkin(bool $langsungLayani = false)
     {
+        if ($langsungLayani && !auth()->user()->isBidan()) {
+            $langsungLayani = false;
+        }
+
         if (!$this->walkinJadwalId) {
             $this->addError('walkinJadwalId', 'Pilih sesi jadwal pelayanan.');
             return;
@@ -266,6 +270,11 @@ class Index extends Component
 
     public function layaniPeserta(int $pesertaId, int $antrianId)
     {
+        if (!auth()->user()->isBidan()) {
+            $this->dispatch('toast-show', slots: ['text' => 'Hanya bidan yang berwenang mencatat pelayanan medis.'], dataset: ['variant' => 'danger']);
+            return;
+        }
+
         $antrian = AntrianJadwal::find($antrianId);
         if ($antrian && in_array($antrian->status, ['terdaftar', 'sedang_dilayani'])) {
             AntrianJadwal::where('jadwal_pelayanan_id', $antrian->jadwal_pelayanan_id)

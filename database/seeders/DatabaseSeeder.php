@@ -22,8 +22,8 @@ class DatabaseSeeder extends Seeder
     {
         // ──── 1. Instansi ────
         $instansi = Instansi::create([
-            'nama_instansi' => 'Puskesmas Wundulako',
-            'kode_faskes' => 'PKM-WDK-001',
+            'nama_instansi' => 'DPPKB Kecamatan Wundulako',
+            'kode_faskes' => 'KB-WDK-001',
         ]);
 
         // ──── 2. Wilayah (5 desa/kelurahan di Kec. Wundulako) ────

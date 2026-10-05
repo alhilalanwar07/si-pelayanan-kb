@@ -160,9 +160,9 @@
                 </span>
             </div>
             <div class="mt-2">
-                <span class="text-sm font-bold text-zinc-900 dark:text-white block">UPTD Puskesmas Wundulako</span>
+                <span class="text-sm font-bold text-zinc-900 dark:text-white block">DPPKB Kecamatan Wundulako</span>
             </div>
-            <span class="text-[11px] text-zinc-500 mt-1 block">5 Poskesdes & Pustu Jejaring</span>
+            <span class="text-[11px] text-zinc-500 mt-1 block">Pusat Pelayanan KB & Balai Penyuluhan</span>
         </flux:card>
     </div>
 
@@ -229,7 +229,7 @@
                                                 {{ $w->nama_desa_kelurahan }}
                                             </span>
                                             @if($w->is_puskesmas)
-                                                <span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300">Puskesmas</span>
+                                                <span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">Pusat</span>
                                             @endif
                                         </div>
                                         <span class="text-[11px] text-zinc-500 dark:text-zinc-400 block truncate">{{ $w->faskes }}</span>
@@ -406,9 +406,11 @@
                         </div>
 
                         <div class="flex items-center gap-2">
-                            <flux:button variant="primary" size="sm" icon="users" href="{{ route('peserta-kb.index') }}" wire:navigate class="bg-blue-600 hover:bg-blue-700 text-white font-semibold">
-                                Lihat Data Peserta
-                            </flux:button>
+                            @if(auth()->user()->isAdmin() || auth()->user()->isBidan())
+                                <flux:button variant="primary" size="sm" icon="users" href="{{ route('peserta-kb.index') }}" wire:navigate class="bg-blue-600 hover:bg-blue-700 text-white font-semibold">
+                                    Lihat Data Peserta
+                                </flux:button>
+                            @endif
                             <flux:button variant="ghost" size="sm" icon="x-mark" wire:click="resetSelection" />
                         </div>
                     </div>
@@ -577,11 +579,11 @@
                     maxZoom: 18
                 }).addTo(this.map);
 
-                // Add Puskesmas Wundulako Primary Landmark
+                // Add DPPKB Kecamatan Wundulako Primary Landmark
                 const puskesmasIcon = L.divIcon({
                     className: 'custom-puskesmas-marker',
-                    html: `<div class="size-8 rounded-full bg-rose-600 border-2 border-white text-white flex items-center justify-center font-bold text-sm shadow-lg pulse-marker-puskesmas">
-                                🏥
+                    html: `<div class="size-8 rounded-full bg-blue-600 border-2 border-white text-white flex items-center justify-center font-bold text-sm shadow-lg pulse-marker-high">
+                                🏢
                            </div>`,
                     iconSize: [32, 32],
                     iconAnchor: [16, 16]
@@ -591,8 +593,8 @@
                     .addTo(this.map)
                     .bindPopup(`
                         <div class="p-2 text-center">
-                            <span class="inline-block px-2 py-0.5 rounded bg-rose-100 text-rose-700 text-[10px] font-bold">FASKES UTAMA</span>
-                            <h4 class="font-bold text-sm text-zinc-900 mt-1">UPTD Puskesmas Wundulako</h4>
+                            <span class="inline-block px-2 py-0.5 rounded bg-blue-100 text-blue-700 text-[10px] font-bold">KANTOR PUSAT</span>
+                            <h4 class="font-bold text-sm text-zinc-900 mt-1">DPPKB Kecamatan Wundulako</h4>
                             <p class="text-xs text-zinc-600 mt-0.5">Pusat Pelayanan & Distribusi Alokon KB</p>
                         </div>
                     `, { className: 'custom-popup' });

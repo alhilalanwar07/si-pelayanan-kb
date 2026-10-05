@@ -144,7 +144,7 @@
         <!-- Header -->
         <div class="header">
             <h1>Pemerintah Kabupaten Kolaka</h1>
-            <h2>UPTD Puskesmas Wundulako</h2>
+            <h2>DPPKB Kecamatan Wundulako</h2>
             <p>Sistem Informasi & Pelayanan Antrian KB Online</p>
             <div class="badge-status">TIKET TERKONFIRMASI ✓</div>
         </div>
@@ -153,7 +153,7 @@
         <div class="queue-number-box">
             <div class="queue-label">Nomor Antrian Anda</div>
             <div class="queue-number">{{ str_pad($antrian->nomor_antrian, 3, '0', STR_PAD_LEFT) }}</div>
-            <div class="queue-sub">Simpan dan bawa tiket ini saat mengunjungi Puskesmas</div>
+            <div class="queue-sub">Simpan dan bawa tiket ini saat mengunjungi loket pelayanan</div>
         </div>
 
         <!-- Patient & Schedule Information Table -->
@@ -208,7 +208,7 @@
         <div class="instructions">
             <div class="instructions-title">Petunjuk Kehadiran:</div>
             <ol>
-                <li>Hadir di Loket Pelayanan KB Puskesmas Wundulako 15 menit sebelum sesi dimulai.</li>
+                <li>Hadir di Loket Pelayanan KB DPPKB Kecamatan Wundulako 15 menit sebelum sesi dimulai.</li>
                 <li>Bawa KTP Asli dan Kartu BPJS/KIS (bila menggunakan asuransi).</li>
                 <li>Tunjukkan lembar tiket PDF atau nomor antrian ini kepada petugas loket.</li>
             </ol>
@@ -216,7 +216,7 @@
 
         <!-- Footer -->
         <div class="footer">
-            Dicetak secara digital melalui SI-Pelayanan KB Puskesmas Wundulako • Waktu: {{ now()->translatedFormat('d F Y H:i') }} WITA
+            Dicetak secara digital melalui SI-Pelayanan KB DPPKB Kecamatan Wundulako • Waktu: {{ now()->translatedFormat('d F Y H:i') }} WITA
         </div>
     </div>
 </body>

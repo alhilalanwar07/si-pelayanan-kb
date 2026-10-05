@@ -226,10 +226,10 @@
     <div class="kop-header">
         <div class="instansi-prov">PEMERINTAH KABUPATEN KOLAKA</div>
         <div class="instansi-dinas">DINAS PENGENDALIAN PENDUDUK DAN KELUARGA BERENCANA</div>
-        <div class="instansi-pkm">UPTD PUSKESMAS KECAMATAN WUNDULAKO</div>
+        <div class="instansi-pkm">DPPKB KECAMATAN WUNDULAKO</div>
         <div class="instansi-alamat">
             Jl. Poros Kolaka - Pomalaa, Kec. Wundulako, Kab. Kolaka, Sulawesi Tenggara 93561<br>
-            Email: pkm.wundulako@kolakakab.go.id | Sistem Informasi Pelayanan KB
+            Email: dppkb.wundulako@kolakakab.go.id | Sistem Informasi Pelayanan KB
         </div>
     </div>
 
@@ -481,7 +481,7 @@
             <tr>
                 <td>
                     <div>Mengetahui,</div>
-                    <div class="font-bold">Kepala UPTD Puskesmas Wundulako</div>
+                    <div class="font-bold">Kepala DPPKB Kecamatan Wundulako</div>
                     <div class="sig-space"></div>
                     <div class="sig-name">( .................................................... )</div>
                     <div>NIP. ....................................................</div>

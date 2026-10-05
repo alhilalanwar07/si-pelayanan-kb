@@ -12,7 +12,7 @@
                 Manajemen antrian pasien dari jadwal aktif dan pencatatan riwayat pelayanan kontrasepsi
             </flux:text>
         </div>
-        @if(auth()->user()->isBidan() || auth()->user()->isAdmin())
+        @if(auth()->user()->isBidan())
             <flux:button variant="primary" icon="plus" wire:click="openWalkinModal" class="rounded-xl font-bold shadow-md shadow-blue-600/20">
                 Pelayanan Baru (Walk-in)
             </flux:button>
@@ -224,19 +224,23 @@
                                     <flux:table.cell class="text-right">
                                         <div class="flex items-center justify-end gap-1.5 sm:gap-2">
                                             @if($antrian->status === 'sedang_dilayani')
-                                                <flux:button size="sm" variant="primary" wire:click="layaniPeserta({{ $antrian->pesertaKb->id }}, {{ $antrian->id }})" icon="sparkles"
-                                                    class="rounded-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-xs shadow-md shadow-blue-600/20">
-                                                    Lanjutkan Layani
-                                                </flux:button>
+                                                @if(auth()->user()->isBidan())
+                                                    <flux:button size="sm" variant="primary" wire:click="layaniPeserta({{ $antrian->pesertaKb->id }}, {{ $antrian->id }})" icon="sparkles"
+                                                        class="rounded-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-xs shadow-md shadow-blue-600/20">
+                                                        Lanjutkan Layani
+                                                    </flux:button>
+                                                @endif
                                                 <flux:button size="sm" variant="outline" wire:click="batalPanggil({{ $antrian->id }})" title="Kembalikan status ke antrian menunggu"
                                                     class="rounded-xl text-xs text-slate-600 hover:bg-slate-100">
                                                     Batal
                                                 </flux:button>
                                             @elseif($antrian->status === 'terdaftar')
-                                                <flux:button size="sm" variant="primary" wire:click="layaniPeserta({{ $antrian->pesertaKb->id }}, {{ $antrian->id }})" icon="sparkles"
-                                                    class="rounded-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-xs shadow-md">
-                                                    Layani Pasien
-                                                </flux:button>
+                                                @if(auth()->user()->isBidan())
+                                                    <flux:button size="sm" variant="primary" wire:click="layaniPeserta({{ $antrian->pesertaKb->id }}, {{ $antrian->id }})" icon="sparkles"
+                                                        class="rounded-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-xs shadow-md">
+                                                        Layani Pasien
+                                                    </flux:button>
+                                                @endif
                                                 <flux:button size="sm" variant="outline" wire:click="panggilPeserta({{ $antrian->id }})" icon="megaphone" title="Panggil nomor ini ke monitor antrian"
                                                     class="rounded-xl text-xs text-blue-600 hover:bg-blue-50 border-blue-200">
                                                     Panggil
@@ -398,7 +402,7 @@
                 <div>
                     <flux:heading size="lg" class="font-extrabold text-slate-900 dark:text-white">Pendaftaran Antrian Walk-in</flux:heading>
                     <flux:text size="sm" class="text-slate-500 dark:text-zinc-400">
-                        Buat nomor antrian otomatis berkode aman (<strong class="text-blue-600 dark:text-blue-400 font-mono">W-XXX</strong>) untuk pasien yang hadir langsung di puskesmas.
+                        Buat nomor antrian otomatis berkode aman (<strong class="text-blue-600 dark:text-blue-400 font-mono">W-XXX</strong>) untuk pasien yang hadir langsung di DPPKB Kecamatan Wundulako.
                     </flux:text>
                 </div>
             </div>
@@ -515,9 +519,11 @@
                 <flux:button variant="outline" wire:click="submitWalkin(false)" icon="ticket" class="w-full sm:w-auto font-bold border-blue-300 text-blue-600 hover:bg-blue-50">
                     Ambil Nomor Antrian
                 </flux:button>
-                <flux:button variant="primary" wire:click="submitWalkin(true)" icon="sparkles" class="w-full sm:w-auto font-bold bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md">
-                    Daftarkan & Langsung Layani
-                </flux:button>
+                @if(auth()->user()->isBidan())
+                    <flux:button variant="primary" wire:click="submitWalkin(true)" icon="sparkles" class="w-full sm:w-auto font-bold bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md">
+                        Daftarkan & Langsung Layani
+                    </flux:button>
+                @endif
             </div>
         </div>
     </flux:modal>

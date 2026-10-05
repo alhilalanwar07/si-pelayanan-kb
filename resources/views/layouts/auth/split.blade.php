@@ -27,7 +27,7 @@
                             <div class="font-extrabold text-base tracking-tight text-white flex items-center gap-2">
                                 <span>SI Pelayanan KB</span>
                                 <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30">
-                                    Puskesmas Wundulako
+                                    DPPKB Kecamatan Wundulako
                                 </span>
                             </div>
                             <p class="text-xs text-slate-400 font-medium">Kabupaten Kolaka, Sulawesi Tenggara</p>
@@ -82,7 +82,7 @@
                 <!-- Footer Info -->
                 <div class="relative z-20 pt-6 border-t border-white/10 flex items-center justify-between text-2xs text-slate-400">
                     <div>
-                        © {{ date('Y') }} UPTD Puskesmas Wundulako • DPPKB Kab. Kolaka
+                        © {{ date('Y') }} DPPKB Kecamatan Wundulako, Kab. Kolaka
                     </div>
                     <div class="flex items-center gap-1 text-slate-400">
                         <flux:icon name="shield-check" class="size-3.5 text-emerald-400" />
@@ -114,7 +114,7 @@
                             <img src="{{ asset('img-logo-login.webp') }}" alt="Logo" class="size-full object-contain" />
                         </div>
                         <h2 class="font-extrabold text-base text-white">SI Pelayanan KB</h2>
-                        <span class="text-2xs text-slate-400">UPTD Puskesmas Wundulako</span>
+                        <span class="text-2xs text-slate-400">DPPKB Kecamatan Wundulako</span>
                     </div>
 
                     {{ $slot }}
@@ -122,7 +122,7 @@
 
                 <!-- Bottom Helper Text -->
                 <div class="text-center pt-6 border-t border-slate-800/80 text-2xs text-slate-500">
-                    Butuh bantuan akses akun? Hubungi Administrator Puskesmas Wundulako.
+                    Butuh bantuan akses akun? Hubungi Administrator DPPKB Kecamatan Wundulako.
                 </div>
             </div>
 

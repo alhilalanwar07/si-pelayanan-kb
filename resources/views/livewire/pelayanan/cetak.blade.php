@@ -830,7 +830,7 @@
             <div class="border-b-2 border-black pb-2 mb-3 text-center">
                 <div class="flex items-center justify-between text-[8px] font-semibold text-zinc-600 mb-1 border-b border-zinc-200 pb-0.5">
                     <span>DINAS PENGENDALIAN PENDUDUK & KELUARGA BERENCANA</span>
-                    <span class="font-bold text-black">PUSKESMAS WUNDULAKO</span>
+                    <span class="font-bold text-black">DPPKB KECAMATAN WUNDULAKO</span>
                     <span>KABUPATEN KOLAKA</span>
                 </div>
                 <h2 class="text-xs font-black uppercase tracking-wider font-sans">LEMBAR PERSETUJUAN TINDAKAN MEDIS (INFORMED CONSENT)</h2>
@@ -841,7 +841,7 @@
             <div class="border border-black p-2 bg-zinc-50 mb-2.5 text-[8.5px]">
                 <span class="font-bold block text-[8.5px] uppercase border-b border-zinc-300 pb-0.5 mb-1">I. Tempat & Waktu Pelayanan</span>
                 <div class="grid grid-cols-2 gap-2">
-                    <div>Fasilitas Pelayanan Kesehatan : <b>{{ auth()->user()->instansi->nama_instansi ?? 'Puskesmas Wundulako' }}</b></div>
+                    <div>Fasilitas Pelayanan Kesehatan : <b>{{ auth()->user()->instansi->nama_instansi ?? 'DPPKB Kecamatan Wundulako' }}</b></div>
                     <div>Tanggal Pelayanan : <b>{{ $pelayanan->tanggal_pelayanan ? $pelayanan->tanggal_pelayanan->translatedFormat('d F Y') : date('d-m-Y') }}</b></div>
                 </div>
             </div>
@@ -970,7 +970,7 @@
 
             <!-- FOOTER NOTE -->
             <div class="flex justify-between items-center text-[7.5px] text-zinc-500 mt-6 border-t border-zinc-300 pt-1">
-                <span>Dokumen Rekam Medis Resmi Pelayanan KB — Puskesmas Wundulako</span>
+                <span>Dokumen Rekam Medis Resmi Pelayanan KB — DPPKB Kecamatan Wundulako</span>
                 <span>Halaman 2 dari 2</span>
             </div>
 

@@ -23,7 +23,7 @@
                     type="email"
                     required
                     autofocus
-                    placeholder="nama@puskesmas.go.id"
+                    placeholder="nama@dppkb.kolakakab.go.id"
                     icon="envelope"
                     class="rounded-xl bg-slate-800/80 border-slate-700 text-white placeholder-slate-500 text-sm focus:border-blue-500 focus:ring-blue-500/20"
                 />
