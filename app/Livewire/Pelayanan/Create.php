@@ -62,7 +62,53 @@ class Create extends Component
     public $pemeriksaan_tambahan_orchitis = false;
     public $pemeriksaan_tambahan_tumor = false;
 
+    public const DAFTAR_ALOKON_BOLEH = [
+        'Suntikan 1 Bulan',
+        'Suntikan 3 Bulan Kombinasi',
+        'Suntikan 3 Bulan Progestin',
+        'Pil Kombinasi',
+        'Pil Progestin',
+        'Kondom',
+        'Implan 1 Batang',
+        'Implan 2 Batang',
+        'IUD',
+        'Tubektomi',
+        'Vasektomi',
+    ];
+
     public $alat_kontrasepsi_boleh_digunakan = [];
+
+    public function selectSemuaAlokon(): void
+    {
+        $this->alat_kontrasepsi_boleh_digunakan = self::DAFTAR_ALOKON_BOLEH;
+    }
+
+    public function uncheckSemuaAlokon(): void
+    {
+        $this->alat_kontrasepsi_boleh_digunakan = [];
+    }
+
+    public function toggleSemuaAlokon(): void
+    {
+        if (count($this->alat_kontrasepsi_boleh_digunakan) === count(self::DAFTAR_ALOKON_BOLEH)) {
+            $this->alat_kontrasepsi_boleh_digunakan = [];
+        } else {
+            $this->alat_kontrasepsi_boleh_digunakan = self::DAFTAR_ALOKON_BOLEH;
+        }
+    }
+
+    public function toggleAlokon(string $alokon): void
+    {
+        if (!is_array($this->alat_kontrasepsi_boleh_digunakan)) {
+            $this->alat_kontrasepsi_boleh_digunakan = [];
+        }
+
+        if (in_array($alokon, $this->alat_kontrasepsi_boleh_digunakan)) {
+            $this->alat_kontrasepsi_boleh_digunakan = array_values(array_diff($this->alat_kontrasepsi_boleh_digunakan, [$alokon]));
+        } else {
+            $this->alat_kontrasepsi_boleh_digunakan[] = $alokon;
+        }
+    }
 
     // Step 2: Informed Consent
     public $persetujuan_klien = false;
@@ -117,12 +163,18 @@ class Create extends Component
         if (request()->has('antrian_id')) {
             $this->antrian_id = (int) request()->query('antrian_id');
             $this->antrian = \App\Models\AntrianJadwal::with('jadwalPelayanan')->find($this->antrian_id);
-            if ($this->antrian && in_array($this->antrian->status, ['terdaftar', 'sedang_dilayani'])) {
-                $this->antrian->update(['status' => 'sedang_dilayani']);
-            }
-            if ($this->antrian && !$this->peserta_kb_id && $this->antrian->peserta_kb_id) {
-                $this->peserta_kb_id = $this->antrian->peserta_kb_id;
-                $this->updatedPesertaKbId($this->peserta_kb_id);
+            if ($this->antrian) {
+                if ($this->antrian->status === 'hadir') {
+                    session()->flash('warning', 'Peserta ini sudah selesai dilayani pada sesi jadwal ini dan tidak boleh dilayani 2x dalam jadwal yang sama.');
+                    return redirect()->route('pelayanan.index');
+                }
+                if (in_array($this->antrian->status, ['terdaftar', 'sedang_dilayani'])) {
+                    $this->antrian->update(['status' => 'sedang_dilayani']);
+                }
+                if (!$this->peserta_kb_id && $this->antrian->peserta_kb_id) {
+                    $this->peserta_kb_id = $this->antrian->peserta_kb_id;
+                    $this->updatedPesertaKbId($this->peserta_kb_id);
+                }
             }
         }
     }
@@ -157,7 +209,11 @@ class Create extends Component
                 $this->rwyt_keputihan = (bool) $lastSkrining->rwyt_keputihan;
                 $this->rwyt_tumor = (bool) $lastSkrining->rwyt_tumor;
                 if (!empty($lastSkrining->alat_kontrasepsi_boleh_digunakan) && empty($this->alat_kontrasepsi_boleh_digunakan)) {
-                    $this->alat_kontrasepsi_boleh_digunakan = $lastSkrining->alat_kontrasepsi_boleh_digunakan;
+                    $savedBoleh = $lastSkrining->alat_kontrasepsi_boleh_digunakan;
+                    if (is_string($savedBoleh)) {
+                        $savedBoleh = json_decode($savedBoleh, true) ?? [];
+                    }
+                    $this->alat_kontrasepsi_boleh_digunakan = is_array($savedBoleh) ? $savedBoleh : [];
                 }
             }
         }
@@ -381,6 +437,23 @@ class Create extends Component
             return;
         }
 
+        if ($this->antrian_id) {
+            $antrianCheck = \App\Models\AntrianJadwal::find($this->antrian_id);
+            if ($antrianCheck && $antrianCheck->status === 'hadir') {
+                $this->dispatch('toast-show', slots: ['text' => 'Nomor antrian ini sudah selesai dilayani dan tidak boleh dilayani 2x.'], dataset: ['variant' => 'danger']);
+                return;
+            }
+        }
+
+        $sudahAdaPelayanan = Pelayanan::where('peserta_kb_id', $this->peserta_kb_id)
+            ->whereDate('tanggal_pelayanan', $this->tanggal_pelayanan)
+            ->exists();
+
+        if ($sudahAdaPelayanan) {
+            $this->dispatch('toast-show', slots: ['text' => 'Peserta ini sudah tercatat mendapatkan pelayanan KB pada tanggal ini dan tidak boleh dilayani 2x dalam jadwal yang sama.'], dataset: ['variant' => 'danger']);
+            return;
+        }
+
         DB::transaction(function () use ($alokon) {
             // Update profile data in PesertaKb
             $peserta = PesertaKb::find($this->peserta_kb_id);
@@ -418,7 +491,7 @@ class Create extends Component
                 'pemeriksaan_tambahan_pembekuan_darah' => $this->pemeriksaan_tambahan_pembekuan_darah,
                 'pemeriksaan_tambahan_orchitis' => $this->pemeriksaan_tambahan_orchitis,
                 'pemeriksaan_tambahan_tumor' => $this->pemeriksaan_tambahan_tumor,
-                'alat_kontrasepsi_boleh_digunakan' => json_encode($this->alat_kontrasepsi_boleh_digunakan),
+                'alat_kontrasepsi_boleh_digunakan' => is_array($this->alat_kontrasepsi_boleh_digunakan) ? $this->alat_kontrasepsi_boleh_digunakan : [],
             ]);
 
             // 2. Save Informed Consent

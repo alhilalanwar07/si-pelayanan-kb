@@ -516,20 +516,52 @@
                     <flux:separator />
 
                     <!-- G. Alat Kontrasepsi yang Boleh Dipergunakan -->
-                    <div class="space-y-3">
-                        <flux:label class="font-bold block text-blue-600 dark:text-blue-400">G. Alat Kontrasepsi yang Boleh Dipergunakan <span class="text-rose-500 font-bold">*</span></flux:label>
-                        <div class="grid gap-4 sm:grid-cols-3 bg-zinc-50 border border-zinc-150 p-4 rounded-xl dark:bg-zinc-800/30 dark:border-zinc-800">
-                            <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Suntikan 1 Bulan" label="Suntikan 1 Bulan" />
-                            <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Suntikan 3 Bulan Kombinasi" label="Suntikan 3 Bulan Kombinasi" />
-                            <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Suntikan 3 Bulan Progestin" label="Suntikan 3 Bulan Progestin" />
-                            <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Pil Kombinasi" label="Pil Kombinasi" />
-                            <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Pil Progestin" label="Pil Progestin" />
-                            <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Kondom" label="Kondom" />
-                            <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Implan 1 Batang" label="Implan 1 Batang" />
-                            <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Implan 2 Batang" label="Implan 2 Batang" />
-                            <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="IUD" label="IUD" />
-                            <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Tubektomi" label="Tubektomi" />
-                            <flux:checkbox wire:model="alat_kontrasepsi_boleh_digunakan" value="Vasektomi" label="Vasektomi" />
+                    <div x-data="{
+                        options: {{ json_encode(\App\Livewire\Pelayanan\Create::DAFTAR_ALOKON_BOLEH) }},
+                        selected: @entangle('alat_kontrasepsi_boleh_digunakan').live,
+                        toggleAll() {
+                            if (!Array.isArray(this.selected)) this.selected = [];
+                            if (this.isAll()) {
+                                this.selected = [];
+                            } else {
+                                this.selected = [...this.options];
+                            }
+                        },
+                        isAll() {
+                            return Array.isArray(this.selected) && this.selected.length === this.options.length;
+                        }
+                    }" class="space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                            <flux:label class="font-bold block text-blue-600 dark:text-blue-400">
+                                G. Alat Kontrasepsi yang Boleh Dipergunakan <span class="text-rose-500 font-bold">*</span>
+                            </flux:label>
+
+                            <div class="flex items-center gap-3">
+                                <!-- Master Toggle Checkbox -->
+                                <label class="inline-flex items-center gap-2 cursor-pointer select-none text-xs font-bold text-slate-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                    <input type="checkbox"
+                                        :checked="isAll()"
+                                        @change="toggleAll()"
+                                        class="size-4 rounded text-blue-600 focus:ring-blue-500 border-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 cursor-pointer">
+                                    <span x-text="isAll() ? 'Batal Centang Semua' : 'Centang Semua'"></span>
+                                </label>
+
+                                <span class="text-2xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-900"
+                                      x-text="`${Array.isArray(selected) ? selected.length : 0} dari ${options.length} dipilih`">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="grid gap-3 sm:grid-cols-3 bg-zinc-50 border border-zinc-150 p-4 rounded-xl dark:bg-zinc-800/30 dark:border-zinc-800">
+                            @foreach(\App\Livewire\Pelayanan\Create::DAFTAR_ALOKON_BOLEH as $alokon)
+                                <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white dark:hover:bg-zinc-800/80 cursor-pointer select-none transition-all border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700">
+                                    <input type="checkbox"
+                                        value="{{ $alokon }}"
+                                        x-model="selected"
+                                        class="size-4.5 rounded text-blue-600 focus:ring-blue-500 border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 cursor-pointer">
+                                    <span class="text-xs sm:text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $alokon }}</span>
+                                </label>
+                            @endforeach
                         </div>
                         <flux:error name="alat_kontrasepsi_boleh_digunakan" />
                     </div>

@@ -122,3 +122,48 @@ test('bidan can register walk-in for brand new unregistered patient', function (
     expect($antrian->kode_antrian)->toBe('W-001');
     expect($antrian->status)->toBe('terdaftar');
 });
+
+test('patient cannot be served twice in the same schedule via walkin modal', function () {
+    $this->actingAs($this->bidan);
+
+    // Pasien sudah berstatus hadir / selesai dilayani di jadwal ini
+    AntrianJadwal::create([
+        'jadwal_pelayanan_id' => $this->jadwal->id,
+        'peserta_kb_id' => $this->peserta->id,
+        'nomor_antrian' => 1,
+        'jenis_pendaftaran' => 'online',
+        'status' => 'hadir',
+    ]);
+
+    Livewire::test(PelayananIndex::class)
+        ->call('openWalkinModal')
+        ->set('walkinType', 'terdaftar')
+        ->set('walkinPesertaId', $this->peserta->id)
+        ->call('submitWalkin', true)
+        ->assertHasErrors(['walkinPesertaId'])
+        ->assertNoRedirect();
+
+    Livewire::test(PelayananIndex::class)
+        ->call('openWalkinModal')
+        ->set('walkinType', 'terdaftar')
+        ->set('walkinPesertaId', $this->peserta->id)
+        ->call('submitWalkin', false)
+        ->assertHasErrors(['walkinPesertaId']);
+});
+
+test('layaniPeserta prevents serving an antrian that is already hadir', function () {
+    $this->actingAs($this->bidan);
+
+    $antrian = AntrianJadwal::create([
+        'jadwal_pelayanan_id' => $this->jadwal->id,
+        'peserta_kb_id' => $this->peserta->id,
+        'nomor_antrian' => 1,
+        'jenis_pendaftaran' => 'online',
+        'status' => 'hadir',
+    ]);
+
+    Livewire::test(PelayananIndex::class)
+        ->call('layaniPeserta', $this->peserta->id, $antrian->id)
+        ->assertDispatched('toast-show')
+        ->assertNoRedirect();
+});

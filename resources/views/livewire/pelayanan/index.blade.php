@@ -411,7 +411,7 @@
         <!-- Pilih Sesi Jadwal -->
         <flux:field>
             <flux:label>Sesi Jadwal Pelayanan <span class="text-rose-500 font-bold">*</span></flux:label>
-            <flux:select wire:model="walkinJadwalId">
+            <flux:select wire:model.live="walkinJadwalId">
                 <option value="">-- Pilih Sesi Jadwal --</option>
                 @foreach($activeJadwals as $aj)
                     <option value="{{ $aj->id }}">
@@ -443,13 +443,22 @@
                 <flux:select wire:model="walkinPesertaId">
                     <option value="">-- Cari atau pilih peserta --</option>
                     @foreach($availablePesertas as $p)
-                        <option value="{{ $p->id }}">
+                        @php
+                            $isServed = in_array($p->id, $servedPesertaIds ?? []);
+                            $isQueued = in_array($p->id, $queuedPesertaIds ?? []);
+                        @endphp
+                        <option value="{{ $p->id }}" {{ $isServed ? 'disabled' : '' }}>
                             {{ $p->nama_lengkap }} (NIK: {{ $p->nik }}) - {{ $p->wilayah->nama_desa_kelurahan ?? 'Desa Lain' }}
+                            @if($isServed)
+                                — [SUDAH DILAYANI]
+                            @elseif($isQueued)
+                                — [DALAM ANTRIAN]
+                            @endif
                         </option>
                     @endforeach
                 </flux:select>
                 <flux:error name="walkinPesertaId" />
-                <flux:description>Pilih data peserta yang sudah tersimpan untuk diberikan nomor antrian walk-in.</flux:description>
+                <flux:description>Pilih data peserta yang sudah tersimpan. Pasien yang sudah selesai dilayani pada sesi jadwal ini tidak dapat didaftarkan atau dilayani kembali.</flux:description>
             </flux:field>
         @else
             <!-- Opsi 2: Pasien Baru -->

@@ -159,6 +159,12 @@ class Index extends Component
         $this->resetErrorBag();
     }
 
+    public function updatedWalkinJadwalId()
+    {
+        $this->walkinPesertaId = null;
+        $this->resetErrorBag('walkinPesertaId');
+    }
+
     public function submitWalkin(bool $langsungLayani = false)
     {
         if ($langsungLayani && !auth()->user()->isBidan()) {
@@ -187,6 +193,17 @@ class Index extends Component
                 ->where('peserta_kb_id', $peserta->id)
                 ->first();
 
+            // Cek apakah peserta sudah selesai dilayani pada sesi jadwal ini
+            $sudahDilayani = ($existing && $existing->status === 'hadir')
+                || Pelayanan::where('peserta_kb_id', $peserta->id)
+                    ->whereDate('tanggal_pelayanan', $jadwal->tanggal)
+                    ->exists();
+
+            if ($sudahDilayani) {
+                $this->addError('walkinPesertaId', "Peserta {$peserta->nama_lengkap} sudah selesai dilayani pada sesi jadwal ini dan tidak boleh dilayani 2x dalam jadwal yang sama.");
+                return;
+            }
+
             if ($existing) {
                 if ($langsungLayani) {
                     $this->closeWalkinModal();
@@ -214,6 +231,24 @@ class Index extends Component
                 'walkinPenggunaanAsuransi' => 'Penggunaan Asuransi',
                 'walkinTanggalLahirIstri' => 'Tanggal Lahir',
             ]);
+
+            // Cek jika NIK sudah ada dan sudah dilayani di jadwal ini
+            $pesertaExisting = PesertaKb::where('nik', $this->walkinNik)->first();
+            if ($pesertaExisting) {
+                $existingAntrian = AntrianJadwal::where('jadwal_pelayanan_id', $jadwal->id)
+                    ->where('peserta_kb_id', $pesertaExisting->id)
+                    ->first();
+
+                $sudahDilayani = ($existingAntrian && $existingAntrian->status === 'hadir')
+                    || Pelayanan::where('peserta_kb_id', $pesertaExisting->id)
+                        ->whereDate('tanggal_pelayanan', $jadwal->tanggal)
+                        ->exists();
+
+                if ($sudahDilayani) {
+                    $this->addError('walkinNik', "Pasien dengan NIK ini sudah selesai dilayani pada sesi jadwal ini dan tidak boleh dilayani 2x dalam jadwal yang sama.");
+                    return;
+                }
+            }
 
             $peserta = PesertaKb::create([
                 'user_id' => null,
@@ -275,8 +310,30 @@ class Index extends Component
             return;
         }
 
-        $antrian = AntrianJadwal::find($antrianId);
-        if ($antrian && in_array($antrian->status, ['terdaftar', 'sedang_dilayani'])) {
+        $antrian = AntrianJadwal::with('jadwalPelayanan')->find($antrianId);
+        if (!$antrian) {
+            $this->dispatch('toast-show', slots: ['text' => 'Data antrian tidak ditemukan.'], dataset: ['variant' => 'danger']);
+            return;
+        }
+
+        if ($antrian->status === 'hadir') {
+            $this->dispatch('toast-show', slots: ['text' => 'Peserta ini sudah selesai dilayani pada sesi jadwal ini dan tidak boleh dilayani 2x dalam jadwal yang sama.'], dataset: ['variant' => 'warning']);
+            return;
+        }
+
+        if ($antrian->jadwalPelayanan) {
+            $sudahAdaPelayanan = Pelayanan::where('peserta_kb_id', $pesertaId)
+                ->whereDate('tanggal_pelayanan', $antrian->jadwalPelayanan->tanggal)
+                ->exists();
+
+            if ($sudahAdaPelayanan) {
+                $antrian->update(['status' => 'hadir']);
+                $this->dispatch('toast-show', slots: ['text' => 'Peserta ini sudah memiliki catatan pelayanan medis pada jadwal ini dan tidak boleh dilayani 2x.'], dataset: ['variant' => 'warning']);
+                return;
+            }
+        }
+
+        if (in_array($antrian->status, ['terdaftar', 'sedang_dilayani'])) {
             AntrianJadwal::where('jadwal_pelayanan_id', $antrian->jadwal_pelayanan_id)
                 ->where('status', 'sedang_dilayani')
                 ->where('id', '!=', $antrianId)
@@ -363,8 +420,33 @@ class Index extends Component
         $pelayanans = $query->latest('tanggal_pelayanan')->paginate(10);
         $alokons = Alokon::orderBy('nama_alokon')->get();
         $tahunList = range(Carbon::now()->year, Carbon::now()->year - 5);
-        $availablePesertas = PesertaKb::terverifikasi()->orderBy('nama_lengkap')->get();
+        $availablePesertas = PesertaKb::terverifikasi()->with('wilayah')->orderBy('nama_lengkap')->get();
         $wilayahs = Wilayah::orderBy('nama_desa_kelurahan')->get();
+
+        // Peserta yang sudah dilayani / sudah antri pada jadwal walkin yang dipilih
+        $servedPesertaIds = [];
+        $queuedPesertaIds = [];
+        $targetWalkinJadwalId = $this->walkinJadwalId ?: $this->selectedJadwalId;
+        if ($targetWalkinJadwalId) {
+            $walkinJadwalTarget = JadwalPelayanan::find($targetWalkinJadwalId);
+            if ($walkinJadwalTarget) {
+                $hadirIds = AntrianJadwal::where('jadwal_pelayanan_id', $walkinJadwalTarget->id)
+                    ->where('status', 'hadir')
+                    ->pluck('peserta_kb_id')
+                    ->toArray();
+
+                $pelayananIds = Pelayanan::whereDate('tanggal_pelayanan', $walkinJadwalTarget->tanggal)
+                    ->pluck('peserta_kb_id')
+                    ->toArray();
+
+                $servedPesertaIds = array_unique(array_merge($hadirIds, $pelayananIds));
+
+                $queuedPesertaIds = AntrianJadwal::where('jadwal_pelayanan_id', $walkinJadwalTarget->id)
+                    ->whereIn('status', ['terdaftar', 'sedang_dilayani'])
+                    ->pluck('peserta_kb_id')
+                    ->toArray();
+            }
+        }
 
         return view('livewire.pelayanan.index', [
             'tab' => $this->tab,
@@ -381,6 +463,8 @@ class Index extends Component
             'tahunList' => $tahunList,
             'availablePesertas' => $availablePesertas,
             'wilayahs' => $wilayahs,
+            'servedPesertaIds' => $servedPesertaIds,
+            'queuedPesertaIds' => $queuedPesertaIds,
         ])->layout('layouts.app', ['title' => 'Pusat Pelayanan & Antrian KB']);
     }
 }
