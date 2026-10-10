@@ -121,16 +121,29 @@
         // Skrining GPA (2 digit each)
         $gpaG = ''; $gpaP = ''; $gpaA = '';
         if ($skrining && $skrining->gravida_partus_abortus) {
-            $gpaParts = explode('-', $skrining->gravida_partus_abortus);
-            $gpaG = str_pad($gpaParts[0] ?? '', 2, '0', STR_PAD_LEFT);
-            $gpaP = str_pad($gpaParts[1] ?? '', 2, '0', STR_PAD_LEFT);
-            $gpaA = str_pad($gpaParts[2] ?? '', 2, '0', STR_PAD_LEFT);
+            $gpaRaw = (string) $skrining->gravida_partus_abortus;
+            if (preg_match('/G\s*(\d+)\s*P\s*(\d+)\s*A\s*(\d+)/i', $gpaRaw, $matches)) {
+                $gpaG = str_pad($matches[1], 2, '0', STR_PAD_LEFT);
+                $gpaP = str_pad($matches[2], 2, '0', STR_PAD_LEFT);
+                $gpaA = str_pad($matches[3], 2, '0', STR_PAD_LEFT);
+            } else {
+                $gpaParts = preg_split('/[\-\s\/]+/', $gpaRaw);
+                $gpaG = isset($gpaParts[0]) ? str_pad(preg_replace('/\D/', '', $gpaParts[0]), 2, '0', STR_PAD_LEFT) : '';
+                $gpaP = isset($gpaParts[1]) ? str_pad(preg_replace('/\D/', '', $gpaParts[1]), 2, '0', STR_PAD_LEFT) : '';
+                $gpaA = isset($gpaParts[2]) ? str_pad(preg_replace('/\D/', '', $gpaParts[2]), 2, '0', STR_PAD_LEFT) : '';
+            }
         }
 
         // Boleh digunakan array
-        $bolehArr = ($skrining && $skrining->alat_kontrasepsi_boleh_digunakan) 
-            ? (json_decode($skrining->alat_kontrasepsi_boleh_digunakan, true) ?? []) 
-            : [];
+        $bolehArr = [];
+        if ($skrining && !empty($skrining->alat_kontrasepsi_boleh_digunakan)) {
+            $rawBoleh = $skrining->alat_kontrasepsi_boleh_digunakan;
+            if (is_array($rawBoleh)) {
+                $bolehArr = $rawBoleh;
+            } elseif (is_string($rawBoleh)) {
+                $bolehArr = json_decode($rawBoleh, true) ?? [];
+            }
+        }
 
         // Dates (2 digit each)
         $tglDilayaniD = $pelayanan->tanggal_pelayanan ? $pelayanan->tanggal_pelayanan->format('d') : '';
