@@ -34,7 +34,7 @@ class Index extends Component
         }
     }
 
-    public function selectWilayah(?int $id): void
+    public function selectWilayah(?int $id = null): void
     {
         if ($this->selectedWilayahId === $id) {
             $this->selectedWilayahId = null;

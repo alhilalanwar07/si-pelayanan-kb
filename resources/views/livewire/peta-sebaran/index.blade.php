@@ -332,50 +332,50 @@
                         <rect x="0" y="0" width="600" height="400" rx="16" fill="transparent" class="stroke-zinc-300 dark:stroke-zinc-800" stroke-width="1.5" stroke-dasharray="6 6" />
 
                         <!-- Kelurahan Wundulako (Center) -->
-                        @php $w0 = $allWilayahs->firstWhere('nama_desa_kelurahan', 'Kelurahan Wundulako'); @endphp
-                        <g wire:click="selectWilayah({{ $w0?->id }})" class="cursor-pointer group">
+                        @php $w0 = $allWilayahs->first(fn($item) => str_contains(strtolower($item->nama_desa_kelurahan), 'wundulako')); @endphp
+                        <g @if($w0) wire:click="selectWilayah({{ $w0->id }})" @endif class="cursor-pointer group">
                             <polygon points="200,150 350,130 380,220 280,250 180,200" 
-                                     class="{{ $w0 ? $w0->color : 'fill-zinc-200' }} {{ $selectedWilayahId === $w0?->id ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
+                                     class="{{ $w0 ? $w0->color : 'fill-zinc-200' }} {{ ($w0 && $selectedWilayahId === $w0->id) ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
                             <circle cx="275" cy="190" r="5" fill="#ef4444" stroke="#ffffff" stroke-width="2" />
                             <text x="275" y="175" text-anchor="middle" class="fill-zinc-900 dark:fill-white font-extrabold text-[11px] pointer-events-none drop-shadow-sm">Kel. Wundulako</text>
                             <text x="275" y="210" text-anchor="middle" class="fill-zinc-700 dark:fill-zinc-300 font-semibold text-[9px] pointer-events-none">({{ $w0?->peserta_kbs_count ?? 0 }} Peserta)</text>
                         </g>
 
                         <!-- Desa Bende (North) -->
-                        @php $w1 = $allWilayahs->firstWhere('nama_desa_kelurahan', 'Desa Bende'); @endphp
-                        <g wire:click="selectWilayah({{ $w1?->id }})" class="cursor-pointer group">
+                        @php $w1 = $allWilayahs->first(fn($item) => str_contains(strtolower($item->nama_desa_kelurahan), 'bende')); @endphp
+                        <g @if($w1) wire:click="selectWilayah({{ $w1->id }})" @endif class="cursor-pointer group">
                             <polygon points="150,50 320,30 350,130 200,150 120,110" 
-                                     class="{{ $w1 ? $w1->color : 'fill-zinc-200' }} {{ $selectedWilayahId === $w1?->id ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
+                                     class="{{ $w1 ? $w1->color : 'fill-zinc-200' }} {{ ($w1 && $selectedWilayahId === $w1->id) ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
                             <circle cx="235" cy="90" r="4" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
                             <text x="235" y="80" text-anchor="middle" class="fill-zinc-900 dark:fill-white font-extrabold text-[11px] pointer-events-none drop-shadow-sm">Desa Bende</text>
                             <text x="235" y="105" text-anchor="middle" class="fill-zinc-700 dark:fill-zinc-300 font-semibold text-[9px] pointer-events-none">({{ $w1?->peserta_kbs_count ?? 0 }} Peserta)</text>
                         </g>
 
                         <!-- Desa Kowioha (East) -->
-                        @php $w2 = $allWilayahs->firstWhere('nama_desa_kelurahan', 'Desa Kowioha'); @endphp
-                        <g wire:click="selectWilayah({{ $w2?->id }})" class="cursor-pointer group">
+                        @php $w2 = $allWilayahs->first(fn($item) => str_contains(strtolower($item->nama_desa_kelurahan), 'kowioha')); @endphp
+                        <g @if($w2) wire:click="selectWilayah({{ $w2->id }})" @endif class="cursor-pointer group">
                             <polygon points="350,130 480,100 520,200 380,220" 
-                                     class="{{ $w2 ? $w2->color : 'fill-zinc-200' }} {{ $selectedWilayahId === $w2?->id ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
+                                     class="{{ $w2 ? $w2->color : 'fill-zinc-200' }} {{ ($w2 && $selectedWilayahId === $w2->id) ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
                             <circle cx="430" cy="160" r="4" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
                             <text x="430" y="150" text-anchor="middle" class="fill-zinc-900 dark:fill-white font-extrabold text-[11px] pointer-events-none drop-shadow-sm">Desa Kowioha</text>
                             <text x="430" y="175" text-anchor="middle" class="fill-zinc-700 dark:fill-zinc-300 font-semibold text-[9px] pointer-events-none">({{ $w2?->peserta_kbs_count ?? 0 }} Peserta)</text>
                         </g>
 
                         <!-- Desa Lamokuni (South) -->
-                        @php $w3 = $allWilayahs->firstWhere('nama_desa_kelurahan', 'Desa Lamokuni'); @endphp
-                        <g wire:click="selectWilayah({{ $w3?->id }})" class="cursor-pointer group">
+                        @php $w3 = $allWilayahs->first(fn($item) => str_contains(strtolower($item->nama_desa_kelurahan), 'lamokuni')); @endphp
+                        <g @if($w3) wire:click="selectWilayah({{ $w3->id }})" @endif class="cursor-pointer group">
                             <polygon points="280,250 380,220 420,340 300,350 240,300" 
-                                     class="{{ $w3 ? $w3->color : 'fill-zinc-200' }} {{ $selectedWilayahId === $w3?->id ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
+                                     class="{{ $w3 ? $w3->color : 'fill-zinc-200' }} {{ ($w3 && $selectedWilayahId === $w3->id) ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
                             <circle cx="325" cy="290" r="4" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
                             <text x="325" y="280" text-anchor="middle" class="fill-zinc-900 dark:fill-white font-extrabold text-[11px] pointer-events-none drop-shadow-sm">Desa Lamokuni</text>
                             <text x="325" y="305" text-anchor="middle" class="fill-zinc-700 dark:fill-zinc-300 font-semibold text-[9px] pointer-events-none">({{ $w3?->peserta_kbs_count ?? 0 }} Peserta)</text>
                         </g>
 
                         <!-- Desa Watalara (West) -->
-                        @php $w4 = $allWilayahs->firstWhere('nama_desa_kelurahan', 'Desa Watalara'); @endphp
-                        <g wire:click="selectWilayah({{ $w4?->id }})" class="cursor-pointer group">
+                        @php $w4 = $allWilayahs->first(fn($item) => str_contains(strtolower($item->nama_desa_kelurahan), 'watalara')); @endphp
+                        <g @if($w4) wire:click="selectWilayah({{ $w4->id }})" @endif class="cursor-pointer group">
                             <polygon points="80,180 180,200 280,250 240,300 120,320 60,260" 
-                                     class="{{ $w4 ? $w4->color : 'fill-zinc-200' }} {{ $selectedWilayahId === $w4?->id ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
+                                     class="{{ $w4 ? $w4->color : 'fill-zinc-200' }} {{ ($w4 && $selectedWilayahId === $w4->id) ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
                             <circle cx="155" cy="250" r="4" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
                             <text x="155" y="240" text-anchor="middle" class="fill-zinc-900 dark:fill-white font-extrabold text-[11px] pointer-events-none drop-shadow-sm">Desa Watalara</text>
                             <text x="155" y="265" text-anchor="middle" class="fill-zinc-700 dark:fill-zinc-300 font-semibold text-[9px] pointer-events-none">({{ $w4?->peserta_kbs_count ?? 0 }} Peserta)</text>
