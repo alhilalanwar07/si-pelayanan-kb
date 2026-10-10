@@ -74,4 +74,8 @@ test('halaman cetak formulir pelayanan KB dapat diakses dan tidak error TypeErro
     $response->assertSee('K/IV/KB/15');
     $response->assertSee('IBU RAHMAWATI');
     $response->assertSee('KARTU STATUS PESERTA KB');
+    // Berat badan 55.5 dicetak sebagai angka bulat 56 (tanpa desimal/koma)
+    $response->assertSee('>56<', false);
+    $response->assertDontSee('>55.5<', false);
+    $response->assertDontSee('>55.50<', false);
 });

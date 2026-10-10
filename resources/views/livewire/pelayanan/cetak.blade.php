@@ -145,6 +145,12 @@
             }
         }
 
+        // Berat badan bulat tanpa angka di belakang koma (,)
+        $beratBadan = '';
+        if ($skrining && $skrining->fisik_berat_badan !== null && $skrining->fisik_berat_badan !== '') {
+            $beratBadan = (string) round((float) $skrining->fisik_berat_badan);
+        }
+
         // Dates (2 digit each)
         $tglDilayaniD = $pelayanan->tanggal_pelayanan ? $pelayanan->tanggal_pelayanan->format('d') : '';
         $tglDilayaniM = $pelayanan->tanggal_pelayanan ? $pelayanan->tanggal_pelayanan->format('m') : '';
@@ -572,7 +578,7 @@
                         <div class="flex items-center gap-1">
                             <span class="font-bold">7. Berat Badan</span>
                             <span>:</span>
-                            <div class="cb-lg ml-1">{{ $skrining->fisik_berat_badan ?? '' }}</div>
+                            <div class="cb-lg ml-1 min-w-[18px] w-auto px-0.5">{{ $beratBadan }}</div>
                             <span class="ml-1">Kg</span>
                         </div>
                     </div>
