@@ -8,6 +8,7 @@ use App\Models\Pelayanan;
 use App\Models\PesertaKb;
 use App\Models\SkriningMedis;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 
 class Create extends Component
@@ -20,6 +21,7 @@ class Create extends Component
     public ?int $diastolik = null;
 
     // Step 1: Skrining Medis & Profil Peserta
+    #[Url(as: 'peserta_id')]
     public $peserta_kb_id = '';
     public $nik = '';
     public $tanggal_skrining = '';
@@ -129,6 +131,7 @@ class Create extends Component
     public $penanggung_jawab_jabatan = 'bidan'; // dokter, bidan, perawat
 
     // Antrian Reference (if dispatched from queue)
+    #[Url(as: 'antrian_id')]
     public $antrian_id = null;
     public ?\App\Models\AntrianJadwal $antrian = null;
 
@@ -160,8 +163,8 @@ class Create extends Component
             }
         }
 
-        if (request()->has('antrian_id')) {
-            $this->antrian_id = (int) request()->query('antrian_id');
+        if (request()->has('antrian_id') || $this->antrian_id) {
+            $this->antrian_id = (int) (request()->query('antrian_id') ?: $this->antrian_id);
             $this->antrian = \App\Models\AntrianJadwal::with('jadwalPelayanan')->find($this->antrian_id);
             if ($this->antrian) {
                 if ($this->antrian->status === 'hadir') {
@@ -174,6 +177,9 @@ class Create extends Component
                 if (!$this->peserta_kb_id && $this->antrian->peserta_kb_id) {
                     $this->peserta_kb_id = $this->antrian->peserta_kb_id;
                     $this->updatedPesertaKbId($this->peserta_kb_id);
+                }
+                if ($this->antrian->jadwalPelayanan) {
+                    $this->tanggal_pelayanan = $this->antrian->jadwalPelayanan->tanggal->toDateString();
                 }
             }
         }
@@ -520,36 +526,49 @@ class Create extends Component
             // 4. Decrease stock
             $alokon->kurangiStok(1);
 
-            // 5. Mark queue status as hadir if associated, or record walk-in queue for today
+            // 5. Tandai status antrian menjadi hadir
             if ($this->antrian_id) {
                 \App\Models\AntrianJadwal::where('id', $this->antrian_id)->update(['status' => 'hadir']);
+            }
+
+            // Pastikan SEMUA antrian peserta ini yang masih 'sedang_dilayani' atau 'terdaftar' pada sesi jadwal terkait atau pada tanggal pelayanan di-update menjadi 'hadir'
+            $antrianAktifQuery = \App\Models\AntrianJadwal::where('peserta_kb_id', $this->peserta_kb_id)
+                ->whereIn('status', ['terdaftar', 'sedang_dilayani']);
+
+            if (!empty($this->antrian?->jadwal_pelayanan_id)) {
+                $antrianAktifQuery->where('jadwal_pelayanan_id', $this->antrian->jadwal_pelayanan_id);
             } else {
+                $antrianAktifQuery->whereHas('jadwalPelayanan', function ($q) {
+                    $q->whereDate('tanggal', $this->tanggal_pelayanan);
+                });
+            }
+            $antrianAktifQuery->update(['status' => 'hadir']);
+
+            // Jika peserta walk-in belum memiliki antrian pada jadwal tanggal pelayanan, catatkan antrian hadir
+            $hasAntrian = \App\Models\AntrianJadwal::where('peserta_kb_id', $this->peserta_kb_id)
+                ->whereHas('jadwalPelayanan', function ($q) {
+                    $q->whereDate('tanggal', $this->tanggal_pelayanan);
+                })
+                ->exists();
+
+            if (!$hasAntrian) {
                 $todayJadwal = \App\Models\JadwalPelayanan::where('instansi_id', auth()->user()->instansi_id)
                     ->whereDate('tanggal', $this->tanggal_pelayanan)
-                    ->where('is_aktif', true)
                     ->first();
 
                 if ($todayJadwal) {
-                    $existing = \App\Models\AntrianJadwal::where('jadwal_pelayanan_id', $todayJadwal->id)
-                        ->where('peserta_kb_id', $this->peserta_kb_id)
-                        ->first();
-
-                    if ($existing) {
-                        $existing->update(['status' => 'hadir']);
-                    } else {
-                        $lastNomor = \App\Models\AntrianJadwal::where('jadwal_pelayanan_id', $todayJadwal->id)
-                            ->lockForUpdate()
-                            ->max('nomor_antrian') ?? 0;
-                        $nomor = $lastNomor + 1;
-                        \App\Models\AntrianJadwal::create([
-                            'jadwal_pelayanan_id' => $todayJadwal->id,
-                            'peserta_kb_id' => $this->peserta_kb_id,
-                            'nomor_antrian' => $nomor,
-                            'jenis_pendaftaran' => 'walkin',
-                            'kode_antrian' => 'W-' . str_pad($nomor, 3, '0', STR_PAD_LEFT),
-                            'status' => 'hadir',
-                        ]);
-                    }
+                    $lastNomor = \App\Models\AntrianJadwal::where('jadwal_pelayanan_id', $todayJadwal->id)
+                        ->lockForUpdate()
+                        ->max('nomor_antrian') ?? 0;
+                    $nomor = $lastNomor + 1;
+                    \App\Models\AntrianJadwal::create([
+                        'jadwal_pelayanan_id' => $todayJadwal->id,
+                        'peserta_kb_id' => $this->peserta_kb_id,
+                        'nomor_antrian' => $nomor,
+                        'jenis_pendaftaran' => 'walkin',
+                        'kode_antrian' => 'W-' . str_pad($nomor, 3, '0', STR_PAD_LEFT),
+                        'status' => 'hadir',
+                    ]);
                 }
             }
         });

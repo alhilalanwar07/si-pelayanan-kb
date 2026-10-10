@@ -366,6 +366,22 @@ class Index extends Component
             ? JadwalPelayanan::find($this->selectedJadwalId)
             : ($todayJadwal ?? $activeJadwals->first());
 
+        // Auto-heal / sinkronisasi status antrian dengan pelayanan KB:
+        // Jika peserta pada antrian ini sudah memiliki catatan rekam pelayanan pada tanggal sesi jadwal ini,
+        // pastikan status antriannya otomatis disinkronkan ke 'hadir' (tidak tertinggal 'sedang_dilayani' atau 'terdaftar')
+        if ($currentJadwal) {
+            $dilayaniPesertaIds = Pelayanan::whereDate('tanggal_pelayanan', $currentJadwal->tanggal)
+                ->pluck('peserta_kb_id')
+                ->all();
+
+            if (!empty($dilayaniPesertaIds)) {
+                $currentJadwal->antrians()
+                    ->whereIn('peserta_kb_id', $dilayaniPesertaIds)
+                    ->whereIn('status', ['terdaftar', 'sedang_dilayani'])
+                    ->update(['status' => 'hadir']);
+            }
+        }
+
         $totalAntrianHariIni = 0;
         $antrianHadir = 0;
         $antrianMenunggu = 0;

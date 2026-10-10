@@ -1,9 +1,12 @@
 <?php
 
+use App\Livewire\Pelayanan\Create as PelayananCreate;
 use App\Livewire\Pelayanan\Index as PelayananIndex;
+use App\Models\Alokon;
 use App\Models\AntrianJadwal;
 use App\Models\Instansi;
 use App\Models\JadwalPelayanan;
+use App\Models\Pelayanan;
 use App\Models\PesertaKb;
 use App\Models\User;
 use App\Models\Wilayah;
@@ -163,6 +166,69 @@ test('layaniPeserta prevents serving an antrian that is already hadir', function
     ]);
 
     Livewire::test(PelayananIndex::class)
+        ->call('layaniPeserta', $this->peserta->id, $antrian->id)
+        ->assertDispatched('toast-show')
+        ->assertNoRedirect();
+});
+
+test('walkin langsung layani marks queue as hadir after being served and cannot be served again', function () {
+    $this->actingAs($this->bidan);
+
+    $alokon = Alokon::create([
+        'instansi_id' => $this->instansi->id,
+        'nama_alokon' => 'Suntikan 3 Bulan Progestin',
+        'stok' => 10,
+    ]);
+
+    // 1. Walk-in Daftarkan & Langsung Layani
+    Livewire::test(PelayananIndex::class)
+        ->call('openWalkinModal')
+        ->set('walkinType', 'terdaftar')
+        ->set('walkinPesertaId', $this->peserta->id)
+        ->call('submitWalkin', true)
+        ->assertRedirect(route('pelayanan.create', [
+            'peserta_id' => $this->peserta->id,
+            'antrian_id' => 1,
+        ]));
+
+    $antrian = AntrianJadwal::where('peserta_kb_id', $this->peserta->id)->first();
+    expect($antrian->status)->toBe('sedang_dilayani');
+
+    // 2. Layani pasien di Wizard Pelayanan (Create.php) dan simpan
+    Livewire::withQueryParams([
+        'peserta_id' => $this->peserta->id,
+        'antrian_id' => $antrian->id,
+    ])
+        ->test(PelayananCreate::class)
+        ->assertSet('antrian_id', $antrian->id)
+        ->assertSet('peserta_kb_id', $this->peserta->id)
+        ->set('pendidikan_istri', 'SMA')
+        ->set('pendidikan_suami', 'S1')
+        ->set('pekerjaan_istri', 'IRT')
+        ->set('pekerjaan_suami', 'Wiraswasta')
+        ->set('gravida_partus_abortus', 'G2P1A0')
+        ->set('fisik_berat_badan', 55)
+        ->set('fisik_tekanan_darah', '120/80')
+        ->set('alat_kontrasepsi_boleh_digunakan', ['Suntikan 3 Bulan Progestin'])
+        ->call('nextStep')
+        ->assertSet('currentStep', 2)
+        ->set('persetujuan_klien', true)
+        ->set('persetujuan_pasangan', true)
+        ->call('nextStep')
+        ->assertSet('currentStep', 3)
+        ->set('alokon_id', $alokon->id)
+        ->set('tanggal_kunjungan_ulang', now()->addMonths(3)->toDateString())
+        ->call('simpan')
+        ->assertHasNoErrors()
+        ->assertRedirect(route('pelayanan.index'));
+
+    // 3. Status antrian di database harus sudah 'hadir'
+    expect($antrian->fresh()->status)->toBe('hadir');
+
+    // 4. Di halaman PelayananIndex, antrian pasien berstatus hadir dan tidak bisa dilayani ganda
+    Livewire::test(PelayananIndex::class)
+        ->assertSee('Selesai / Hadir')
+        ->assertDontSee('Lanjutkan Layani')
         ->call('layaniPeserta', $this->peserta->id, $antrian->id)
         ->assertDispatched('toast-show')
         ->assertNoRedirect();
