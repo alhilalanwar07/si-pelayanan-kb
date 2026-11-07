@@ -161,9 +161,11 @@
                 </span>
             </div>
             <div class="mt-2">
-                <span class="text-sm font-bold text-zinc-900 dark:text-white block">DPPKB Kecamatan Wundulako</span>
+                <a href="https://www.google.com/maps/place/Balai+penyuluh+kkbpk+kec,wundulako/@-4.081423,121.5105193,12z" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-zinc-900 hover:text-blue-600 dark:text-white dark:hover:text-blue-400 block transition-colors">
+                    DPPKB Kecamatan Wundulako ↗
+                </a>
             </div>
-            <span class="text-[11px] text-zinc-500 mt-1 block">Pusat Pelayanan KB & Balai Penyuluhan</span>
+            <span class="text-[11px] text-zinc-500 mt-1 block">Koordinat: -4.081423, 121.5105193</span>
         </flux:card>
     </div>
 
@@ -594,7 +596,7 @@
             map: null,
             markers: {},
             polygons: {},
-            centerCoords: [-4.1333, 121.6167],
+            centerCoords: [-4.081423, 121.5105193],
             allWilayahs: config.allWilayahs || [],
             selectedId: config.selectedId,
             viewMode: config.viewMode,
@@ -660,18 +662,26 @@
                     iconAnchor: [16, 16]
                 });
 
-                L.marker([-4.1385, 121.6178], { icon: puskesmasIcon })
+                L.marker([-4.081423, 121.5105193], { icon: puskesmasIcon })
                     .addTo(this.map)
                     .bindPopup(`
-                        <div class="p-2 text-center">
+                        <div class="p-2 text-center space-y-1">
                             <span class="inline-block px-2 py-0.5 rounded bg-blue-100 text-blue-700 text-[10px] font-bold">KANTOR PUSAT</span>
                             <h4 class="font-bold text-sm text-zinc-900 mt-1">DPPKB Kecamatan Wundulako</h4>
-                            <p class="text-xs text-zinc-600 mt-0.5">Pusat Pelayanan & Distribusi Alokon KB</p>
+                            <p class="text-xs text-zinc-600 mt-0.5">Balai Penyuluh KKBPK Kec. Wundulako</p>
+                            <div class="pt-1">
+                                <a href="https://www.google.com/maps/place/Balai+penyuluh+kkbpk+kec,wundulako/@-4.081423,121.5105193,12z" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:underline">
+                                    📍 Buka di Google Maps (-4.0814, 121.5105) ↗
+                                </a>
+                            </div>
                         </div>
                     `, { className: 'custom-popup' });
 
+                const boundsCoords = [[-4.081423, 121.5105193]];
+
                 // Render each Village Marker and Polygon
                 this.allWilayahs.forEach(w => {
+                    boundsCoords.push([w.lat, w.lng]);
                     const pulseClass = w.density_tier === 'high' ? 'pulse-marker-high' : 'pulse-marker-med';
                     const markerColor = w.hex_color || '#2563eb';
 
@@ -714,6 +724,10 @@
 
                     this.markers[w.id] = marker;
                 });
+
+                if (boundsCoords.length > 1) {
+                    this.map.fitBounds(boundsCoords, { padding: [45, 45], maxZoom: 13 });
+                }
             },
 
             flyToWilayah(id, lat, lng) {
@@ -729,7 +743,12 @@
 
             recenterMap() {
                 if (this.map) {
-                    this.map.flyTo(this.centerCoords, 13, { duration: 1 });
+                    const boundsCoords = [[-4.081423, 121.5105193], ...this.allWilayahs.map(w => [w.lat, w.lng])];
+                    if (boundsCoords.length > 1) {
+                        this.map.fitBounds(boundsCoords, { padding: [45, 45], maxZoom: 13 });
+                    } else {
+                        this.map.flyTo(this.centerCoords, 12, { duration: 1 });
+                    }
                     this.$wire.selectWilayah(null);
                 }
             }

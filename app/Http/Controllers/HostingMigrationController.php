@@ -53,9 +53,9 @@ class HostingMigrationController extends Controller
             if ($hasWilayahKoordinatColumns) {
                 $defaultKoordinatWilayah = [
                     'Kelurahan Wundulako' => [
-                        'latitude' => -4.1385000,
-                        'longitude' => 121.6178000,
-                        'link_gmaps' => 'https://www.google.com/maps?q=-4.1385,121.6178',
+                        'latitude' => -4.0814230,
+                        'longitude' => 121.5105193,
+                        'link_gmaps' => 'https://www.google.com/maps/place/Balai+penyuluh+kkbpk+kec,wundulako/@-4.081423,121.5105193,12z',
                     ],
                     'Desa Bende' => [
                         'latitude' => -4.1150000,
@@ -81,7 +81,11 @@ class HostingMigrationController extends Controller
 
                 foreach ($defaultKoordinatWilayah as $namaDesa => $koordinat) {
                     $wilayah = Wilayah::where('nama_desa_kelurahan', $namaDesa)->first();
-                    if ($wilayah && ($wilayah->latitude === null || $wilayah->longitude === null)) {
+                    $needsWundulakoSync = $namaDesa === 'Kelurahan Wundulako'
+                        && $wilayah
+                        && (float) $wilayah->latitude === -4.1385;
+
+                    if ($wilayah && ($wilayah->latitude === null || $wilayah->longitude === null || $needsWundulakoSync)) {
                         $wilayah->update($koordinat);
                         $updatedWilayahs[] = "{$namaDesa} diisi koordinat ({$koordinat['latitude']}, {$koordinat['longitude']})";
                     }

@@ -35,9 +35,9 @@ class DatabaseSeeder extends Seeder
         $wilayahs = collect([
             [
                 'nama_desa_kelurahan' => 'Kelurahan Wundulako',
-                'latitude' => -4.1385000,
-                'longitude' => 121.6178000,
-                'link_gmaps' => 'https://www.google.com/maps?q=-4.1385,121.6178',
+                'latitude' => -4.0814230,
+                'longitude' => 121.5105193,
+                'link_gmaps' => 'https://www.google.com/maps/place/Balai+penyuluh+kkbpk+kec,wundulako/@-4.081423,121.5105193,12z',
             ],
             [
                 'nama_desa_kelurahan' => 'Desa Bende',

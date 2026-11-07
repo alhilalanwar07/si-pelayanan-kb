@@ -83,7 +83,7 @@
                     Cetak Laporan
                 </flux:sidebar.item>
                 <flux:sidebar.item icon="map" :href="route('peta-sebaran.index')"
-                    :current="request()->routeIs('peta-sebaran.*')" wire:navigate>
+                    :current="request()->routeIs('peta-sebaran.*')">
                     Peta Sebaran
                 </flux:sidebar.item>
             </flux:sidebar.group>

@@ -71,18 +71,18 @@ class Index extends Component
         // Coordinates database for Kecamatan Wundulako
         $geoCoordinates = [
             'Kelurahan Wundulako' => [
-                'lat' => -4.1385,
-                'lng' => 121.6178,
+                'lat' => -4.081423,
+                'lng' => 121.5105193,
                 'code' => 'WND',
                 'type' => 'Kelurahan',
                 'faskes' => 'DPPKB Kecamatan Wundulako (Pusat)',
                 'is_puskesmas' => true,
                 'polygon' => [
-                    [-4.130, 121.610],
-                    [-4.130, 121.625],
-                    [-4.145, 121.628],
-                    [-4.148, 121.614],
-                    [-4.138, 121.608],
+                    [-4.075, 121.502],
+                    [-4.075, 121.518],
+                    [-4.088, 121.520],
+                    [-4.090, 121.506],
+                    [-4.081, 121.500],
                 ],
             ],
             'Desa Bende' => [

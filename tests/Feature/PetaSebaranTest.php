@@ -90,7 +90,7 @@ test('route run-migrate di hosting berhasil menjalankan migrasi dan mengisi koor
         ->assertSee('Tersedia (latitude, longitude, link_gmaps)');
 
     $wundulako->refresh();
-    expect($wundulako->latitude)->toBe(-4.1385)
-        ->and($wundulako->longitude)->toBe(121.6178)
-        ->and($wundulako->link_gmaps)->toContain('-4.1385,121.6178');
+    expect($wundulako->latitude)->toBe(-4.081423)
+        ->and($wundulako->longitude)->toBe(121.5105193)
+        ->and($wundulako->link_gmaps)->toContain('-4.081423,121.5105193');
 });
