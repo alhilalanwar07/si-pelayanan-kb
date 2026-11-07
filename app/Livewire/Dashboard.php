@@ -7,7 +7,6 @@ use App\Models\Pelayanan;
 use App\Models\PesertaKb;
 use App\Models\Wilayah;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class Dashboard extends Component
@@ -16,7 +15,7 @@ class Dashboard extends Component
     {
         // 1. Stats
         $totalPeserta = PesertaKb::count();
-        
+
         $pesertaBulanIni = PesertaKb::whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
             ->count();
@@ -27,7 +26,8 @@ class Dashboard extends Component
 
         $menungguVerifikasi = PesertaKb::menunggu()->count();
 
-        $peringatanStok = Alokon::stokRendah(10)->count();
+        $alokonStokRendah = Alokon::with('instansi')->stokRendah(10)->orderBy('stok')->get();
+        $peringatanStok = $alokonStokRendah->count();
 
         // 2. Registrasi Peserta Terbaru (limit 5)
         $pesertaTerbaru = PesertaKb::with('wilayah')
@@ -45,9 +45,10 @@ class Dashboard extends Component
 
         // Calculate percentages for wilayah rank
         $wilayahRank = $wilayahRank->map(function ($wilayah) use ($totalPeserta) {
-            $wilayah->persentase = $totalPeserta > 0 
-                ? round(($wilayah->peserta_kbs_count / $totalPeserta) * 100) 
+            $wilayah->persentase = $totalPeserta > 0
+                ? round(($wilayah->peserta_kbs_count / $totalPeserta) * 100)
                 : 0;
+
             return $wilayah;
         });
 
@@ -72,6 +73,7 @@ class Dashboard extends Component
             'pelayananBulanIni' => $pelayananBulanIni,
             'menungguVerifikasi' => $menungguVerifikasi,
             'peringatanStok' => $peringatanStok,
+            'alokonStokRendah' => $alokonStokRendah,
             'pesertaTerbaru' => $pesertaTerbaru,
             'alokons' => $alokons,
             'wilayahRank' => $wilayahRank,
@@ -85,8 +87,9 @@ class Dashboard extends Component
      */
     public function verifikasiPeserta($pesertaId)
     {
-        if (!auth()->user()->isAdmin()) {
+        if (! auth()->user()->isAdmin()) {
             $this->dispatch('toast-show', slots: ['text' => 'Hanya admin yang dapat memverifikasi peserta.'], dataset: ['variant' => 'danger']);
+
             return;
         }
 

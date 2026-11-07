@@ -437,28 +437,118 @@
         </div>
 
         @if($walkinType === 'terdaftar')
-            <!-- Opsi 1: Pasien Sudah Terdaftar -->
+            <!-- Opsi 1: Pasien Sudah Terdaftar (Ketik Nama Lengkap / NIK) -->
             <flux:field>
-                <flux:label>Pilih Peserta KB <span class="text-rose-500 font-bold">*</span></flux:label>
-                <flux:select wire:model="walkinPesertaId">
-                    <option value="">-- Cari atau pilih peserta --</option>
-                    @foreach($availablePesertas as $p)
-                        @php
-                            $isServed = in_array($p->id, $servedPesertaIds ?? []);
-                            $isQueued = in_array($p->id, $queuedPesertaIds ?? []);
-                        @endphp
-                        <option value="{{ $p->id }}" {{ $isServed ? 'disabled' : '' }}>
-                            {{ $p->nama_lengkap }} (NIK: {{ $p->nik }}) - {{ $p->wilayah->nama_desa_kelurahan ?? 'Desa Lain' }}
-                            @if($isServed)
-                                — [SUDAH DILAYANI]
-                            @elseif($isQueued)
-                                — [DALAM ANTRIAN]
-                            @endif
-                        </option>
-                    @endforeach
-                </flux:select>
+                <flux:label>Cari &amp; Pilih Peserta KB Terdaftar <span class="text-rose-500 font-bold">*</span></flux:label>
+
+                <div class="space-y-3">
+                    <!-- Input Ketik Nama Lengkap Peserta -->
+                    <div class="relative">
+                        <flux:input
+                            type="text"
+                            icon="magnifying-glass"
+                            wire:model.live.debounce.150ms="walkinSearchPeserta"
+                            placeholder="Ketik nama lengkap peserta yang dicari atau 16 digit NIK..."
+                            autocomplete="off"
+                        />
+                        @if(!empty($walkinSearchPeserta))
+                            <button type="button" wire:click="resetPesertaWalkin"
+                                class="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-2xs font-bold text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-zinc-700 dark:hover:text-zinc-200 cursor-pointer">
+                                Hapus
+                            </button>
+                        @endif
+                    </div>
+
+                    <!-- Kartu Peserta yang Sedang Terpilih -->
+                    @if($selectedWalkinPeserta)
+                        <div class="flex items-center justify-between gap-3 rounded-xl border-2 border-emerald-500 bg-emerald-50/70 p-3 dark:border-emerald-600 dark:bg-emerald-950/30">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <div class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-xs font-extrabold text-white">
+                                    ✓
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="truncate text-sm font-extrabold text-emerald-950 dark:text-emerald-200">
+                                            {{ $selectedWalkinPeserta->nama_lengkap }}
+                                        </span>
+                                        <span class="rounded bg-emerald-200/80 px-1.5 py-0.5 text-[10px] font-bold text-emerald-900 dark:bg-emerald-900 dark:text-emerald-200">
+                                            Terpilih
+                                        </span>
+                                    </div>
+                                    <div class="truncate text-xs font-mono text-emerald-800 dark:text-emerald-300">
+                                        NIK: {{ $selectedWalkinPeserta->nik }} • {{ $selectedWalkinPeserta->wilayah->nama_desa_kelurahan ?? 'Kec. Wundulako' }}
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" wire:click="resetPesertaWalkin"
+                                class="shrink-0 rounded-lg border border-emerald-300 bg-white px-2.5 py-1 text-xs font-bold text-emerald-700 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-zinc-800 dark:text-emerald-300 cursor-pointer">
+                                Ganti
+                            </button>
+                        </div>
+                    @endif
+
+                    <!-- Daftar Hasil Pencarian Peserta -->
+                    <div class="max-h-52 overflow-y-auto rounded-xl border border-slate-200 bg-white divide-y divide-slate-100 dark:border-zinc-700 dark:bg-zinc-900 dark:divide-zinc-800">
+                        @forelse($filteredWalkinPesertas as $p)
+                            @php
+                                $isServed = in_array($p->id, $servedPesertaIds ?? []);
+                                $isQueued = in_array($p->id, $queuedPesertaIds ?? []);
+                                $isSelected = (int) $walkinPesertaId === (int) $p->id;
+                            @endphp
+                            <button
+                                type="button"
+                                wire:key="walkin-peserta-{{ $p->id }}"
+                                @if(!$isServed)
+                                    wire:click="pilihPesertaWalkin({{ $p->id }}, {{ Js::from($p->nama_lengkap) }})"
+                                @else
+                                    disabled
+                                @endif
+                                class="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left transition-colors {{ $isServed ? 'opacity-50 cursor-not-allowed bg-slate-50 dark:bg-zinc-800/40' : ($isSelected ? 'bg-blue-50 dark:bg-blue-950/40 cursor-pointer' : 'hover:bg-slate-50 dark:hover:bg-zinc-800/70 cursor-pointer') }}"
+                            >
+                                <div class="min-w-0">
+                                    <div class="flex flex-wrap items-center gap-1.5">
+                                        <span class="text-sm font-bold {{ $isSelected ? 'text-blue-700 dark:text-blue-300' : 'text-slate-900 dark:text-white' }}">
+                                            {{ $p->nama_lengkap }}
+                                        </span>
+                                        <span class="text-2xs text-slate-500 dark:text-zinc-400">
+                                            (Suami: {{ $p->nama_suami_istri ?: '-' }})
+                                        </span>
+                                    </div>
+                                    <div class="text-xs font-mono text-slate-500 dark:text-zinc-400">
+                                        NIK: {{ $p->nik }} • {{ $p->wilayah->nama_desa_kelurahan ?? 'Kec. Wundulako' }}
+                                    </div>
+                                </div>
+
+                                <div class="shrink-0">
+                                    @if($isServed)
+                                        <span class="rounded-full bg-rose-100 px-2 py-0.5 text-[10px] font-bold text-rose-700 dark:bg-rose-950 dark:text-rose-300">
+                                            SUDAH DILAYANI
+                                        </span>
+                                    @elseif($isQueued)
+                                        <span class="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                                            DALAM ANTRIAN
+                                        </span>
+                                    @elseif($isSelected)
+                                        <span class="rounded-full bg-blue-600 px-2.5 py-0.5 text-[10px] font-bold text-white">
+                                            Dipilih ✓
+                                        </span>
+                                    @else
+                                        <span class="rounded-lg border border-slate-200 px-2 py-1 text-2xs font-semibold text-slate-600 dark:border-zinc-700 dark:text-zinc-300">
+                                            Pilih
+                                        </span>
+                                    @endif
+                                </div>
+                            </button>
+                        @empty
+                            <div class="px-4 py-6 text-center text-xs text-slate-500 dark:text-zinc-400">
+                                Peserta dengan nama atau NIK <strong>"{{ $walkinSearchPeserta }}"</strong> tidak ditemukan. Silakan periksa ejaan nama atau pilih tab <strong>2. Pasien Baru</strong>.
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+
                 <flux:error name="walkinPesertaId" />
-                <flux:description>Pilih data peserta yang sudah tersimpan. Pasien yang sudah selesai dilayani pada sesi jadwal ini tidak dapat didaftarkan atau dilayani kembali.</flux:description>
+                <flux:description>Ketik nama lengkap peserta yang dicari pada kolom di atas, lalu klik nama peserta dari daftar yang muncul.</flux:description>
             </flux:field>
         @else
             <!-- Opsi 2: Pasien Baru -->

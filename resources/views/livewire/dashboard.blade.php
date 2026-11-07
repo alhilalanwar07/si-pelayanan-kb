@@ -66,18 +66,78 @@
         <flux:card class="relative overflow-hidden border-t-4 border-t-rose-500">
             <div class="flex items-center justify-between">
                 <div>
-                    <flux:text size="xs" class="font-semibold uppercase tracking-wider text-zinc-500">Peringatan Stok</flux:text>
-                    <flux:heading size="xl" class="mt-2 text-rose-600 dark:text-rose-400 font-extrabold">{{ $peringatanStok }}</flux:heading>
+                    <flux:text size="xs" class="font-semibold uppercase tracking-wider text-zinc-500">Peringatan Stok Alokon</flux:text>
+                    <flux:heading size="xl" class="mt-2 text-rose-600 dark:text-rose-400 font-extrabold">{{ $peringatanStok }} <span class="text-xs font-semibold text-zinc-500">Jenis</span></flux:heading>
                 </div>
                 <div class="rounded-lg bg-rose-50 p-3 text-rose-500 dark:bg-rose-950/50">
                     <flux:icon name="exclamation-triangle" class="size-6" />
                 </div>
             </div>
-            <div class="mt-4 text-xs {{ $peringatanStok > 0 ? 'text-rose-600 dark:text-rose-400 font-medium' : 'text-zinc-500' }}">
-                <span>{{ $peringatanStok > 0 ? 'Alokon di bawah threshold stok' : 'Stok alokon aman' }}</span>
+            <div class="mt-3 text-xs {{ $peringatanStok > 0 ? 'text-rose-600 dark:text-rose-400 font-semibold' : 'text-emerald-600 dark:text-emerald-400 font-medium' }}">
+                @if($peringatanStok > 0)
+                    <div class="space-y-1">
+                        @foreach($alokonStokRendah as $itemRendah)
+                            <div class="flex items-center justify-between gap-1 rounded bg-rose-50/90 dark:bg-rose-950/40 px-2 py-0.5 text-[11px] text-rose-700 dark:text-rose-300 border border-rose-200/70 dark:border-rose-800/60">
+                                <span class="truncate font-bold">{{ $itemRendah->nama_alokon }}</span>
+                                <span class="shrink-0 font-extrabold">Sisa {{ $itemRendah->stok }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <span>Seluruh stok alokon aman (≥ 10 unit)</span>
+                @endif
             </div>
         </flux:card>
     </div>
+
+    <!-- Banner Peringatan Stok Alokon Menipis / Kurang -->
+    @if($alokonStokRendah->count() > 0)
+        <div class="rounded-2xl border-2 border-rose-300 bg-gradient-to-r from-rose-50 via-amber-50/60 to-rose-50 p-4 sm:p-5 shadow-sm dark:border-rose-800/80 dark:from-rose-950/50 dark:via-zinc-900 dark:to-rose-950/40">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div class="flex items-start gap-3.5">
+                    <div class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-rose-600 text-white shadow-md shadow-rose-600/25">
+                        <flux:icon name="exclamation-triangle" class="size-6" />
+                    </div>
+                    <div class="space-y-1.5">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h3 class="text-sm sm:text-base font-extrabold text-rose-900 dark:text-rose-200">
+                                Peringatan: Terdapat {{ $alokonStokRendah->count() }} Jenis Alokon yang Stoknya Sudah Menipis / Kurang!
+                            </h3>
+                            <span class="inline-flex items-center rounded-full bg-rose-100 px-2.5 py-0.5 text-2xs font-extrabold uppercase tracking-wide text-rose-700 dark:bg-rose-900/60 dark:text-rose-300 border border-rose-300 dark:border-rose-700">
+                                Di Bawah Batas Minimum (&lt; 10 Unit)
+                            </span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-rose-800 dark:text-rose-300 leading-relaxed">
+                            Perhatian Petugas &amp; Pimpinan:
+                            @foreach($alokonStokRendah as $idx => $item)
+                                <strong>Stok {{ $item->nama_alokon }} sudah menipis / kurang (tersisa {{ $item->stok }} unit)</strong>{{ !$loop->last ? '; ' : '.' }}
+                            @endforeach
+                            Segera lakukan pengadaan atau penambahan stok agar pelayanan KB tidak terhambat.
+                        </p>
+                        <div class="flex flex-wrap gap-2 pt-1">
+                            @foreach($alokonStokRendah as $item)
+                                <div class="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs font-bold text-slate-800 dark:text-zinc-200 border border-rose-200 dark:border-rose-800 shadow-2xs">
+                                    <span class="size-2.5 rounded-full {{ $item->stok <= 5 ? 'bg-red-600 animate-ping' : 'bg-amber-500' }}"></span>
+                                    <span>{{ $item->nama_alokon }}:</span>
+                                    <span class="rounded-md px-1.5 py-0.5 text-2xs font-extrabold {{ $item->stok <= 5 ? 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300' }}">
+                                        Stok Kurang / Menipis (Sisa {{ $item->stok }} Unit)
+                                    </span>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                @if(auth()->user()->isAdmin())
+                    <div class="shrink-0 self-start lg:self-center">
+                        <flux:button variant="primary" size="sm" icon="plus-circle" href="{{ route('alokon.index') }}" wire:navigate class="bg-rose-600 hover:bg-rose-700 text-white font-bold shadow-sm">
+                            Tambah Stok Alokon
+                        </flux:button>
+                    </div>
+                @endif
+            </div>
+        </div>
+    @endif
 
     <!-- Content Grid (Recent Registrations & Alokon Stock) -->
     <div class="grid gap-6 lg:grid-cols-3">
@@ -163,14 +223,25 @@
 
             <div class="mt-4 space-y-4">
                 @forelse($alokons as $alokon)
-                    <div class="flex flex-col space-y-1">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <flux:heading size="sm" class="font-semibold">{{ $alokon->nama_alokon }}</flux:heading>
+                    <div class="flex flex-col space-y-1.5 rounded-xl p-2.5 {{ $alokon->stok < 10 ? 'bg-rose-50/60 border border-rose-200 dark:bg-rose-950/20 dark:border-rose-900/60' : '' }}">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="min-w-0">
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    <flux:heading size="sm" class="font-semibold">{{ $alokon->nama_alokon }}</flux:heading>
+                                    @if($alokon->stok < 10)
+                                        <span class="inline-flex items-center rounded-full bg-rose-100 px-2 py-0.5 text-[10px] font-bold text-rose-700 dark:bg-rose-900/60 dark:text-rose-300">
+                                            Stok Menipis / Kurang
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+                                            Aman
+                                        </span>
+                                    @endif
+                                </div>
                                 <span class="text-xs text-zinc-500">{{ $alokon->instansi->nama_instansi }}</span>
                             </div>
-                            <div class="text-right">
-                                <span class="text-sm font-bold {{ $alokon->stok < 5 ? 'text-red-500' : ($alokon->stok < 10 ? 'text-amber-500' : 'text-emerald-500') }}">
+                            <div class="text-right shrink-0">
+                                <span class="text-sm font-extrabold {{ $alokon->stok < 5 ? 'text-red-600 dark:text-red-400' : ($alokon->stok < 10 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400') }}">
                                     {{ $alokon->stok }}
                                 </span>
                                 <span class="text-xs text-zinc-400"> unit</span>
@@ -179,7 +250,7 @@
                         
                         <!-- Progress bar -->
                         @php
-                            $percentage = min(100, max(0, ($alokon->stok / 150) * 100));
+                            $percentage = min(100, max(5, ($alokon->stok / 150) * 100));
                             $colorClass = $alokon->stok < 5 ? 'bg-red-500' : ($alokon->stok < 10 ? 'bg-amber-500' : 'bg-emerald-500');
                         @endphp
                         <div class="h-2 w-full rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
@@ -253,7 +324,7 @@
                     <flux:heading size="lg">🗺️ Peserta per Wilayah</flux:heading>
                     <flux:text size="xs">{{ $wilayahRank->count() }} desa/kelurahan terdaftar</flux:text>
                 </div>
-                <flux:button size="sm" variant="outline" href="{{ route('peta-sebaran.index', ['viewMode' => 'vector']) }}" wire:navigate>Lihat Peta</flux:button>
+                <flux:button size="sm" variant="outline" href="{{ route('peta-sebaran.index') }}" wire:navigate>Lihat Peta</flux:button>
             </div>
 
             <div class="mt-4 divide-y divide-zinc-100 dark:divide-zinc-800 max-h-56 overflow-y-auto pr-1">

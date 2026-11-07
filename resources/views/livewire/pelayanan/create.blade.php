@@ -144,13 +144,13 @@
                                 }
                             }" @click.outside="open = false" class="relative">
                                 {{-- Trigger Button --}}
-                                <button type="button" @click="open = !open"
+                                <button type="button" @click="open = !open; if (open) $nextTick(() => $refs.searchInput.focus())"
                                     class="flex w-full items-center justify-between h-10 rounded-lg border bg-white px-3 py-2 text-left text-sm shadow-xs
                                         border-zinc-200 dark:border-white/10 dark:bg-white/10
                                         text-zinc-700 dark:text-zinc-300
                                         focus:outline-none focus:ring-2 focus:ring-blue-500">
                                     <span x-show="selectedLabel" x-text="selectedLabel" class="truncate"></span>
-                                    <span x-show="!selectedLabel" class="text-zinc-400">Cari atau pilih peserta...</span>
+                                    <span x-show="!selectedLabel" class="text-zinc-400">Ketik atau pilih nama lengkap peserta...</span>
                                     <div class="flex items-center gap-1 ml-2 shrink-0">
                                         <template x-if="selectedLabel">
                                             <button type="button" @click.stop="clear()" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200">
@@ -169,7 +169,7 @@
                                         <div class="relative">
                                             <svg class="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
                                             <input type="text" x-model="search" x-ref="searchInput" @keydown.escape="open = false"
-                                                placeholder="Ketik nama atau NIK..."
+                                                placeholder="Ketik nama lengkap peserta atau NIK..."
                                                 class="w-full rounded-md border border-zinc-200 bg-zinc-50 py-1.5 pl-8 pr-3 text-sm text-zinc-700
                                                     placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500
                                                     dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-blue-400">

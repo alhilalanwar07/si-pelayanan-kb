@@ -89,10 +89,10 @@
                                 <flux:icon name="identification" class="size-6 sm:size-7" />
                             </div>
                             <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                                Pengecekan NIK Peserta
+                                Pengecekan NIK &amp; Rekam Medis Peserta
                             </h2>
                             <p class="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 leading-relaxed">
-                                Masukkan 16 digit Nomor Induk Kependudukan (NIK) pada KTP Anda untuk memulai.
+                                Masukkan 16 digit Nomor Induk Kependudukan (NIK) pada KTP Anda untuk memesan jadwal antrian atau melihat <strong>Hasil Pelayanan &amp; Rekam Medis KB (3 Langkah)</strong>.
                             </p>
                         </div>
 
@@ -423,7 +423,209 @@
                             </div>
                         @endif
 
-                        {{-- ==================== 1. JADWAL / ANTRIAN AKTIF (BELUM DILAKUKAN) ==================== --}}
+                        {{-- ==================== 1. HASIL PELAYANAN MEDIS KB & REKAM MEDIS 3 LANGKAH ==================== --}}
+                        <div class="space-y-4 pt-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <div class="flex items-center gap-2 text-slate-900 dark:text-white font-extrabold text-sm sm:text-base">
+                                    <flux:icon name="clipboard-document-check" class="size-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                    Hasil Pelayanan &amp; Rekam Medis KB (3 Langkah)
+                                </div>
+                                <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-2xs font-bold text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800 self-start sm:self-auto">
+                                    Total {{ $riwayatPelayanan->count() }} Kunjungan Tercatat
+                                </span>
+                            </div>
+
+                            @if($riwayatPelayanan->count() > 0)
+                                <div class="space-y-4">
+                                    @foreach($riwayatPelayanan as $idx => $pelayanan)
+                                        @php
+                                            $skrining = $pelayanan->skriningMedis;
+                                            $consent = $skrining?->informedConsent;
+                                            $bolehList = is_array($skrining?->alat_kontrasepsi_boleh_digunakan)
+                                                ? $skrining->alat_kontrasepsi_boleh_digunakan
+                                                : (is_string($skrining?->alat_kontrasepsi_boleh_digunakan) ? (json_decode($skrining->alat_kontrasepsi_boleh_digunakan, true) ?? []) : []);
+                                        @endphp
+                                        <div wire:key="rekam-medis-{{ $pelayanan->id }}" class="rounded-2xl bg-white dark:bg-zinc-900 border-2 border-slate-200/90 dark:border-zinc-700/90 shadow-sm overflow-hidden">
+                                            <!-- Header Kunjungan -->
+                                            <div class="bg-slate-50 dark:bg-zinc-800/80 px-4 py-3 border-b border-slate-200/80 dark:border-zinc-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                                <div class="flex flex-wrap items-center gap-2">
+                                                    <span class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-2 py-0.5 text-2xs font-black text-white">
+                                                        Kunjungan #{{ $riwayatPelayanan->count() - $idx }}
+                                                    </span>
+                                                    <span class="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white">
+                                                        {{ $pelayanan->alokon->nama_alokon ?? 'Pelayanan KB' }}
+                                                    </span>
+                                                    <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                                                        Selesai Dilayani ✓
+                                                    </span>
+                                                </div>
+                                                <div class="text-2xs font-bold text-slate-600 dark:text-zinc-300 flex items-center gap-1.5">
+                                                    <flux:icon name="calendar" class="size-3.5 text-blue-600 dark:text-blue-400" />
+                                                    <span>Tanggal Layanan: {{ $pelayanan->tanggal_pelayanan ? $pelayanan->tanggal_pelayanan->translatedFormat('d F Y') : '-' }}</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- 3 Langkah Rekam Medis -->
+                                            <div class="p-4 space-y-3.5">
+                                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                    <!-- LANGKAH 1: SKRINING MEDIS -->
+                                                    <div class="rounded-xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/70 dark:border-blue-900/60 p-3.5 space-y-2.5">
+                                                        <div class="flex items-center justify-between gap-1 border-b border-blue-200/60 dark:border-blue-900/50 pb-2">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[10px] font-black text-white">1</span>
+                                                                <span class="text-xs font-extrabold text-blue-950 dark:text-blue-200">Skrining Medis</span>
+                                                            </div>
+                                                            <span class="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                                                                Layak Medis ✓
+                                                            </span>
+                                                        </div>
+
+                                                        @if($skrining)
+                                                            <div class="grid grid-cols-2 gap-2 text-2xs">
+                                                                <div>
+                                                                    <span class="text-slate-400 block">Tekanan Darah:</span>
+                                                                    <span class="font-bold text-slate-800 dark:text-zinc-200">{{ $skrining->fisik_tekanan_darah ?: '-' }} mmHg</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="text-slate-400 block">Berat Badan:</span>
+                                                                    <span class="font-bold text-slate-800 dark:text-zinc-200">{{ $skrining->fisik_berat_badan ? number_format((float) $skrining->fisik_berat_badan, 1) . ' kg' : '-' }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="text-slate-400 block">Keadaan Umum:</span>
+                                                                    <span class="font-bold capitalize text-slate-800 dark:text-zinc-200">{{ $skrining->fisik_keadaan_umum ?: 'Baik' }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="text-slate-400 block">Status GPA:</span>
+                                                                    <span class="font-bold font-mono text-slate-800 dark:text-zinc-200">{{ $skrining->gravida_partus_abortus ?: '-' }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="text-slate-400 block">Posisi Rahim:</span>
+                                                                    <span class="font-bold capitalize text-slate-800 dark:text-zinc-200">{{ $skrining->posisi_rahim ?: 'Normal' }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="text-slate-400 block">Menyusui:</span>
+                                                                    <span class="font-bold text-slate-800 dark:text-zinc-200">{{ $skrining->status_menyusui ? 'Ya' : 'Tidak' }}</span>
+                                                                </div>
+                                                            </div>
+                                                            @if(count($bolehList) > 0)
+                                                                <div class="pt-1.5 border-t border-blue-200/50 dark:border-blue-900/40">
+                                                                    <span class="text-[10px] text-slate-400 block mb-1">Alokon Diizinkan:</span>
+                                                                    <div class="flex flex-wrap gap-1">
+                                                                        @foreach(array_slice($bolehList, 0, 4) as $alokonBoleh)
+                                                                            <span class="rounded bg-white dark:bg-zinc-800 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                                                                                {{ $alokonBoleh }}
+                                                                            </span>
+                                                                        @endforeach
+                                                                        @if(count($bolehList) > 4)
+                                                                            <span class="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-bold text-blue-800">
+                                                                                +{{ count($bolehList) - 4 }} lainnya
+                                                                            </span>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        @else
+                                                            <p class="text-2xs text-slate-500">Data pemeriksaan fisik &amp; skrining medis terverifikasi.</p>
+                                                        @endif
+                                                    </div>
+
+                                                    <!-- LANGKAH 2: INFORMED CONSENT -->
+                                                    <div class="rounded-xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/70 dark:border-indigo-900/60 p-3.5 space-y-2.5">
+                                                        <div class="flex items-center justify-between gap-1 border-b border-indigo-200/60 dark:border-indigo-900/50 pb-2">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-black text-white">2</span>
+                                                                <span class="text-xs font-extrabold text-indigo-950 dark:text-indigo-200">Informed Consent</span>
+                                                            </div>
+                                                            <span class="rounded bg-indigo-100 px-1.5 py-0.5 text-[10px] font-bold text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300">
+                                                                Disetujui ✓
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="space-y-2 text-2xs">
+                                                            <div>
+                                                                <span class="text-slate-400 block">Jenis Tindakan Medis:</span>
+                                                                <span class="font-extrabold capitalize text-indigo-700 dark:text-indigo-300">
+                                                                    {{ $consent ? $consent->labelTindakan() : 'Pemasangan / Pemberian Kontrasepsi' }}
+                                                                </span>
+                                                            </div>
+                                                            <div class="grid grid-cols-2 gap-2">
+                                                                <div class="rounded-lg bg-white dark:bg-zinc-800 p-2 border border-indigo-100 dark:border-indigo-900/50">
+                                                                    <span class="text-[10px] text-slate-400 block">Persetujuan Klien:</span>
+                                                                    <span class="font-bold text-emerald-600 dark:text-emerald-400">
+                                                                        {{ ($consent?->persetujuan_klien ?? true) ? 'Setuju ✓' : 'Tidak' }}
+                                                                    </span>
+                                                                </div>
+                                                                <div class="rounded-lg bg-white dark:bg-zinc-800 p-2 border border-indigo-100 dark:border-indigo-900/50">
+                                                                    <span class="text-[10px] text-slate-400 block">Persetujuan Pasangan:</span>
+                                                                    <span class="font-bold text-emerald-600 dark:text-emerald-400">
+                                                                        {{ ($consent?->persetujuan_pasangan ?? true) ? 'Setuju ✓' : 'Tidak' }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <span class="text-slate-400 block">Tanggal Persetujuan:</span>
+                                                                <span class="font-bold text-slate-800 dark:text-zinc-200">
+                                                                    {{ $consent?->tanggal_persetujuan ? $consent->tanggal_persetujuan->translatedFormat('d F Y') : ($pelayanan->tanggal_pelayanan?->translatedFormat('d F Y') ?? '-') }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- LANGKAH 3: PEMBERIAN ALOKON & KONTROL -->
+                                                    <div class="rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/70 dark:border-emerald-900/60 p-3.5 space-y-2.5">
+                                                        <div class="flex items-center justify-between gap-1 border-b border-emerald-200/60 dark:border-emerald-900/50 pb-2">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-black text-white">3</span>
+                                                                <span class="text-xs font-extrabold text-emerald-950 dark:text-emerald-200">Tindakan &amp; Alokon</span>
+                                                            </div>
+                                                            <span class="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                                                                Tercatat ✓
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="space-y-2 text-2xs">
+                                                            <div>
+                                                                <span class="text-slate-400 block">Alokon yang Diberikan:</span>
+                                                                <span class="font-extrabold text-emerald-700 dark:text-emerald-300">
+                                                                    {{ $pelayanan->alokon->nama_alokon ?? '-' }}
+                                                                </span>
+                                                            </div>
+                                                            <div>
+                                                                <span class="text-slate-400 block">Petugas Pemeriksa ({{ ucfirst($pelayanan->penanggung_jawab_jabatan ?: 'Bidan') }}):</span>
+                                                                <span class="font-bold text-slate-800 dark:text-zinc-200 block">
+                                                                    {{ $pelayanan->penanggung_jawab_nama ?: 'Bidan Pelaksana' }}
+                                                                </span>
+                                                                @if($pelayanan->penanggung_jawab_nip)
+                                                                    <span class="text-[10px] text-slate-400 font-mono">NIP. {{ $pelayanan->penanggung_jawab_nip }}</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="rounded-lg bg-white dark:bg-zinc-800 p-2 border border-emerald-200 dark:border-emerald-900/60">
+                                                                <span class="text-[10px] text-slate-400 block">Jadwal Kunjungan / Kontrol Ulang:</span>
+                                                                <span class="font-extrabold text-blue-600 dark:text-blue-400 text-xs">
+                                                                    {{ $pelayanan->tanggal_kunjungan_ulang ? $pelayanan->tanggal_kunjungan_ulang->translatedFormat('d F Y') : 'Sesuai Kebutuhan' }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                @if($pelayanan->keterangan)
+                                                    <div class="rounded-xl bg-slate-50 dark:bg-zinc-800/60 px-3 py-2 text-2xs text-slate-600 dark:text-zinc-300 border border-slate-200/70 dark:border-zinc-700">
+                                                        <strong class="text-slate-800 dark:text-white">Catatan Medis Petugas:</strong> {{ $pelayanan->keterangan }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="text-center py-6 px-4 rounded-2xl bg-slate-50/60 dark:bg-zinc-800/30 border border-slate-200/60 dark:border-zinc-800 text-slate-500 dark:text-zinc-400 text-2xs sm:text-xs">
+                                    Belum ada catatan rekam pelayanan medis sebelumnya di DPPKB Kecamatan Wundulako.
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- ==================== 2. JADWAL / ANTRIAN AKTIF (BELUM DILAKUKAN) ==================== --}}
                         @if($antrianAktif)
                             <div class="rounded-2xl sm:rounded-3xl border-2 border-blue-500/40 bg-gradient-to-b from-blue-50/80 via-white to-white dark:from-blue-950/30 dark:via-zinc-900 dark:to-zinc-900 p-5 sm:p-6 space-y-4 shadow-lg shadow-blue-500/5">
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-blue-200/60 dark:border-zinc-800 pb-3">
@@ -496,13 +698,13 @@
                                 </div>
                             </div>
 
-                        {{-- ==================== 2. PILIH JADWAL BARU (JIKA TIDAK ADA ANTRIAN AKTIF) ==================== --}}
+                        {{-- ==================== 3. PILIH JADWAL BARU (JIKA TIDAK ADA ANTRIAN AKTIF) ==================== --}}
                         @else
-                            <div class="space-y-4">
+                            <div class="space-y-4 pt-4 border-t border-slate-100 dark:border-zinc-800">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs sm:text-sm">
                                         <flux:icon name="calendar-days" class="size-4 shrink-0" />
-                                        Pilih Jadwal Pelayanan yang Tersedia
+                                        Pilih Jadwal Pelayanan Kunjungan Berikutnya
                                     </div>
                                     <span class="text-3xs sm:text-2xs text-slate-400 font-semibold">*Pilih salah satu jadwal</span>
                                 </div>
@@ -583,69 +785,6 @@
                                 @endif
                             </div>
                         @endif
-
-                        {{-- ==================== 3. RIWAYAT PELAYANAN MEDIS KB YANG SUDAH DIJALANI ==================== --}}
-                        <div class="space-y-4 pt-4 border-t border-slate-100 dark:border-zinc-800">
-                            <div class="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-xs sm:text-sm">
-                                <flux:icon name="clipboard-document-check" class="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                                Riwayat Pelayanan KB yang Telah Dijalani
-                            </div>
-
-                            @if($riwayatPelayanan->count() > 0)
-                                <div class="space-y-3">
-                                    @foreach($riwayatPelayanan as $pelayanan)
-                                        <div class="rounded-2xl bg-slate-50 dark:bg-zinc-800/50 border border-slate-200/80 dark:border-zinc-700/80 p-4 space-y-2.5">
-                                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-slate-200/60 dark:border-zinc-700/60 pb-2">
-                                                <div class="flex items-center gap-2">
-                                                    <span class="size-2 rounded-full bg-emerald-500"></span>
-                                                    <span class="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white">
-                                                        {{ $pelayanan->alokon->nama_alokon ?? 'Pelayanan KB' }}
-                                                    </span>
-                                                    <span class="px-2 py-0.5 rounded-full text-3xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                                                        Selesai Dilayani ✓
-                                                    </span>
-                                                </div>
-                                                <span class="text-2xs font-semibold text-slate-500 dark:text-zinc-400">
-                                                    {{ $pelayanan->tanggal_pelayanan ? $pelayanan->tanggal_pelayanan->translatedFormat('d F Y') : '-' }}
-                                                </span>
-                                            </div>
-
-                                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-2xs text-slate-600 dark:text-zinc-400">
-                                                <div>
-                                                    <span class="text-slate-400 font-medium">Petugas Pemeriksa:</span>
-                                                    <div class="font-bold text-slate-800 dark:text-zinc-200">
-                                                        {{ $pelayanan->penanggung_jawab_nama ?: 'Bidan / Petugas Medis' }}
-                                                        @if($pelayanan->penanggung_jawab_nip)
-                                                            <span class="text-3xs text-slate-400 font-normal block font-mono">NIP. {{ $pelayanan->penanggung_jawab_nip }}</span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <span class="text-slate-400 font-medium">Jabatan Petugas:</span>
-                                                    <div class="font-bold text-slate-800 dark:text-zinc-200">{{ ucfirst($pelayanan->penanggung_jawab_jabatan ?: 'Bidan') }}</div>
-                                                </div>
-                                                <div>
-                                                    <span class="text-slate-400 font-medium">Jadwal Kontrol Ulang:</span>
-                                                    <div class="font-bold text-blue-600 dark:text-blue-400">
-                                                        {{ $pelayanan->tanggal_kunjungan_ulang ? $pelayanan->tanggal_kunjungan_ulang->translatedFormat('d F Y') : 'Sesuai Kebutuhan' }}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            @if($pelayanan->keterangan)
-                                                <div class="text-3xs sm:text-2xs text-slate-500 dark:text-zinc-400 pt-1.5 border-t border-slate-200/50 dark:border-zinc-700/50">
-                                                    Catatan Pelayanan: {{ $pelayanan->keterangan }}
-                                                </div>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="text-center py-6 px-4 rounded-2xl bg-slate-50/60 dark:bg-zinc-800/30 border border-slate-200/60 dark:border-zinc-800 text-slate-500 dark:text-zinc-400 text-2xs sm:text-xs">
-                                    Belum ada catatan rekam pelayanan medis sebelumnya di DPPKB Kecamatan Wundulako.
-                                </div>
-                            @endif
-                        </div>
 
                         {{-- ==================== 4. RIWAYAT ANTRIAN SEBELUMNYA ==================== --}}
                         @if($riwayatAntrian->count() > 0)

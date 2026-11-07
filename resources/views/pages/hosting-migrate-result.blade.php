@@ -56,7 +56,24 @@
             <!-- Content Details -->
             <div class="p-5 sm:p-7 space-y-6">
                 <!-- Check Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    <!-- Check Kolom Koordinat Wilayah -->
+                    <div class="p-4 rounded-xl border {{ ($hasWilayahKoordinatColumns ?? false) ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200' }} flex items-start gap-3">
+                        <div class="size-8 rounded-lg {{ ($hasWilayahKoordinatColumns ?? false) ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' }} flex items-center justify-center shrink-0 mt-0.5">
+                            @if($hasWilayahKoordinatColumns ?? false)
+                                <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                            @else
+                                <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+                            @endif
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold block text-slate-800">Kolom Koordinat Wilayah</span>
+                            <span class="text-xs {{ ($hasWilayahKoordinatColumns ?? false) ? 'text-emerald-700' : 'text-rose-700' }}">
+                                {{ ($hasWilayahKoordinatColumns ?? false) ? 'Tersedia (latitude, longitude, link_gmaps)' : 'Belum ditemukan di tabel wilayahs' }}
+                            </span>
+                        </div>
+                    </div>
+
                     <!-- Check Kolom NIP -->
                     <div class="p-4 rounded-xl border {{ $hasNipColumn ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200' }} flex items-start gap-3">
                         <div class="size-8 rounded-lg {{ $hasNipColumn ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' }} flex items-center justify-center shrink-0 mt-0.5">
@@ -67,7 +84,7 @@
                             @endif
                         </div>
                         <div>
-                            <span class="text-xs font-bold block text-slate-800">Kolom Baru (NIP Petugas)</span>
+                            <span class="text-xs font-bold block text-slate-800">Kolom NIP Petugas</span>
                             <span class="text-xs {{ $hasNipColumn ? 'text-emerald-700' : 'text-rose-700' }}">
                                 {{ $hasNipColumn ? 'Tersedia di tabel users (users.nip)' : 'Belum ditemukan di tabel users' }}
                             </span>
@@ -87,6 +104,21 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Updated Wilayahs List -->
+                @if(!empty($updatedWilayahs))
+                    <div class="space-y-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Inisialisasi Koordinat GPS & Link Google Maps Wilayah</span>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-700 space-y-1">
+                            @foreach($updatedWilayahs as $wilayahMsg)
+                                <div class="flex items-center gap-2">
+                                    <svg class="size-3.5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                                    <span>{{ $wilayahMsg }}</span>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
 
                 <!-- Updated Users List -->
                 @if(count($updatedUsers) > 0)
@@ -115,6 +147,11 @@
                         <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" /></svg>
                         <span>Menuju Halaman Login</span>
                     </a>
+                    @if(($mode ?? 'migrate') !== 'seed')
+                        <a href="{{ route('hosting.migrate.seed') }}" onclick="return confirm('Apakah Anda yakin ingin menjalankan Migrate Fresh + Seed? Seluruh data di hosting akan digantikan dengan data seeder revisi (25 peserta KB, 40 pelayanan 4 bulan, stok kritis IUD/Implan, dan koordinat 5 desa).')" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-xl font-semibold text-xs sm:text-sm transition-colors">
+                            <span>Muat Data Seeder Revisi (4 Bulan)</span>
+                        </a>
+                    @endif
                     <a href="{{ url('/') }}" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold text-xs sm:text-sm transition-colors">
                         <span>Halaman Utama</span>
                     </a>

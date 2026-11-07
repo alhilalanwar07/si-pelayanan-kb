@@ -22,28 +22,44 @@ class Index extends Component
 
     // Filters for Riwayat
     public $search = '';
+
     public $filterAlokon = '';
+
     public $filterBulan = '';
+
     public $filterTahun = '';
 
     // Filter for Antrian
     public $searchAntrian = '';
+
     public ?int $selectedJadwalId = null;
 
     // Modal Walk-in State
     public bool $showWalkinModal = false;
+
     public string $walkinType = 'terdaftar'; // 'terdaftar' | 'baru'
+
     public ?int $walkinPesertaId = null;
+
+    public string $walkinSearchPeserta = '';
+
     public ?int $walkinJadwalId = null;
 
     // Form Pasien Baru Walk-in
     public string $walkinNik = '';
+
     public string $walkinNamaLengkap = '';
+
     public string $walkinNomorHp = '';
+
     public ?int $walkinWilayahId = null;
+
     public string $walkinAlamatLengkap = '';
+
     public string $walkinPenggunaanAsuransi = 'umum';
+
     public string $walkinNamaSuamiIstri = '';
+
     public string $walkinTanggalLahirIstri = '';
 
     protected $queryString = [
@@ -57,7 +73,7 @@ class Index extends Component
     public function mount()
     {
         $this->filterTahun = Carbon::now()->year;
-        
+
         // Default selected jadwal: today or nearest upcoming
         $todayJadwal = JadwalPelayanan::where('instansi_id', auth()->user()->instansi_id)
             ->whereDate('tanggal', now()->toDateString())
@@ -104,7 +120,7 @@ class Index extends Component
     {
         $antrian = AntrianJadwal::findOrFail($antrianId);
         $antrian->update(['status' => 'tidak_hadir']);
-        
+
         $this->dispatch('toast-show', slots: ['text' => 'Status antrian diubah menjadi Tidak Hadir.'], dataset: ['variant' => 'info']);
     }
 
@@ -148,6 +164,7 @@ class Index extends Component
 
     public function resetWalkinForm()
     {
+        $this->walkinSearchPeserta = '';
         $this->walkinNik = '';
         $this->walkinNamaLengkap = '';
         $this->walkinNomorHp = '';
@@ -159,20 +176,64 @@ class Index extends Component
         $this->resetErrorBag();
     }
 
+    public function pilihPesertaWalkin(int $pesertaId, string $namaLengkap): void
+    {
+        $this->walkinPesertaId = $pesertaId;
+        $this->walkinSearchPeserta = $namaLengkap;
+        $this->resetErrorBag('walkinPesertaId');
+    }
+
+    public function resetPesertaWalkin(): void
+    {
+        $this->walkinPesertaId = null;
+        $this->walkinSearchPeserta = '';
+        $this->resetErrorBag('walkinPesertaId');
+    }
+
+    public function updatedWalkinSearchPeserta($value): void
+    {
+        $q = trim((string) $value);
+        if ($q === '') {
+            $this->walkinPesertaId = null;
+
+            return;
+        }
+
+        // Jika teks yang diketik persis sama dengan nama lengkap atau NIK salah satu peserta, otomatis pilih
+        $exactMatch = PesertaKb::terverifikasi()
+            ->where(function ($query) use ($q) {
+                $query->whereRaw('LOWER(nama_lengkap) = ?', [strtolower($q)])
+                    ->orWhere('nik', $q);
+            })
+            ->first();
+
+        if ($exactMatch) {
+            $this->walkinPesertaId = $exactMatch->id;
+            $this->resetErrorBag('walkinPesertaId');
+        } elseif ($this->walkinPesertaId) {
+            $current = PesertaKb::find($this->walkinPesertaId);
+            if (! $current || strtolower($current->nama_lengkap) !== strtolower($q)) {
+                $this->walkinPesertaId = null;
+            }
+        }
+    }
+
     public function updatedWalkinJadwalId()
     {
         $this->walkinPesertaId = null;
+        $this->walkinSearchPeserta = '';
         $this->resetErrorBag('walkinPesertaId');
     }
 
     public function submitWalkin(bool $langsungLayani = false)
     {
-        if ($langsungLayani && !auth()->user()->isBidan()) {
+        if ($langsungLayani && ! auth()->user()->isBidan()) {
             $langsungLayani = false;
         }
 
-        if (!$this->walkinJadwalId) {
+        if (! $this->walkinJadwalId) {
             $this->addError('walkinJadwalId', 'Pilih sesi jadwal pelayanan.');
+
             return;
         }
 
@@ -180,10 +241,24 @@ class Index extends Component
 
         $peserta = null;
         if ($this->walkinType === 'terdaftar') {
+            if (! $this->walkinPesertaId && ! empty(trim($this->walkinSearchPeserta))) {
+                $q = trim($this->walkinSearchPeserta);
+                $matched = PesertaKb::terverifikasi()
+                    ->where(function ($query) use ($q) {
+                        $query->where('nama_lengkap', 'like', '%'.$q.'%')
+                            ->orWhere('nik', 'like', '%'.$q.'%');
+                    })
+                    ->first();
+
+                if ($matched) {
+                    $this->walkinPesertaId = $matched->id;
+                }
+            }
+
             $this->validate([
                 'walkinPesertaId' => 'required|exists:peserta_kbs,id',
             ], [
-                'walkinPesertaId.required' => 'Silakan pilih peserta yang sudah terdaftar.',
+                'walkinPesertaId.required' => 'Silakan ketik nama lengkap atau pilih peserta yang sudah terdaftar.',
             ]);
 
             $peserta = PesertaKb::findOrFail($this->walkinPesertaId);
@@ -201,15 +276,18 @@ class Index extends Component
 
             if ($sudahDilayani) {
                 $this->addError('walkinPesertaId', "Peserta {$peserta->nama_lengkap} sudah selesai dilayani pada sesi jadwal ini dan tidak boleh dilayani 2x dalam jadwal yang sama.");
+
                 return;
             }
 
             if ($existing) {
                 if ($langsungLayani) {
                     $this->closeWalkinModal();
+
                     return $this->layaniPeserta($peserta->id, $existing->id);
                 }
                 $this->addError('walkinPesertaId', "Peserta ini sudah memiliki nomor antrian ({$existing->kode_display}) pada sesi jadwal ini.");
+
                 return;
             }
         } else {
@@ -245,7 +323,8 @@ class Index extends Component
                         ->exists();
 
                 if ($sudahDilayani) {
-                    $this->addError('walkinNik', "Pasien dengan NIK ini sudah selesai dilayani pada sesi jadwal ini dan tidak boleh dilayani 2x dalam jadwal yang sama.");
+                    $this->addError('walkinNik', 'Pasien dengan NIK ini sudah selesai dilayani pada sesi jadwal ini dan tidak boleh dilayani 2x dalam jadwal yang sama.');
+
                     return;
                 }
             }
@@ -272,7 +351,7 @@ class Index extends Component
                 ->max('nomor_antrian') ?? 0;
 
             $nomorAntrian = $lastNomor + 1;
-            $kodeAntrian = 'W-' . str_pad($nomorAntrian, 3, '0', STR_PAD_LEFT);
+            $kodeAntrian = 'W-'.str_pad($nomorAntrian, 3, '0', STR_PAD_LEFT);
             $status = $langsungLayani ? 'sedang_dilayani' : 'terdaftar';
 
             if ($langsungLayani) {
@@ -305,19 +384,22 @@ class Index extends Component
 
     public function layaniPeserta(int $pesertaId, int $antrianId)
     {
-        if (!auth()->user()->isBidan()) {
+        if (! auth()->user()->isBidan()) {
             $this->dispatch('toast-show', slots: ['text' => 'Hanya bidan yang berwenang mencatat pelayanan medis.'], dataset: ['variant' => 'danger']);
+
             return;
         }
 
         $antrian = AntrianJadwal::with('jadwalPelayanan')->find($antrianId);
-        if (!$antrian) {
+        if (! $antrian) {
             $this->dispatch('toast-show', slots: ['text' => 'Data antrian tidak ditemukan.'], dataset: ['variant' => 'danger']);
+
             return;
         }
 
         if ($antrian->status === 'hadir') {
             $this->dispatch('toast-show', slots: ['text' => 'Peserta ini sudah selesai dilayani pada sesi jadwal ini dan tidak boleh dilayani 2x dalam jadwal yang sama.'], dataset: ['variant' => 'warning']);
+
             return;
         }
 
@@ -329,6 +411,7 @@ class Index extends Component
             if ($sudahAdaPelayanan) {
                 $antrian->update(['status' => 'hadir']);
                 $this->dispatch('toast-show', slots: ['text' => 'Peserta ini sudah memiliki catatan pelayanan medis pada jadwal ini dan tidak boleh dilayani 2x.'], dataset: ['variant' => 'warning']);
+
                 return;
             }
         }
@@ -362,7 +445,7 @@ class Index extends Component
             ->orderBy('tanggal')
             ->get();
 
-        $currentJadwal = $this->selectedJadwalId 
+        $currentJadwal = $this->selectedJadwalId
             ? JadwalPelayanan::find($this->selectedJadwalId)
             : ($todayJadwal ?? $activeJadwals->first());
 
@@ -374,7 +457,7 @@ class Index extends Component
                 ->pluck('peserta_kb_id')
                 ->all();
 
-            if (!empty($dilayaniPesertaIds)) {
+            if (! empty($dilayaniPesertaIds)) {
                 $currentJadwal->antrians()
                     ->whereIn('peserta_kb_id', $dilayaniPesertaIds)
                     ->whereIn('status', ['terdaftar', 'sedang_dilayani'])
@@ -400,36 +483,36 @@ class Index extends Component
         $antrians = collect();
         if ($currentJadwal) {
             $antrianQuery = $currentJadwal->antrians()->with(['pesertaKb.wilayah'])->orderBy('nomor_antrian');
-            
-            if (!empty($this->searchAntrian)) {
+
+            if (! empty($this->searchAntrian)) {
                 $antrianQuery->whereHas('pesertaKb', function ($q) {
-                    $q->where('nama_lengkap', 'like', '%' . $this->searchAntrian . '%')
-                      ->orWhere('nik', 'like', '%' . $this->searchAntrian . '%');
+                    $q->where('nama_lengkap', 'like', '%'.$this->searchAntrian.'%')
+                        ->orWhere('nik', 'like', '%'.$this->searchAntrian.'%');
                 });
             }
-            
+
             $antrians = $antrianQuery->get();
         }
 
         // ──── 3. QUERY RIWAYAT PELAYANAN ────
         $query = Pelayanan::with(['pesertaKb.wilayah', 'alokon.instansi', 'skriningMedis']);
 
-        if (!empty($this->search)) {
+        if (! empty($this->search)) {
             $query->whereHas('pesertaKb', function ($q) {
-                $q->where('nama_lengkap', 'like', '%' . $this->search . '%')
-                  ->orWhere('nik', 'like', '%' . $this->search . '%');
+                $q->where('nama_lengkap', 'like', '%'.$this->search.'%')
+                    ->orWhere('nik', 'like', '%'.$this->search.'%');
             });
         }
 
-        if (!empty($this->filterAlokon)) {
+        if (! empty($this->filterAlokon)) {
             $query->where('alokon_id', $this->filterAlokon);
         }
 
-        if (!empty($this->filterBulan)) {
+        if (! empty($this->filterBulan)) {
             $query->whereMonth('tanggal_pelayanan', $this->filterBulan);
         }
 
-        if (!empty($this->filterTahun)) {
+        if (! empty($this->filterTahun)) {
             $query->whereYear('tanggal_pelayanan', $this->filterTahun);
         }
 
@@ -437,6 +520,18 @@ class Index extends Component
         $alokons = Alokon::orderBy('nama_alokon')->get();
         $tahunList = range(Carbon::now()->year, Carbon::now()->year - 5);
         $availablePesertas = PesertaKb::terverifikasi()->with('wilayah')->orderBy('nama_lengkap')->get();
+        $filteredWalkinPesertas = $availablePesertas;
+        if (! empty(trim($this->walkinSearchPeserta))) {
+            $q = strtolower(trim($this->walkinSearchPeserta));
+            $filteredWalkinPesertas = $availablePesertas->filter(function ($p) use ($q) {
+                return str_contains(strtolower($p->nama_lengkap), $q)
+                    || str_contains(strtolower($p->nik), $q)
+                    || str_contains(strtolower($p->wilayah->nama_desa_kelurahan ?? ''), $q);
+            })->values();
+        }
+        $selectedWalkinPeserta = $this->walkinPesertaId
+            ? $availablePesertas->firstWhere('id', (int) $this->walkinPesertaId)
+            : null;
         $wilayahs = Wilayah::orderBy('nama_desa_kelurahan')->get();
 
         // Peserta yang sudah dilayani / sudah antri pada jadwal walkin yang dipilih
@@ -478,6 +573,8 @@ class Index extends Component
             'alokons' => $alokons,
             'tahunList' => $tahunList,
             'availablePesertas' => $availablePesertas,
+            'filteredWalkinPesertas' => $filteredWalkinPesertas,
+            'selectedWalkinPeserta' => $selectedWalkinPeserta,
             'wilayahs' => $wilayahs,
             'servedPesertaIds' => $servedPesertaIds,
             'queuedPesertaIds' => $queuedPesertaIds,

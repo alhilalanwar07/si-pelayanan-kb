@@ -10,24 +10,24 @@ use Livewire\Component;
 class Index extends Component
 {
     public ?int $selectedWilayahId = null;
+
     public string $search = '';
+
     public string $densityFilter = 'all'; // all, high, medium, low
-    public string $viewMode = 'vector'; // 'vector' (Choropleth SVG default) or 'map' (Leaflet interactive GIS)
+
+    public string $viewMode = 'map'; // 'map' (Leaflet interactive GIS default) or 'vector' (Grafik & Tabel Wilayah)
 
     protected $queryString = [
         'selectedWilayahId' => ['except' => null, 'as' => 'wilayah'],
         'densityFilter' => ['except' => 'all'],
-        'viewMode' => ['except' => ''],
+        'viewMode' => ['except' => 'map'],
     ];
 
     public function mount(): void
     {
-        if (!request()->has('viewMode') && !app()->runningUnitTests()) {
-            $this->redirect(route('peta-sebaran.index', array_merge(request()->query(), ['viewMode' => 'vector'])), navigate: true);
-            return;
-        }
-
-        $this->viewMode = request('viewMode', 'vector');
+        $this->viewMode = in_array(request('viewMode'), ['map', 'vector'])
+            ? request('viewMode')
+            : 'map';
 
         if (request()->has('wilayah')) {
             $this->selectedWilayahId = (int) request('wilayah');
@@ -82,8 +82,8 @@ class Index extends Component
                     [-4.130, 121.625],
                     [-4.145, 121.628],
                     [-4.148, 121.614],
-                    [-4.138, 121.608]
-                ]
+                    [-4.138, 121.608],
+                ],
             ],
             'Desa Bende' => [
                 'lat' => -4.1150,
@@ -97,8 +97,8 @@ class Index extends Component
                     [-4.102, 121.622],
                     [-4.125, 121.625],
                     [-4.130, 121.610],
-                    [-4.120, 121.600]
-                ]
+                    [-4.120, 121.600],
+                ],
             ],
             'Desa Kowioha' => [
                 'lat' => -4.1320,
@@ -111,8 +111,8 @@ class Index extends Component
                     [-4.125, 121.630],
                     [-4.120, 121.658],
                     [-4.142, 121.662],
-                    [-4.145, 121.632]
-                ]
+                    [-4.145, 121.632],
+                ],
             ],
             'Desa Lamokuni' => [
                 'lat' => -4.1580,
@@ -126,8 +126,8 @@ class Index extends Component
                     [-4.145, 121.635],
                     [-4.170, 121.640],
                     [-4.172, 121.620],
-                    [-4.160, 121.610]
-                ]
+                    [-4.160, 121.610],
+                ],
             ],
             'Desa Watalara' => [
                 'lat' => -4.1480,
@@ -141,8 +141,8 @@ class Index extends Component
                     [-4.138, 121.608],
                     [-4.158, 121.610],
                     [-4.165, 121.590],
-                    [-4.150, 121.580]
-                ]
+                    [-4.150, 121.580],
+                ],
             ],
         ];
 
@@ -151,24 +151,39 @@ class Index extends Component
             ->orderBy('peserta_kbs_count', 'desc')
             ->get();
 
+        // Preload all pelayanans to compute method breakdown per wilayah without N+1
+        $allPelayanansByWilayah = Pelayanan::with(['alokon', 'pesertaKb'])
+            ->get()
+            ->groupBy(fn ($p) => $p->pesertaKb?->wilayah_id);
+
         // Enrich with GIS metadata and tiering
-        $enrichedWilayahs = $allWilayahs->map(function ($w, $index) use ($totalPeserta, $geoCoordinates) {
+        $enrichedWilayahs = $allWilayahs->map(function ($w, $index) use ($totalPeserta, $geoCoordinates, $allPelayanansByWilayah) {
             $w->persentase = $totalPeserta > 0
                 ? round(($w->peserta_kbs_count / $totalPeserta) * 100, 1)
                 : 0;
+
+            $wilayahPelayanans = $allPelayanansByWilayah->get($w->id, collect());
+            $alokonCounts = $wilayahPelayanans
+                ->groupBy(fn ($p) => $p->alokon?->nama_alokon ?: 'Lainnya')
+                ->map(fn ($g) => $g->count())
+                ->sortDesc();
+
+            $w->alokon_summary = $alokonCounts->toArray();
+            $w->metode_terbanyak = $alokonCounts->keys()->first() ?? '-';
 
             $geo = $geoCoordinates[$w->nama_desa_kelurahan] ?? [
                 'lat' => -4.1333 + ($index * 0.015),
                 'lng' => 121.6167 + ($index * 0.012),
                 'code' => strtoupper(substr(str_replace(['Desa ', 'Kelurahan '], '', $w->nama_desa_kelurahan), 0, 3)),
                 'type' => str_starts_with($w->nama_desa_kelurahan, 'Kelurahan') ? 'Kelurahan' : 'Desa',
-                'faskes' => 'Poskesdes ' . str_replace(['Desa ', 'Kelurahan '], '', $w->nama_desa_kelurahan),
+                'faskes' => 'Poskesdes '.str_replace(['Desa ', 'Kelurahan '], '', $w->nama_desa_kelurahan),
                 'is_puskesmas' => false,
-                'polygon' => []
+                'polygon' => [],
             ];
 
-            $w->lat = $geo['lat'];
-            $w->lng = $geo['lng'];
+            $w->lat = $w->latitude !== null ? (float) $w->latitude : (float) $geo['lat'];
+            $w->lng = $w->longitude !== null ? (float) $w->longitude : (float) $geo['lng'];
+            $w->gmaps_url = $w->link_gmaps ?: "https://www.google.com/maps?q={$w->lat},{$w->lng}";
             $w->code = $geo['code'];
             $w->type = $geo['type'];
             $w->faskes = $geo['faskes'];
@@ -240,9 +255,9 @@ class Index extends Component
                     ->groupBy(fn ($p) => $p->alokon?->nama_alokon ?: 'Metode Lain')
                     ->map(fn ($group) => [
                         'count' => $group->count(),
-                        'percentage' => $pelayanansInWilayah->count() > 0 
-                            ? round(($group->count() / $pelayanansInWilayah->count()) * 100, 1) 
-                            : 0
+                        'percentage' => $pelayanansInWilayah->count() > 0
+                            ? round(($group->count() / $pelayanansInWilayah->count()) * 100, 1)
+                            : 0,
                     ])
                     ->sortByDesc('count');
 

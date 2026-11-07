@@ -83,21 +83,22 @@
             @endif
 
             <div class="inline-flex rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
-                <button type="button" disabled
-                        class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg opacity-50 cursor-not-allowed text-zinc-400 dark:text-zinc-500">
+                <button type="button"
+                        wire:click="setViewMode('map')"
+                        class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer {{ $viewMode === 'map' ? 'bg-white text-blue-600 shadow-xs dark:bg-zinc-700 dark:text-white' : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white' }}">
                     <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                     </svg>
-                    <span>Peta GIS Satelit</span>
+                    <span>Peta Lokasi Titik Desa</span>
                 </button>
                 <button type="button" 
                         wire:click="setViewMode('vector')"
-                        class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all {{ $viewMode === 'vector' ? 'bg-white text-blue-600 shadow-xs dark:bg-zinc-700 dark:text-white' : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white' }}">
+                        class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer {{ $viewMode === 'vector' ? 'bg-white text-blue-600 shadow-xs dark:bg-zinc-700 dark:text-white' : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white' }}">
                     <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
                     </svg>
-                    <span>Peta Tematik SVG</span>
+                    <span>Grafik &amp; Tabel Sebaran</span>
                 </button>
             </div>
         </div>
@@ -295,7 +296,7 @@
                             <span class="relative inline-flex rounded-full size-3 bg-blue-600"></span>
                         </span>
                         <flux:heading size="md">
-                            {{ $viewMode === 'map' ? 'Peta Satelit GIS & Titik Wilayah' : 'Visualisasi Poligon Tematik' }}
+                            {{ $viewMode === 'map' ? 'Peta Lokasi Titik Desa/Kelurahan' : 'Visualisasi Grafik & Tabel Sebaran Wilayah' }}
                         </flux:heading>
                     </div>
 
@@ -313,75 +314,150 @@
                     </div>
                 </div>
 
-                <!-- 1. Interactive Leaflet GIS Map View -->
+                <!-- 1. Interactive Leaflet Standard Pin Map View -->
                 <div x-show="viewMode === 'map'" class="relative w-full h-[460px] bg-zinc-100 dark:bg-zinc-950">
                     <div id="leaflet-map" wire:ignore class="w-full h-full"></div>
                 </div>
 
-                <!-- 2. Interactive SVG Vector Map View -->
-                <div x-show="viewMode === 'vector'" class="p-6 flex flex-col items-center justify-center bg-zinc-50/50 dark:bg-zinc-950/50 min-h-[460px]">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" class="w-full max-w-[550px] h-auto drop-shadow-xl select-none">
-                        <defs>
-                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                                <feGaussianBlur stdDeviation="4" result="blur" />
-                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                            </filter>
-                        </defs>
+                <!-- 2. Visualisasi Grafik Batang & Tabel Ringkasan Sebaran Wilayah (Mudah Dimengerti Pimpinan) -->
+                <div x-show="viewMode === 'vector'" class="p-5 sm:p-6 space-y-6 bg-white dark:bg-zinc-900">
+                    @php
+                        $maxPesertaWilayah = max(1, (int) $allWilayahs->max('peserta_kbs_count'));
+                    @endphp
 
-                        <!-- Outer Border / Background Canvas -->
-                        <rect x="0" y="0" width="600" height="400" rx="16" fill="transparent" class="stroke-zinc-300 dark:stroke-zinc-800" stroke-width="1.5" stroke-dasharray="6 6" />
+                    <!-- Bagian A: Grafik Batang Perbandingan Jumlah Peserta & Pelayanan per Desa/Kelurahan -->
+                    <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/60 dark:bg-zinc-950/40 p-4 sm:p-5 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                                <h4 class="text-sm font-extrabold text-zinc-900 dark:text-white">
+                                    Grafik Perbandingan Peserta KB &amp; Pelayanan per Desa/Kelurahan
+                                </h4>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                                    Klik pada salah satu baris desa/kelurahan di bawah untuk melihat rincian daftar peserta dan metode KB.
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-3 text-xs font-semibold">
+                                <span class="inline-flex items-center gap-1.5 text-blue-700 dark:text-blue-400">
+                                    <span class="size-3 rounded bg-blue-600 inline-block"></span> Jumlah Peserta KB
+                                </span>
+                                <span class="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                                    <span class="size-3 rounded bg-emerald-500 inline-block"></span> Total Pelayanan
+                                </span>
+                            </div>
+                        </div>
 
-                        <!-- Kelurahan Wundulako (Center) -->
-                        @php $w0 = $allWilayahs->first(fn($item) => str_contains(strtolower($item->nama_desa_kelurahan), 'wundulako')); @endphp
-                        <g @if($w0) wire:click="selectWilayah({{ $w0->id }})" @endif class="cursor-pointer group">
-                            <polygon points="200,150 350,130 380,220 280,250 180,200" 
-                                     class="{{ $w0 ? $w0->color : 'fill-zinc-200' }} {{ ($w0 && $selectedWilayahId === $w0->id) ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
-                            <circle cx="275" cy="190" r="5" fill="#ef4444" stroke="#ffffff" stroke-width="2" />
-                            <text x="275" y="175" text-anchor="middle" class="fill-zinc-900 dark:fill-white font-extrabold text-[11px] pointer-events-none drop-shadow-sm">Kel. Wundulako</text>
-                            <text x="275" y="210" text-anchor="middle" class="fill-zinc-700 dark:fill-zinc-300 font-semibold text-[9px] pointer-events-none">({{ $w0?->peserta_kbs_count ?? 0 }} Peserta)</text>
-                        </g>
+                        <div class="space-y-3">
+                            @foreach($allWilayahs as $idx => $w)
+                                @php
+                                    $barWidthPeserta = max(6, round(($w->peserta_kbs_count / $maxPesertaWilayah) * 100));
+                                    $barWidthLayanan = max(6, min(100, round(($w->pelayanans_count / max(1, $allWilayahs->max('pelayanans_count'))) * 100)));
+                                    $isSelectedRow = $selectedWilayahId === $w->id;
+                                @endphp
+                                <div wire:key="chart-wilayah-{{ $w->id }}"
+                                     wire:click="selectWilayah({{ $w->id }})"
+                                     class="cursor-pointer rounded-xl border p-3.5 transition-all {{ $isSelectedRow ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-950/30 shadow-xs ring-2 ring-blue-500/20' : 'border-zinc-200/90 bg-white hover:border-blue-300 dark:border-zinc-800 dark:bg-zinc-900' }}">
+                                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                                        <div class="flex items-center gap-2.5">
+                                            <span class="flex size-6 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-xs font-black text-white">
+                                                {{ $idx + 1 }}
+                                            </span>
+                                            <div>
+                                                <span class="font-extrabold text-sm text-zinc-900 dark:text-white">
+                                                    {{ $w->nama_desa_kelurahan }}
+                                                </span>
+                                                <span class="text-xs text-zinc-500 dark:text-zinc-400 ml-1">
+                                                    ({{ $w->faskes }})
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-wrap items-center gap-2 text-xs">
+                                            <span class="rounded-lg bg-blue-100 px-2.5 py-0.5 font-extrabold text-blue-800 dark:bg-blue-950 dark:text-blue-300">
+                                                {{ $w->peserta_kbs_count }} Peserta ({{ $w->persentase }}%)
+                                            </span>
+                                            <span class="rounded-lg bg-emerald-100 px-2.5 py-0.5 font-extrabold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                                                {{ $w->pelayanans_count }} Pelayanan
+                                            </span>
+                                        </div>
+                                    </div>
 
-                        <!-- Desa Bende (North) -->
-                        @php $w1 = $allWilayahs->first(fn($item) => str_contains(strtolower($item->nama_desa_kelurahan), 'bende')); @endphp
-                        <g @if($w1) wire:click="selectWilayah({{ $w1->id }})" @endif class="cursor-pointer group">
-                            <polygon points="150,50 320,30 350,130 200,150 120,110" 
-                                     class="{{ $w1 ? $w1->color : 'fill-zinc-200' }} {{ ($w1 && $selectedWilayahId === $w1->id) ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
-                            <circle cx="235" cy="90" r="4" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
-                            <text x="235" y="80" text-anchor="middle" class="fill-zinc-900 dark:fill-white font-extrabold text-[11px] pointer-events-none drop-shadow-sm">Desa Bende</text>
-                            <text x="235" y="105" text-anchor="middle" class="fill-zinc-700 dark:fill-zinc-300 font-semibold text-[9px] pointer-events-none">({{ $w1?->peserta_kbs_count ?? 0 }} Peserta)</text>
-                        </g>
+                                    <!-- Bar Peserta -->
+                                    <div class="space-y-1.5">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-20 text-[11px] font-semibold text-zinc-500 shrink-0">Peserta KB</span>
+                                            <div class="flex-1 h-3 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+                                                <div class="h-full rounded-full bg-blue-600 transition-all duration-500" style="width: {{ $barWidthPeserta }}%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-20 text-[11px] font-semibold text-zinc-500 shrink-0">Pelayanan</span>
+                                            <div class="flex-1 h-2.5 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+                                                <div class="h-full rounded-full bg-emerald-500 transition-all duration-500" style="width: {{ $barWidthLayanan }}%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
 
-                        <!-- Desa Kowioha (East) -->
-                        @php $w2 = $allWilayahs->first(fn($item) => str_contains(strtolower($item->nama_desa_kelurahan), 'kowioha')); @endphp
-                        <g @if($w2) wire:click="selectWilayah({{ $w2->id }})" @endif class="cursor-pointer group">
-                            <polygon points="350,130 480,100 520,200 380,220" 
-                                     class="{{ $w2 ? $w2->color : 'fill-zinc-200' }} {{ ($w2 && $selectedWilayahId === $w2->id) ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
-                            <circle cx="430" cy="160" r="4" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
-                            <text x="430" y="150" text-anchor="middle" class="fill-zinc-900 dark:fill-white font-extrabold text-[11px] pointer-events-none drop-shadow-sm">Desa Kowioha</text>
-                            <text x="430" y="175" text-anchor="middle" class="fill-zinc-700 dark:fill-zinc-300 font-semibold text-[9px] pointer-events-none">({{ $w2?->peserta_kbs_count ?? 0 }} Peserta)</text>
-                        </g>
+                    <!-- Bagian B: Tabel Ringkasan Sebaran & Jenis Alokon per Desa/Kelurahan -->
+                    <div class="space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-sm font-extrabold text-zinc-900 dark:text-white">
+                                Tabel Ringkasan Sebaran Peserta &amp; Metode KB per Wilayah
+                            </h4>
+                            <span class="text-xs text-zinc-500">Total: {{ $totalPeserta }} Peserta &amp; {{ $totalPelayanan }} Pelayanan</span>
+                        </div>
 
-                        <!-- Desa Lamokuni (South) -->
-                        @php $w3 = $allWilayahs->first(fn($item) => str_contains(strtolower($item->nama_desa_kelurahan), 'lamokuni')); @endphp
-                        <g @if($w3) wire:click="selectWilayah({{ $w3->id }})" @endif class="cursor-pointer group">
-                            <polygon points="280,250 380,220 420,340 300,350 240,300" 
-                                     class="{{ $w3 ? $w3->color : 'fill-zinc-200' }} {{ ($w3 && $selectedWilayahId === $w3->id) ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
-                            <circle cx="325" cy="290" r="4" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
-                            <text x="325" y="280" text-anchor="middle" class="fill-zinc-900 dark:fill-white font-extrabold text-[11px] pointer-events-none drop-shadow-sm">Desa Lamokuni</text>
-                            <text x="325" y="305" text-anchor="middle" class="fill-zinc-700 dark:fill-zinc-300 font-semibold text-[9px] pointer-events-none">({{ $w3?->peserta_kbs_count ?? 0 }} Peserta)</text>
-                        </g>
-
-                        <!-- Desa Watalara (West) -->
-                        @php $w4 = $allWilayahs->first(fn($item) => str_contains(strtolower($item->nama_desa_kelurahan), 'watalara')); @endphp
-                        <g @if($w4) wire:click="selectWilayah({{ $w4->id }})" @endif class="cursor-pointer group">
-                            <polygon points="80,180 180,200 280,250 240,300 120,320 60,260" 
-                                     class="{{ $w4 ? $w4->color : 'fill-zinc-200' }} {{ ($w4 && $selectedWilayahId === $w4->id) ? 'stroke-amber-400 stroke-[4] filter-[url(#glow)]' : 'stroke-white dark:stroke-zinc-900 stroke-[3]' }} transition-all duration-300 group-hover:opacity-90" />
-                            <circle cx="155" cy="250" r="4" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
-                            <text x="155" y="240" text-anchor="middle" class="fill-zinc-900 dark:fill-white font-extrabold text-[11px] pointer-events-none drop-shadow-sm">Desa Watalara</text>
-                            <text x="155" y="265" text-anchor="middle" class="fill-zinc-700 dark:fill-zinc-300 font-semibold text-[9px] pointer-events-none">({{ $w4?->peserta_kbs_count ?? 0 }} Peserta)</text>
-                        </g>
-                    </svg>
-                    <span class="text-xs text-zinc-500 mt-2 font-medium">Klik pada bidang wilayah di peta untuk meninjau data rincian</span>
+                        <div class="overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-zinc-100/80 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-[11px] font-bold">
+                                    <tr>
+                                        <th class="py-3 px-3.5">Desa / Kelurahan</th>
+                                        <th class="py-3 px-3 text-center">Peserta KB</th>
+                                        <th class="py-3 px-3 text-center">Persentase</th>
+                                        <th class="py-3 px-3 text-center">Total Layanan</th>
+                                        <th class="py-3 px-3.5">Rincian Pemakaian Alokon</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-zinc-200/70 dark:divide-zinc-800 bg-white dark:bg-zinc-900">
+                                    @foreach($allWilayahs as $w)
+                                        <tr wire:key="table-wilayah-{{ $w->id }}"
+                                            wire:click="selectWilayah({{ $w->id }})"
+                                            class="cursor-pointer transition-colors {{ $selectedWilayahId === $w->id ? 'bg-blue-50/70 dark:bg-blue-950/30' : 'hover:bg-zinc-50 dark:hover:bg-zinc-800/50' }}">
+                                            <td class="py-3 px-3.5">
+                                                <div class="font-bold text-zinc-900 dark:text-white">{{ $w->nama_desa_kelurahan }}</div>
+                                                <div class="text-[11px] text-zinc-500">{{ $w->faskes }}</div>
+                                            </td>
+                                            <td class="py-3 px-3 text-center font-extrabold text-sm text-blue-600 dark:text-blue-400">
+                                                {{ $w->peserta_kbs_count }} <span class="text-[11px] font-normal text-zinc-500">orang</span>
+                                            </td>
+                                            <td class="py-3 px-3 text-center font-bold text-zinc-800 dark:text-zinc-200">
+                                                {{ $w->persentase }}%
+                                            </td>
+                                            <td class="py-3 px-3 text-center font-extrabold text-sm text-emerald-600 dark:text-emerald-400">
+                                                {{ $w->pelayanans_count }} <span class="text-[11px] font-normal text-zinc-500">kali</span>
+                                            </td>
+                                            <td class="py-3 px-3.5">
+                                                @if(!empty($w->alokon_summary))
+                                                    <div class="flex flex-wrap gap-1">
+                                                        @foreach($w->alokon_summary as $namaAlokon => $jml)
+                                                            <span class="inline-flex items-center gap-1 rounded-md bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">
+                                                                <span>{{ $namaAlokon }}:</span>
+                                                                <strong class="text-blue-600 dark:text-blue-400">{{ $jml }}</strong>
+                                                            </span>
+                                                        @endforeach
+                                                    </div>
+                                                @else
+                                                    <span class="text-zinc-400">-</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </flux:card>
 
@@ -568,15 +644,10 @@
                 // Add zoom control at top right
                 L.control.zoom({ position: 'topright' }).addTo(this.map);
 
-                // CartoDB Positron Tile Layer (Clean modern styling)
-                const isDark = document.documentElement.classList.contains('dark');
-                const tileUrl = isDark 
-                    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-                    : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
-
-                L.tileLayer(tileUrl, {
-                    attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap',
-                    maxZoom: 18
+                // OpenStreetMap Official Tile Layer (Gratis 100%, Tanpa API Key)
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    maxZoom: 19
                 }).addTo(this.map);
 
                 // Add DPPKB Kecamatan Wundulako Primary Landmark
@@ -629,6 +700,11 @@
                                     <span class="text-base font-black text-blue-600">${w.peserta_kbs_count}</span>
                                     <span class="text-xs text-zinc-500">Akseptor (${w.persentase}%)</span>
                                 </div>
+                                <div class="pt-1">
+                                    <a href="${w.gmaps_url || ('https://www.google.com/maps?q=' + w.lat + ',' + w.lng)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:underline">
+                                        📍 Buka di Google Maps (${Number(w.lat).toFixed(4)}, ${Number(w.lng).toFixed(4)}) ↗
+                                    </a>
+                                </div>
                             </div>
                         `, { className: 'custom-popup' });
 
@@ -637,23 +713,6 @@
                     });
 
                     this.markers[w.id] = marker;
-
-                    // Add Polygon if available
-                    if (w.polygon && w.polygon.length > 0) {
-                        const poly = L.polygon(w.polygon, {
-                            color: markerColor,
-                            fillColor: markerColor,
-                            fillOpacity: 0.25,
-                            weight: 2
-                        }).addTo(this.map);
-
-                        poly.on('click', () => {
-                            this.$wire.selectWilayah(w.id);
-                            marker.openPopup();
-                        });
-
-                        this.polygons[w.id] = poly;
-                    }
                 });
             },
 
